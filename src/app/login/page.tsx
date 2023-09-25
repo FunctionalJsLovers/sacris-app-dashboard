@@ -17,7 +17,12 @@ export default function LoginPage() {
                 <h3 className={styles.textSacris}>SacrisApp</h3>
                 <form className={styles.form}>
                     <label htmlFor="username" className={styles.label}>Nombre de usuario</label>
-                    <input className={styles.username} type="text" id="username" placeholder="Enter your user name"></input>
+                    <input
+                        className={styles.username}
+                        type="text"
+                        id="username"
+                        placeholder="Enter your user name"
+                    />
 
                     <label htmlFor="password" className={styles.label}>Contraseña</label>
                     <div className={styles.passwordInput}>
