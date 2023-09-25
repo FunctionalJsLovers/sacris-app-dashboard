@@ -1,0 +1,68 @@
+.allHome {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #BBBFC1;
+}
+
+.images {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    max-width: 500px;
+    height: auto;
+    margin-right: 100px;
+    margin-top: 100px;
+}
+
+.image1,
+.image2,
+.image3 {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 50%;
+}
+
+.image1 {
+    position: relative;
+    top: -20px;
+    right: 30px;
+    background-image: url("https://img.freepik.com/free-photo/process-creating-new-tattoo-young-woman-by-expirienced-tattoo-artist-studio_613910-17260.jpg?w=1060&t=st=1693848349~exp=1693848949~hmac=cbe5da8aaefa7fe49341592794922292cb3e0020da7f77f472bd79932e427670");
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 3;
+}
+
+.image3 {
+    bottom: 5.625rem;
+    position: relative;
+    left: 6.25rem;
+    background-image: url("https://scontent.fbog11-1.fna.fbcdn.net/v/t1.6435-9/204959888_117995313831361_6113798635038376752_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a26aad&_nc_eui2=AeHf32zLpXCNRV3s4wwD5CdTQjy0QhmkhTpCPLRCGaSFOvRtf0O5MlrSj87pjR0pLBqOHsf1LkYZ5baoTSFGKYJn&_nc_ohc=Vg9sHybTczoAX8zXHo7&_nc_ht=scontent.fbog11-1.fna&oh=00_AfDlpdzwar7wM3518MrYzIW5Y5nGzNfGBXoIIjdldRxTEQ&oe=651D7EAF");
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 2;
+}
+
+.image2 {
+    bottom: 110px;
+    position: relative;
+    right: 1px;
+    background-image: url("https://img.freepik.com/free-photo/woman-having-video-call_53876-65330.jpg?w=1060&t=st=1693847945~exp=1693848545~hmac=3ef12aabe010362cb334e572f73f458cf12af9ecd5cb2cc845d727282a758982");
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+
+.textContainer {
+    flex: 1;
+}
+
+.sacrisText {
+    font-size: 70px;
+    font-weight: bold;
+    color: #111111;
+    font-family: "Comic Sans MS", sans-serif;
+    text-shadow: 0 0 10px #CB3230;
+}
