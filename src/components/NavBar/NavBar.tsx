@@ -25,9 +25,11 @@ const NavBar: React.FC<NavBarProps> = ({ routes }) => {
     return (
         <nav
             className={`${styles.navBar} ${expanded ? styles.expanded : ''}`}>
-            <div className={styles.divLogo}>
-                <Image className={styles.Logo} src="/images/Logo.png" alt="SacrisApp" width={50} height={50}/>
-            </div>
+            <Link href="/admin/dashboard">
+                <div className={styles.divLogo}>
+                    <Image className={styles.Logo} src="/images/Logo.png" alt="SacrisApp" width={50} height={50}/>
+                </div>
+            </Link>
             <div className={styles.line}>
                 <div className={styles.iconExpande} onClick={handleToggleExpand}>
                     {expanded ? '<' : '>'}
