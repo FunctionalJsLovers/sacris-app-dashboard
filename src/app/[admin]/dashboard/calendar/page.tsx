@@ -7,7 +7,7 @@ import ComCalendar from "@/components/ComCalendar/ComCalendar";
 const routes = [
     {
         name: 'Artistas',
-        path: '/login',
+        path: '/admin/dashboard/artist',
         icon: '/images/iconsNSelect/artists.png',
         text: 'None'
     },
