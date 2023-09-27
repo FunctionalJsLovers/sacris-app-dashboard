@@ -2,7 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import NavBar from "@/components/NavBar/NavBar";
-import Providers from './helpers/Providers';
+import Providers from '@/helpers/Providers';
 
 export const metadata: Metadata = {
   title: 'SacrisApp',
@@ -16,13 +16,13 @@ export default function PrincipalLayout({children }: PageProps) {
 const routes = [
   {
       name: 'Artistas',
-      path: '/admin/dashboard/artist',
+      path: '/dashboard/artist',
       icon: '/images/iconsNSelect/artists.png',
       text: 'None'
   },
   {
       name: 'Calendario',
-      path: '/admin/dashboard/calendar',
+      path: '/dashboard/calendar',
       icon: '/images/iconsNSelect/calendar.png',
       text: 'None'
   },

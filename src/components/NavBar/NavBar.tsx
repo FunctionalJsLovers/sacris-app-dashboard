@@ -25,7 +25,7 @@ const NavBar: React.FC<NavBarProps> = ({ routes }) => {
     return (
         <nav
             className={`${styles.navBar} ${expanded ? styles.expanded : ''}`}>
-            <Link href="/admin/dashboard">
+            <Link href="/dashboard">
                 <div className={styles.divLogo}>
                     <Image className={styles.Logo} src="/images/Logo.png" alt="SacrisApp" width={50} height={50}/>
                 </div>
