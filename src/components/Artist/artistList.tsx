@@ -1,20 +1,26 @@
+'use client'
 import {  RiFileUserLine, RiInboxLine, RiCalendarTodoLine, RiExternalLinkLine } from 'react-icons/ri';
+import { Icon } from '@iconify/react/dist/iconify.js';
 import styles from './artist.module.css'
 import Image from 'next/image';
-import axios from 'axios'
 import Link from 'next/link';
-
-export async function load(){
-   const {data} =await axios.get("https://handsomely-divine-abstracted-bed.deploy.space/admins/")
-    return data;    
-}
+import { useQuery } from 'react-query';
+import { getAllArtists } from '../../services/ArtistsAPI';
 
 
-async function Card({ }) {
-const artists = await load();
+
+
+function Card({ }) {
+
+  const {data: artists} = useQuery({
+    queryKey: ['artists'],
+    queryFn: getAllArtists,
+    refetchOnWindowFocus: false,
+  })
+  
   return (
     <>
-      {artists.map((artist:any)=>(
+      {artists?.map((artist:any)=>(
        // eslint-disable-next-line react/jsx-key
        <Link href={`/artist/${String(artist.adminId)}`}> <div className={styles.card}key={artist.id}>
 
