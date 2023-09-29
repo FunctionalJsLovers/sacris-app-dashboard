@@ -7,9 +7,9 @@ import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import axios from "axios";
 import styles from './styles.module.css';
-import  { useQuery } from "react-query";
+import Error from "@/components/PopUps/Error/Error";
 
-type Appointment = {
+type Session = {
     sessionId: string;
     createdAt: string;
     date: string;
@@ -23,11 +23,11 @@ type Appointment = {
 
 
 function ComCalendar() {
-    const [selectedEvent, setSelectedEvent] = useState<Appointment | null>(null)
-    const [appointments, setAppointments] = useState<Appointment[]>([]);
-
-
-
+    const [selectedEvent, setSelectedEvent] = useState<Session | null>(null)
+    const [sessions, setSessions] = useState<Session[]>([]);
+    const [appointmentDescription, setAppointmentDescription] = useState<string>("");
+    const [artistName, setArtistName] = useState<string>("")
+    const [error, setError] = useState<string | null>(null);
     const getColorForState = (state: string): string => {
         switch (state) {
             case "sin pagar":
@@ -46,12 +46,13 @@ function ComCalendar() {
     }
 
     useEffect(() => {
-        axios.get("/resources/appointments.json")
+        axios.get("https://handsomely-divine-abstracted-bed.deploy.space/sessions/?totalCount=false")
             .then((response) => {
-                setAppointments(response.data);
+                setSessions(response.data);
             })
             .catch((error) => {
-                console.error("F, no se cargaron los datos :(: ", error);
+                console.log(error);
+                setError("No se pudo cargar la información de las citas");
             });
     }, []);
 
@@ -64,6 +65,26 @@ function ComCalendar() {
             });
         }
     }, []);
+
+    const fetchAppointmentData = (event: Session) => {
+        const appointmentId = event.appointmentIdFk;
+        axios.get(`https://handsomely-divine-abstracted-bed.deploy.space/appointments/${appointmentId}`)
+            .then((response) => {
+                setAppointmentDescription(response.data.description);
+                axios.get(`https://handsomely-divine-abstracted-bed.deploy.space/artists/${response.data.artistIdFk}`)
+                    .then((artistResponse) => {
+                        setArtistName(artistResponse.data.name)
+                    })
+                    .catch((error) => {
+                        console.error("Error al obtener el nombre del artista: ", error)
+                        setError("Error al obtener el nombre del artista");
+                    })
+            })
+            .catch((error) => {
+                console.error("Error al obtener la información de la cita:", error);
+                setError("Error al obtener la información de la cita");
+            });
+    }
 
     return (
         <div className={styles.fullCalendar}>
@@ -84,36 +105,40 @@ function ComCalendar() {
                 }}
                 height={"80vh"}
 
-                events={appointments.map(appointment => ({
+                events={sessions.map(appointment => ({
                     id: appointment.sessionId,
-                    title: appointment.description,
+                    title: appointmentDescription,
                     start: new Date(appointment.date),
                     end: new Date(new Date(appointment.date).getTime() + appointment.estimatedTime * 60000),
                     color: getColorForState(appointment.status)
                 }))}
                 eventClick={(clickInfo) => {
-                    const event = appointments.find(appointment => appointment.sessionId === clickInfo.event.id);
+                    const event = sessions.find(appointment => appointment.sessionId === clickInfo.event.id);
                     if (event) {
-                        console.log(event)
                         setSelectedEvent(event);
+                    }
+
+                    if (event) {
+                        setSelectedEvent(event);
+                        fetchAppointmentData(event);
                     }
                 }}
             />
+            {error && <Error message={error} onClose={() => setError(null)}/>}
             {selectedEvent && (
                 <div className={styles.popup}>
                     <div className={styles.popupContent}>
-                        <h2>{selectedEvent.description}</h2>
+                        <h2>{appointmentDescription}</h2>
                         <p>Inicio: {new Date(selectedEvent.date).toLocaleString()}</p>
                         <p>Fin: {new Date(new Date(selectedEvent.date).getTime() + selectedEvent.estimatedTime * 60000).toLocaleString()}</p>
                         <p>Estado: {selectedEvent.status}</p>
-                        <p>ID Artista: {selectedEvent.appointmentIdFk}</p>
+                        <p>Nombre Artista: {artistName}</p>
                         <p>Precio: {selectedEvent.price}</p>
                         <button onClick={handleClosePopup}>Cerrar</button>
                     </div>
                 </div>
             )}
         </div>
-
     );
 }
 
