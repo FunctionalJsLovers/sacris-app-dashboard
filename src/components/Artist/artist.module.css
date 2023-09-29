@@ -1,0 +1,90 @@
+/* styles/Card.module.css */
+
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: white;
+    cursor: pointer;
+
+  }
+  
+  .carddetails {
+    display: flex;
+    flex-grow: 1;
+  }
+  .selected { 
+    color: #CB3230; 
+  }
+
+  .cardImage img {
+    flex: 1;
+    width: 50px; 
+    height: 50px; 
+    margin-right: 16px; 
+    border-radius: 50px;
+  }
+  
+  .name h1{
+    color: var(--gray-gray-700, #2D3748);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 140%; 
+  }
+  
+  .name h3 {
+    color: var(--gray-gray-500, #718096);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%;
+   
+  }
+  
+  .cardicons {
+    display: flex;
+    gap: 8px;
+    width: 350px;
+    justify-content: space-between;
+
+
+  }
+  
+  .edit_icon,
+  .product_icon,
+  .calendar_icon,
+  .portfolio_icon
+   {
+    cursor: pointer;
+    font-size: 28px;
+    color: #00000040;
+
+  }
+
+  
+  .portfolio_icon:hover {
+    color:red;
+  }
+
+  .calendar_icon:hover {
+    color:red;
+  }
+  .product_icon:hover {
+    color:red;
+  }
+  .edit_icon:hover {
+    color:red;
+  }
+
+  .card:hover{
+    background-color: #CB32302B;
+  }
+
+
+
+
+  
+  
