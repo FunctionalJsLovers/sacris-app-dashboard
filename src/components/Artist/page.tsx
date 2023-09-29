@@ -21,7 +21,7 @@ import Link from 'next/link';
                     />
                 </div>
                 <div className={styles.buttonContainer}>
-                 <Link  href="/artist/new" >   <button 
+                 <Link  href="./artist/new" >   <button 
                     >
                         <RiUserAddLine className={styles.icons} />
                     </button></Link>
