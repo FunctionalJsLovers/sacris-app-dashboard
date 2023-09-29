@@ -5,7 +5,9 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
+import axios from "axios";
 import styles from './styles.module.css';
+import  { useQuery } from "react-query";
 
 type Appointment = {
     sessionId: string;
@@ -18,42 +20,13 @@ type Appointment = {
     description: string;
 };
 
-const appointments: Appointment[] = [
-    {
-        sessionId: "123",
-        createdAt: "2023-09-26T09:00:00",
-        date: "2023-09-28T10:00:00",
-        estimatedTime: 60,
-        status: "sin pagar",
-        price: "50",
-        appointmentIdFk: "456",
-        description: "Cita para césar",
-    },
-    {
-        sessionId: "1234",
-        createdAt: "2023-09-26T09:00:00",
-        date: "2023-09-28T10:00:00",
-        estimatedTime: 60,
-        status: "sin pagar",
-        price: "50",
-        appointmentIdFk: "456",
-        description: "Cita para césar 2",
-    },
-    {
-        sessionId: "12324",
-        createdAt: "2023-09-26T12:00:00",
-        date: "2023-09-28T22:00:00",
-        estimatedTime: 60,
-        status: "pagado",
-        price: "50",
-        appointmentIdFk: "456",
-        description: "Cita para césar 3",
-    },
-];
+
 
 function ComCalendar() {
-    const calendarRef = useRef<FullCalendar | null>(null);
     const [selectedEvent, setSelectedEvent] = useState<Appointment | null>(null)
+    const [appointments, setAppointments] = useState<Appointment[]>([]);
+
+
 
     const getColorForState = (state: string): string => {
         switch (state) {
@@ -71,6 +44,16 @@ function ComCalendar() {
     const handleClosePopup = () => {
         setSelectedEvent(null);
     }
+
+    useEffect(() => {
+        axios.get("/resources/appointments.json")
+            .then((response) => {
+                setAppointments(response.data);
+            })
+            .catch((error) => {
+                console.error("F, no se cargaron los datos :(: ", error);
+            });
+    }, []);
 
     useEffect(() => {
         const headerButtons = document.querySelectorAll(".fc-header-toolbar button");
@@ -120,10 +103,11 @@ function ComCalendar() {
                 <div className={styles.popup}>
                     <div className={styles.popupContent}>
                         <h2>{selectedEvent.description}</h2>
-                        <p>Start: {new Date(selectedEvent.date).toLocaleString()}</p>
-                        <p>End: {new Date(new Date(selectedEvent.date).getTime() + selectedEvent.estimatedTime * 60000).toLocaleString()}</p>
-                        <p>Status: {selectedEvent.status}</p>
-                        <p>Price: {selectedEvent.price}</p>
+                        <p>Inicio: {new Date(selectedEvent.date).toLocaleString()}</p>
+                        <p>Fin: {new Date(new Date(selectedEvent.date).getTime() + selectedEvent.estimatedTime * 60000).toLocaleString()}</p>
+                        <p>Estado: {selectedEvent.status}</p>
+                        <p>ID Artista: {selectedEvent.appointmentIdFk}</p>
+                        <p>Precio: {selectedEvent.price}</p>
                         <button onClick={handleClosePopup}>Cerrar</button>
                     </div>
                 </div>

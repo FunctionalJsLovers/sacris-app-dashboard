@@ -1,0 +1,32 @@
+[
+  {
+    "sessionId": "123",
+    "createdAt": "2023-09-26T09:00:00",
+    "date": "2023-09-28T10:00:00",
+    "estimatedTime": 60,
+    "status": "sin pagar",
+    "price": "50",
+    "appointmentIdFk": "456",
+    "description": "Cita para césar"
+  },
+  {
+    "sessionId": "1234",
+    "createdAt": "2023-09-26T09:00:00",
+    "date": "2023-09-28T10:00:00",
+    "estimatedTime": 60,
+    "status": "sin pagar",
+    "price": "50",
+    "appointmentIdFk": "456",
+    "description": "Cita para césar 2"
+  },
+  {
+    "sessionId": "12324",
+    "createdAt": "2023-09-26T12:00:00",
+    "date": "2023-09-28T22:00:00",
+    "estimatedTime": 60,
+    "status": "pagado",
+    "price": "50",
+    "appointmentIdFk": "456",
+    "description": "Cita para césar 3"
+  }
+]
