@@ -17,6 +17,8 @@ function Card({ }) {
     queryFn: getAllArtists,
     refetchOnWindowFocus: false,
   })
+
+  console.log(artists)
   
   return (
     <>
