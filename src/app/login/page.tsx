@@ -13,6 +13,8 @@ export default function LoginPage() {
 
     const { data: session, status } = useSession();
 
+    console.log(session)
+
 
     return (
         <div className={styles.all}>

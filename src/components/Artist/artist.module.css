@@ -1,5 +1,4 @@
 /* styles/Card.module.css */
-
 .card {
     display: flex;
     align-items: center;
@@ -8,9 +7,20 @@
     margin-bottom: 16px;
     background-color: white;
     cursor: pointer;
-
   }
   
+  .editContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: gray;
+    cursor: pointer;
+  }
+
   .carddetails {
     display: flex;
     flex-grow: 1;
