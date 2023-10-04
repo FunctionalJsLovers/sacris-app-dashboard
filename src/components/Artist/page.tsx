@@ -1,33 +1,27 @@
-import { RiUserAddLine, RiEditLine, RiDeleteBin2Line, RiSearchLine } from 'react-icons/ri';
-import styles from './page.module.css';
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable no-multiple-empty-lines */
+import { RiUserAddLine, RiEditLine, RiDeleteBin2Line, RiSearchLine } from 'react-icons/ri'
+import styles from './page.module.css'
 import Card from './artistList'
-import { useState } from 'react';
-import Link from 'next/link';
+import Link from 'next/link'
 
 
- function Artist() {
-
-    
-    return (
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function Artist () {
+  return (
         <div className={styles.all}>
             <div className={styles.main}>
                 <div className={styles.inputContainer} >
                     <RiSearchLine className={styles.searchIcon} />
-                    <input
-                        className={styles.inputField}
+                    <input className={styles.inputField}
                         type="text"
-                        placeholder="Buscar..."
-
-                    />
+                        placeholder="Buscar..." />
                 </div>
                 <div className={styles.buttonContainer}>
-                 <Link  href="./artist/new" >   <button 
-                    >
+                    <Link href="./artist/new" >   <button>
                         <RiUserAddLine className={styles.icons} />
                     </button></Link>
-                    <button
-                       
-                    >
+                    <button>
                         <RiEditLine className={styles.icons} />
                     </button>
                     <button
@@ -47,17 +41,15 @@ import Link from 'next/link';
                         <div className={styles.header}>Perfil</div>
                     </div>
                 </div>
-                <div className={styles.card}> 
-                <Card></Card>           
+                <div className={styles.card}>
+                    <Card></Card>
                 </div>
 
             </div>
-
-
         </div>
 
-    );
+  )
 }
 
-export default Artist;
+export default Artist
 
