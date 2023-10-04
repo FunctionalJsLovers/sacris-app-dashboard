@@ -15,7 +15,7 @@ function Artist () {
                     <RiSearchLine className={styles.searchIcon} />
                     <input className={styles.inputField}
                         type="text"
-                        placeholder="Buscar..." />
+                        placeholder="Type here..." />
                 </div>
                 <div className={styles.buttonContainer}>
                     <Link href="./artist/new" >   <button>
@@ -31,19 +31,22 @@ function Artist () {
                 </div>
             </div>
             <div className={styles.artist}>
-                <h1>Lista De Artistas</h1> <br />
+                <h1>Lista de artistas</h1> <br />
                 <div className={styles.header_row}>
-                    <div className={styles.header_a}>Artista</div>
+                    <div className={styles.header_a}>ARTISTA</div>
                     <div className={styles.tags}>
-                        <div className={styles.header}>Producto</div>
-                        <div className={styles.header}>Cita</div>
-                        <div className={styles.header}>Portafolio</div>
-                        <div className={styles.header}>Perfil</div>
+                        <div className={styles.header}>PRODUCTOS</div>
+                        <div className={styles.header}>CITAS</div>
+                        <div className={styles.header}>PORTAFOLIO</div>
+                        <div className={styles.header}>PERFIL</div>
                     </div>
                 </div>
-                <div className={styles.card}>
+                <div className={styles.back}>
+
+                <div className={styles.card_i}>
                     <Card></Card>
-                </div>
+                    </div>
+                    </div>
 
             </div>
         </div>
