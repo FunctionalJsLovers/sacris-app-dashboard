@@ -1,18 +1,18 @@
-import React from "react";
-import styles from './styles.module.css';
+import React from 'react'
+import styles from './styles.module.css'
 
 interface AccountSectionProps {
-    accountName: string;
-    notificationCount: number;
-    photoUrl: string;
+  accountName: string
+  notificationCount: number
+  photoUrl: string
 }
 
 const AccountSection: React.FC<AccountSectionProps> = ({
-                                                           accountName,
-                                                           notificationCount,
-                                                           photoUrl,
-                                                       }) => {
-    return (
+  accountName,
+  notificationCount,
+  photoUrl
+}) => {
+  return (
         <div className={styles.accountSection}>
             <div className={styles.notificationIcon}>
                 <span>{notificationCount}</span>
@@ -23,7 +23,7 @@ const AccountSection: React.FC<AccountSectionProps> = ({
                 <img src={photoUrl} alt={`Foto de ${accountName}`} />
             </div>
         </div>
-    );
-};
+  )
+}
 
-export default AccountSection;
+export default AccountSection

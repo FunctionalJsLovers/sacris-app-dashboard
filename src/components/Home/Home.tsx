@@ -1,9 +1,9 @@
-import React from 'react';
-import  styles from './styles.module.css';
-import Image from "next/image";
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import React from 'react'
+import styles from './styles.module.css'
 
-function Home() {
-    return (
+function Home () {
+  return (
         <div className={styles.allHome}>
             <div className={styles.images}>
                 <div className={styles.imageContainer}>
@@ -18,7 +18,7 @@ function Home() {
                 <h1 className={styles.sacrisText}>SacrisApp</h1>
             </div>
         </div>
-    )
+  )
 }
 
-export default Home;
+export default Home
