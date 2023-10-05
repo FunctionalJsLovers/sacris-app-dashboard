@@ -14,27 +14,34 @@ import Image from 'next/image'
 import { useQuery } from 'react-query'
 import { getAllArtists } from '../../services/ArtistsAPI'
 import { useState } from 'react'
+import ViewArtist from '@/app/(admin)/dashboard/artist/ViewArtist/ViewArtist'
+
+interface UserType {
+  name: string
+  email: string
+  artistId: string
+  phone: string
+}
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-function Card () {
+function ArtistList ({onUserSelect} : {onUserSelect?: (user: UserType) => void}) {
   const { data: artists } = useQuery({
     queryKey: ['artists'],
     queryFn: getAllArtists,
     refetchOnWindowFocus: false
   })
 
-  const [selectedUserId, setSelectedUserId] = useState<string>('')
-  const [editState, setEditState] = useState<boolean>(false)
+  const [selectedUser, setSelectedUser] = useState<UserType>()
 
-  const handleEditIconClick = (userId: string) => {
-    setSelectedUserId(userId)
-    setEditState(true)
+  const handleEditIconClick = (user: UserType) => {
+    setSelectedUser(user)
+    if (onUserSelect) {
+      onUserSelect(user)
+    }
   }
 
   return (
       <div className={styles.container}>
-        {editState ? (<div className={styles.editContainer}>Edit {selectedUserId}</div>
-        ) : (
           <div className={styles.artistContainer}>
             {artists?.map((artist: any) => (
               // eslint-disable-next-line react/jsx-key
@@ -70,16 +77,15 @@ function Card () {
                     className={styles.edit_icon}
                     title="Editar Perfil"
                     onClick={() => {
-                      handleEditIconClick(artist.artistId)
+                      handleEditIconClick(artist)
                     }}
                   />
                 </div>
               </div>
             ))}
           </div>
-        )}
       </div>
   )
 }
 
-export default Card
+export default ArtistList
