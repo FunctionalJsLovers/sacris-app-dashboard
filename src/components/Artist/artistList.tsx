@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-redeclare */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable multiline-ternary */
 /* eslint-disable react/react-in-jsx-scope */
