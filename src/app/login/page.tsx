@@ -1,15 +1,17 @@
-'use client';
-import styles from './styles.module.css';
-import React, { useState } from "react";
-export default function LoginPage() {
-    const [passwordVisible, setPasswordVisible] = useState(false);
-    const [password, setPassword] = useState('');
+'use client'
+import styles from './styles.module.css'
+import React, { useState } from 'react'
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export default function LoginPage () {
+  const [passwordVisible, setPasswordVisible] = useState(false)
+  const [password, setPassword] = useState('')
 
-    const togglePasswordVisibility = () => {
-        setPasswordVisible(!passwordVisible);
-    }
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible)
+  }
 
-    return (
+  return (
         <div className={styles.all}>
             <div className={styles.loginContainer}>
                 <h2 className={styles.welcome}>¡Bienvenido!</h2>
@@ -27,17 +29,16 @@ export default function LoginPage() {
                     <label htmlFor="password" className={styles.label}>Contraseña</label>
                     <div className={styles.passwordInput}>
                         <input className={styles.password}
-                               type={passwordVisible ? 'text' : 'password'}
-                               id="password"
-                               placeholder="Enter your password"
-                               value={password}
-                               onChange={(e) => setPassword(e.target.value)}
+                            type={passwordVisible ? 'text' : 'password'}
+                            id="password"
+                            placeholder="Enter your password"
+                            value={password}
+                            onChange={(e) => { setPassword(e.target.value) }}
                         >
                         </input>
                         <span
-                            className={`${styles.togglePassword} ${
-                                passwordVisible ? styles.togglePasswordHidden : styles.togglePasswordVisible
-                            }`}
+                            className={`${styles.togglePassword} ${passwordVisible ? styles.togglePasswordHidden : styles.togglePasswordVisible
+                                }`}
                             onClick={togglePasswordVisibility}
                         >
                         </span>
@@ -46,5 +47,5 @@ export default function LoginPage() {
                 </form>
             </div>
         </div>
-    )
+  )
 }
