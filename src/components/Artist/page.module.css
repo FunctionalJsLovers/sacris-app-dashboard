@@ -1,8 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter');
 
 .all {
-  height: 100vh;
-  width: 100%;
   background-color: white;
 }
 
@@ -71,7 +68,7 @@
   margin-left: 30px;
   background-color: white;
   color: var(--gray-gray-700, #2D3748);
-  font-family: Inter;
+  font-family: var(--font), sans-serif;
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
@@ -93,11 +90,14 @@
 
 .header_a {
   flex: 1;
+  font-family: var(--font), sans-serif;
+
 }
 
 .tags {
   display: flex;
   width: 400px;
+  font-family: var(--font), sans-serif;
   justify-content: space-between;
   flex-direction: row;
   margin-right: 50px;
@@ -111,7 +111,7 @@
 }
 
 .back{
-  max-height: 400px; 
+  max-height: 390px; 
   overflow: auto;
  
 }

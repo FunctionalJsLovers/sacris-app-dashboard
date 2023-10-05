@@ -24,6 +24,8 @@
   .carddetails {
     display: flex;
     flex-grow: 1;
+    font-family: var(--font), sans-serif;
+
   }
   .selected { 
     color: #CB3230; 
@@ -39,6 +41,7 @@
   
   .name h1{
     color: var(--gray-gray-700, #2D3748);
+    font-family: var(--font), sans-serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
@@ -46,6 +49,7 @@
   }  
   .name h3 {
     color: var(--gray-gray-500, #718096);
+    font-family: var(--font), sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
