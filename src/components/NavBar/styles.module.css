@@ -113,5 +113,14 @@
     color: #CB3230;
 }
 
+.logout{
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    cursor: pointer;
+}
+
+
 
 

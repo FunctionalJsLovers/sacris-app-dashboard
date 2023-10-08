@@ -3,6 +3,9 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import styles from './styles.module.css';
 import Image from "next/image";
+import { signOut } from 'next-auth/react';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { useRouter } from 'next/navigation';
 
 interface Route {
     name: string;
@@ -21,6 +24,7 @@ const NavBar: React.FC<NavBarProps> = ({ routes }) => {
     const handleToggleExpand = () => {
         setExpanded(!expanded);
     };
+
 
     return (
         <nav
@@ -60,11 +64,9 @@ const NavBar: React.FC<NavBarProps> = ({ routes }) => {
                         {expanded && <span className={styles.textAccount}>Cuenta</span>}
                     </Link>
                 </div>
-                <div className={styles.logout}>
-                    <Link href="/">
-                        <Image src="/images/iconsNSelect/logout.png" alt="Salir" width={25} height={25}/>
-                        {expanded && <span className={styles.textLogout}>Salir</span>}
-                    </Link>
+                <div className={styles.logout} onClick={()=>signOut({callbackUrl:`http://localhost:3000/api/auth/signout`})}>
+                    <Icon icon='ri:logout-circle-line' color='BBBFC1' width={'25px'}/>
+                    {expanded && <span className={styles.textAccount}>Salir</span>}
                 </div>
             </div>
         </nav>
