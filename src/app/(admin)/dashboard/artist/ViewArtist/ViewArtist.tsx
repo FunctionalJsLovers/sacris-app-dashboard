@@ -47,14 +47,14 @@ function ViewArtist({user}: {user?: UserType}){
                     <div className={styles.mail}>
                         <p>Correo electrónico</p>
                         <Input defaultValue={user?.email}
-                        disabled={true}
+                        disabled={!editState}
                         style={inputStyles}
                         />
                     </div>
                     <div className={styles.description}>
                         <p>Descripción</p>
                         <Input defaultValue={user?.email}
-                        disabled={true}
+                        disabled={!editState}
                         style={{width: '640px', height: '100px'}}
                         />
                     </div>
@@ -63,21 +63,21 @@ function ViewArtist({user}: {user?: UserType}){
                     <div className={styles.name}>
                         <p>Nombre</p>
                         <Input defaultValue={user?.name}
-                        disabled={true}
+                        disabled={!editState}
                         style={inputStyles}
                         />
                     </div>
                     <div className={styles.userName}>
                         <p>Nombre de usuario</p>
                         <Input defaultValue={user?.name}
-                        disabled={true}
+                        disabled={!editState}
                         style={inputStyles}
                         />
                     </div>
                     <div className={styles.categories}>
                         <p>Categorías</p>
                         <Select defaultValue={'Blackwork'}
-                        disabled={true}
+                        disabled={!editState}
                         className='custom-select'
                         style={inputStyles}
                         />
@@ -85,14 +85,14 @@ function ViewArtist({user}: {user?: UserType}){
                     <div className={styles.phone}>
                         <p>Teléfono</p>
                         <Input defaultValue={user?.phone}
-                        disabled={true}
+                        disabled={!editState}
                         style={inputStyles}
                         />
                     </div>
                     <div className={styles.instagram}>
                         <p>Instagram</p>
                         <Input defaultValue={user?.email}
-                        disabled={true}
+                        disabled={!editState}
                         style={inputStyles}
                         />
                     </div>
