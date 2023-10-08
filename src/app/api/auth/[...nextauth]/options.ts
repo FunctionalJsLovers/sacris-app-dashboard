@@ -9,5 +9,5 @@ export const options: NextAuthOptions = {
             issuer: process.env.AUTH0_ISSUER_BASE_URL || '',
         })
     ],
-    secret: process.env.SECRET || ''
+    secret: process.env.NEXTAUTH_SECRET || ''
 }
