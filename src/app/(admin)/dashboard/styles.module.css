@@ -1,11 +1,11 @@
 .allDashboard {
-    height: 100vh;
-    display: flex;
+  height: 100vh;
+  display: flex;
 }
 
 .content {
-    width: 100%;
-    height: auto;
-    margin-left: 65px;
-    background-color: blueviolet;
+  width: 100%;
+  height: auto;
+  margin-left: 65px;
+  background-color: blueviolet;
 }
