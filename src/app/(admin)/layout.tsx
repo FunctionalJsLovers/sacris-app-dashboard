@@ -13,13 +13,13 @@ export default function AdminLayout({children}:PageProps){
     const routes = [
         {
           name: 'Artistas',
-          path: '/dashboard/artist',
+          path: '/artist',
           icon: '/images/iconsNSelect/artists.png',
           text: 'None'
         },
         {
           name: 'Calendario',
-          path: '/dashboard/calendar',
+          path: '/calendar',
           icon: '/images/iconsNSelect/calendar.png',
           text: 'None'
         },

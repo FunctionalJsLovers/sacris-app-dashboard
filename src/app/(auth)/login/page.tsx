@@ -6,12 +6,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-    const [passwordVisible, setPasswordVisible] = useState(false);
-    const [password, setPassword] = useState('');
-
-    const togglePasswordVisibility = () => {
-        setPasswordVisible(!passwordVisible);
-    }
 
     const { data: session, status } = useSession();
     const router = useRouter();
