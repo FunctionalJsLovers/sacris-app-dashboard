@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 'use client';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -7,13 +6,6 @@ import Image from "next/image";
 import { signOut } from 'next-auth/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useRouter } from 'next/navigation';
-=======
-'use client'
-import Link from 'next/link'
-import React, { useState } from 'react'
-import styles from './styles.module.css'
-import Image from 'next/image'
->>>>>>> dev
 
 interface Route {
   name: string
@@ -34,12 +26,7 @@ const NavBar: React.FC<NavBarProps> = ({ routes }) => {
     setExpanded(!expanded)
   }
 
-<<<<<<< HEAD
-
-    return (
-=======
   return (
->>>>>>> dev
         <nav
             className={`${styles.navBar} ${expanded ? styles.expanded : ''}`}>
             <Link href="/dashboard">

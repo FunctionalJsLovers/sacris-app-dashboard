@@ -28,9 +28,7 @@
   },
   "devDependencies": {
     "@iconify/react": "^4.1.1",
-<<<<<<< HEAD
     "next-auth": "^4.23.2",
-=======
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "eslint": "^8.50.0",
     "eslint-config-standard-with-typescript": "^39.1.0",
@@ -38,7 +36,6 @@
     "eslint-plugin-n": "^16.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
->>>>>>> dev
     "typescript": "^5.2.2"
   }
 }

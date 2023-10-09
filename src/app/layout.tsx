@@ -44,7 +44,6 @@ export default function PrincipalLayout ({ children }: PageProps) {
     <html lang="en">
       <body>
         <Providers>
-          <NavBar routes={routes}/>
           {children}
         </Providers>
         </body>
