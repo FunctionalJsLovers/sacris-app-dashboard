@@ -2,6 +2,7 @@
 import styles from './styles.module.css';
 import React, { useState } from "react";
 import { signIn, useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 export default function LoginPage() {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -13,7 +14,7 @@ export default function LoginPage() {
 
     const { data: session, status } = useSession();
 
-    console.log(session)
+    console.log(session?.user,'session')
 
 
     return (
@@ -24,7 +25,10 @@ export default function LoginPage() {
                 <h3 className={styles.textSacris}>SacrisApp</h3>
                 <form className={styles.form}>
                     {session && <p className={styles.textSacris}>Ya estás logueado como {session.user?.email}</p>}
-                    <button onClick={() => signIn()} className={styles.buttonLogin}>LoginAuth0</button>
+                    <button onClick={() => signIn()} className={styles.buttonLogin}>LoginNextAuth</button>
+                    <Link href='/api/auth/login'>
+                        <button className={styles.buttonLogin}>LoginAuth0</button>
+                    </Link>
                 </form>
             </div>
         </div>
