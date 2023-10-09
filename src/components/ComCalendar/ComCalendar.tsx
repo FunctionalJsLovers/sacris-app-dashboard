@@ -1,24 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-'use client'
-import React, { useState } from 'react'
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import styles from './styles.module.css'
+'use client';
+import React, { useState } from 'react';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import styles from './styles.module.css';
 
 interface Appointment {
-  title: string
-  start: string
-  end: string
-  cliente: string
-  tatuador: string
-  state: 'sin pagar' | 'pagado' | 'abonado'
+  title: string;
+  start: string;
+  end: string;
+  cliente: string;
+  tatuador: string;
+  state: 'sin pagar' | 'pagado' | 'abonado';
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-function ComCalendar () {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+function ComCalendar() {
   const [appointments, setAppointments] = useState([
     {
       title: 'Cita existente',
@@ -26,7 +23,7 @@ function ComCalendar () {
       end: '2023-09-30T11:00:00',
       cliente: 'César',
       tatuador: 'César también',
-      state: 'sin pagar'
+      state: 'sin pagar',
     },
     {
       title: 'Prueba de cita 2',
@@ -34,7 +31,7 @@ function ComCalendar () {
       end: '2023-09-30T11:00:00',
       cliente: 'Augusto',
       tatuador: 'Augusto artista',
-      state: 'abonado'
+      state: 'abonado',
     },
     {
       title: 'Prueba de cita 3',
@@ -42,7 +39,7 @@ function ComCalendar () {
       end: '2023-09-30T12:00:00',
       cliente: 'Augusto',
       tatuador: 'Augusto artista',
-      state: 'pagado'
+      state: 'pagado',
     },
     {
       title: 'Cita césar',
@@ -50,41 +47,41 @@ function ComCalendar () {
       end: '2023-09-26T11:00:00',
       cliente: 'César',
       tatuador: 'César también',
-      state: 'pagado'
-    }
-  ])
+      state: 'pagado',
+    },
+  ]);
 
   const getColorForState = (state: string): string => {
     switch (state) {
       case 'sin pagar':
-        return 'red'
+        return 'red';
       case 'pagado':
-        return 'green'
+        return 'green';
       case 'abonado':
-        return 'blue'
+        return 'blue';
       default:
-        return 'gray'
+        return 'gray';
     }
-  }
+  };
 
   return (
-        <div className={styles.fullCalendar}>
-            <FullCalendar
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                initialView={'dayGridMonth'}
-                headerToolbar={{
-                  start: 'today prev,next',
-                  center: 'title',
-                  end: 'dayGridMonth,timeGridWeek,timeGridDay'
-                }}
-                height={'80vh'}
-                events={appointments.map((appointment) => ({
-                  ...appointment,
-                  color: getColorForState(appointment.state)
-                }))}
-            />
-        </div>
-  )
+    <div className={styles.fullCalendar}>
+      <FullCalendar
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        initialView={'dayGridMonth'}
+        headerToolbar={{
+          start: 'today prev,next',
+          center: 'title',
+          end: 'dayGridMonth,timeGridWeek,timeGridDay',
+        }}
+        height={'80vh'}
+        events={appointments.map((appointment) => ({
+          ...appointment,
+          color: getColorForState(appointment.state),
+        }))}
+      />
+    </div>
+  );
 }
 
-export default ComCalendar
+export default ComCalendar;

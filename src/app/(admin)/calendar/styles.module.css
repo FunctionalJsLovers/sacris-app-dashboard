@@ -1,0 +1,19 @@
+.allCalendar {
+  height: 100vh;
+  display: flex;
+  background-color: #e3e3e3;
+}
+
+.calendarContent {
+  width: 90%;
+  height: auto;
+  margin: 70px auto 5px 100px;
+}
+
+.title {
+  position: relative;
+  bottom: 40px;
+  font-size: 40px;
+  font-family: 'Times New Roman', sans-serif;
+  color: #111111;
+}
