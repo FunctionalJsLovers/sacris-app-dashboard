@@ -17,5 +17,5 @@ export default async function Providers(params: PageProps){
 }
 
 interface PageProps {
-    children: ReactNode;
+  children: ReactNode
 }

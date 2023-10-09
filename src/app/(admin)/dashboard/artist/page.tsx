@@ -1,37 +1,37 @@
-import NavBar from "@/components/NavBar/NavBar";
-import React from "react";
-import styles from './styles.module.css';
-import AccountSection from "@/components/AccountSection/AccountSection";
-import Artist from "@/components/Artist/page";
+import NavBar from '@/components/NavBar/NavBar'
+import React from 'react'
+import styles from './styles.module.css'
+import AccountSection from '@/components/AccountSection/AccountSection'
+import Artist from '@/components/Artist/page'
 
 const routes = [
-    {
-        name: 'Artistas',
-        path: '/dashboard/artist',
-        icon: '/images/iconsSelect/artists.png',
-        text: 'Red'
-    },
-    {
-        name: 'Calendario',
-        path: '/dashboard/calendar',
-        icon: '/images/iconsNSelect/calendar.png',
-        text: 'None'
-    },
-    {
-        name: 'Productos',
-        path: '/',
-        icon: '/images/iconsNSelect/products.png',
-        text: 'None'
-    },
-    {
-        name: 'Reportes',
-        path: '/',
-        icon: '/images/iconsNSelect/reports.png',
-        text: 'None'
-    },
+  {
+    name: 'Artistas',
+    path: '/dashboard/artist',
+    icon: '/images/iconsSelect/artists.png',
+    text: 'Red'
+  },
+  {
+    name: 'Calendario',
+    path: '/dashboard/calendar',
+    icon: '/images/iconsNSelect/calendar.png',
+    text: 'None'
+  },
+  {
+    name: 'Productos',
+    path: '/',
+    icon: '/images/iconsNSelect/products.png',
+    text: 'None'
+  },
+  {
+    name: 'Reportes',
+    path: '/',
+    icon: '/images/iconsNSelect/reports.png',
+    text: 'None'
+  }
 ]
 const Artists: React.FC = () => {
-    return (
+  return (
         <div className={styles.allArtist}>
                         <NavBar routes={routes}/>
 
@@ -42,7 +42,7 @@ const Artists: React.FC = () => {
                 <Artist></Artist>
             </div>
         </div>
-    )
+  )
 }
 
-export default Artists;
+export default Artists

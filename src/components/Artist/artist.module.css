@@ -7,6 +7,19 @@
     margin-bottom: 16px;
     background-color: white;
     cursor: pointer;
+    border-radius: 20px;
+  }
+
+  .editContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: gray;
+    cursor: pointer;
   }
   
   .editContainer{
@@ -24,6 +37,8 @@
   .carddetails {
     display: flex;
     flex-grow: 1;
+    font-family: var(--font), sans-serif;
+
   }
   .selected { 
     color: #CB3230; 
@@ -39,21 +54,21 @@
   
   .name h1{
     color: var(--gray-gray-700, #2D3748);
+    font-family: var(--font), sans-serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
     line-height: 140%; 
-  }
-  
+  }  
   .name h3 {
     color: var(--gray-gray-500, #718096);
+    font-family: var(--font), sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: 140%;
    
-  }
-  
+  }  
   .cardicons {
     display: flex;
     gap: 8px;
@@ -61,8 +76,7 @@
     justify-content: space-between;
 
 
-  }
-  
+  }  
   .edit_icon,
   .product_icon,
   .calendar_icon,
@@ -72,13 +86,10 @@
     font-size: 28px;
     color: #00000040;
 
-  }
-
-  
+  }  
   .portfolio_icon:hover {
     color:red;
   }
-
   .calendar_icon:hover {
     color:red;
   }
@@ -88,13 +99,6 @@
   .edit_icon:hover {
     color:red;
   }
-
   .card:hover{
     background-color: #CB32302B;
   }
-
-
-
-
-  
-  

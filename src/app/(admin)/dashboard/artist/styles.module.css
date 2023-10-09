@@ -1,19 +1,28 @@
+
 .allArtist {
     height: 100vh;
     display: flex;
     background-color: #E3E3E3;
+    font-family: var(--font), sans-serif;
 }
 
 .calendarArtist {
     width: 90%;
     height: auto;
     margin: 70px auto 5px 100px;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: var(--font), sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; 
+
+
 }
 
 .title {
     position: relative;
     bottom: 40px;
     font-size: 40px;
-    font-family: "Times New Roman", sans-serif;
     color: #111111;
 }

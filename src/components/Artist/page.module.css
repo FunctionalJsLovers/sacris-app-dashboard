@@ -1,12 +1,12 @@
-.all{
-  height: 100vh;
-  width: 100%;
+
+.all {
   background-color: white;
 }
-.main{
-    padding: 25px;
-    justify-content: space-between;
-    display: flex;
+
+.main {
+  padding: 25px;
+  justify-content: space-between;
+  display: flex;
 }
 
 .inputContainer {
@@ -22,70 +22,97 @@
   font-size: 20px;
   color: #999;
   margin-right: 8px;
+  
 }
 
 .inputField {
   flex-grow: 1;
-  border: none;
   outline: none;
-  font-size: 16px;
+  color: var(--gray-gray-400, #A0AEC0);
+  font-family: Helvetica;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  border: none;
+  border-color: white;
 }
-  
-  .buttonContainer {
-    display: flex; 
-    gap: 10px;
-    width: 200px;
-    justify-content: space-between;
+
+.buttonContainer {
+  display: flex;
+  gap: 10px;
+  width: 200px;
+  justify-content: space-between;
 
 
-  }
+}
 
-  .buttonContainer button{
-    width: 30px;
-    height: 30px;
-    font-size: 30px;
-    border-color: transparent;
-    background-color: transparent;
-    cursor: pointer;
-    justify-content: space-between;
-  }
+.buttonContainer button {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+  border-color: transparent;
+  background-color: transparent;
+  cursor: pointer;
+  justify-content: space-between;
+}
 
-  .selected { 
-    color: #CB3230; 
-  }
+.selected {
+  color: #CB3230;
+}
 
-  .icons{
-    size: 2rem;
-  }
-  .artist{
-    margin-left:30px ;
-    background-color: white;
-  }
+.icons {
+  size: 2rem;
+}
+
+.artist {
+  margin-left: 30px;
+  background-color: white;
+  color: var(--gray-gray-700, #2D3748);
+  font-family: var(--font), sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 140%;
+  ;
+
+}
 
 
 .header_row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 8px 16px;
   color: var(--gray-gray-400, #A0AEC0);
+  font-size: 15px;
+
 
 }
 
 .header_a {
   flex: 1;
+  font-family: var(--font), sans-serif;
+
 }
 
-.tags{
+.tags {
   display: flex;
-  gap: 8px;
-  width: 370px;
+  width: 400px;
+  font-family: var(--font), sans-serif;
   justify-content: space-between;
   flex-direction: row;
+  margin-right: 50px;
 
 }
 
-.card{
-display: block;
-margin-bottom: 20px;
+.card_i {
+  display: block;
+  margin-right: 30px;
+
 }
+
+.back{
+  max-height: 390px; 
+  overflow: auto;
+ 
+}
+
