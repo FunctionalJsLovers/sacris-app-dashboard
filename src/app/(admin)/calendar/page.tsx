@@ -12,6 +12,12 @@ const routes = [
     text: 'None',
   },
   {
+    name: 'Citas',
+    path: '/dashboard/appointments',
+    icon: '/images/iconsNSelect/appointments.png',
+    text: 'None',
+  },
+  {
     name: 'Calendario',
     path: '/dashboard/calendar',
     icon: '/images/iconsSelect/calendar.png',

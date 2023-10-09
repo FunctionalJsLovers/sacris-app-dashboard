@@ -1,0 +1,43 @@
+.successPopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.successContent {
+  background-color: white;
+  border-radius: 4px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.successContent p {
+  margin: 10px;
+  color: #111111;
+  font-size: 18px;
+}
+
+.successContent button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #0d4918;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.2s;
+}
+
+.successContent button:hover {
+  font-size: 15px;
+  background-color: #136a23;
+}
