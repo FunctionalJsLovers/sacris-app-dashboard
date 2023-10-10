@@ -17,7 +17,7 @@ export default function AdminLayout({ children }: PageProps) {
     },
     {
       name: 'Citas',
-      path: '/dashboard/appointments',
+      path: '/appointments',
       icon: 'ri:calendar-todo-fill',
       text: 'None',
     },
