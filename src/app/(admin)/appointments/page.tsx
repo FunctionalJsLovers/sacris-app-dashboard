@@ -7,7 +7,8 @@ import EditDltAppointment from '@/components/Appointment/ManageAppointments/Edit
 import CreateAppointment from '@/components/Appointment/ManageAppointments/CreateAppointment/CreateAppointment';
 import NavBar from '@/components/NavBar/NavBar';
 
-const routes = [
+{
+  /*const routes = [
   {
     name: 'Artistas',
     path: '/dashboard/artist',
@@ -38,7 +39,8 @@ const routes = [
     icon: '/images/iconsNSelect/reports.png',
     text: 'None',
   },
-];
+];*/
+}
 
 interface Appointment {
   appointmentId: string;
@@ -115,7 +117,7 @@ const Appointments: React.FC = () => {
 
   return (
     <div className={styles.allAppointmentSection}>
-      <NavBar routes={routes} />
+      {/*<NavBar routes={routes} />*/}
       <AccountSection
         notificationCount={2}
         photoUrl="https://th.bing.com/th/id/OIP.hFh4Uw00oR7qfvoCqnG8fQHaEK?w=186&h=104&c=7&r=0&o=5&dpr=1.3&pid=1.7"

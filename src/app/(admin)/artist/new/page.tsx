@@ -4,7 +4,8 @@ import styles from './styles.module.css';
 import AccountSection from '@/components/AccountSection/AccountSection';
 import CustomForm from './ProductForm';
 
-const routes = [
+{
+  /*const routes = [
   {
     name: 'Artistas',
     path: '/dashboard/artist',
@@ -35,11 +36,13 @@ const routes = [
     icon: '/images/iconsNSelect/reports.png',
     text: 'None',
   },
-];
+];*/
+}
+
 const Artists: React.FC = () => {
   return (
     <div className={styles.allArtist}>
-      <NavBar routes={routes} />
+      {/*<NavBar routes={routes} />*/}
 
       <AccountSection
         notificationCount={2}

@@ -5,7 +5,6 @@ import styles from './styles.module.css';
 import Image from 'next/image';
 import { signOut } from 'next-auth/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { useRouter } from 'next/navigation';
 
 interface Route {
   name: string;
@@ -49,11 +48,7 @@ const NavBar: React.FC<NavBarProps> = ({ routes }) => {
             <Link href={route.path}>
               <div className={styles.link}>
                 <span>
-                  <Image
-                    src={route.icon}
-                    alt={route.name}
-                    width={25}
-                    height={25}></Image>
+                  <Icon icon={route.icon} width={25} height={25}></Icon>
                 </span>
                 {expanded && (
                   <span
