@@ -38,7 +38,6 @@
 .buttonContainer {
   display: flex;
   gap: 10px;
-  width: 200px;
   justify-content: space-between;
 }
 

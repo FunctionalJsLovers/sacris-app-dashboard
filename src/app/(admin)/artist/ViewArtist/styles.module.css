@@ -1,0 +1,101 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 20px;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  width: 100%;
+  gap: 20px;
+}
+
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  margin-right: 20px;
+  gap: 30px;
+}
+
+.rightPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  margin-left: 20px;
+  gap: 30px;
+}
+
+.container p {
+  font-size: 16px;
+  font-weight: 400;
+  color: black;
+  margin-bottom: 5px;
+}
+
+.editButton {
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 30px;
+  font-weight: 400;
+  color: #000000;
+  cursor: pointer;
+}
+
+.deleteButton {
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 30px;
+  font-weight: 400;
+  color: #000000;
+  cursor: pointer;
+}
+
+.editButton:hover {
+  color: #cb3230;
+}
+
+.deleteButton:hover {
+  color: #cb3230;
+}
+
+.saveButtonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 40px;
+}
+
+.saveButton {
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+  background-color: #007bff;
+  margin: 0;
+}
