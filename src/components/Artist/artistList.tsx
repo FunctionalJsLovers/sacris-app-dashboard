@@ -21,7 +21,7 @@ interface UserType {
 function ArtistList({
   onUserSelect,
 }: {
-  onUserSelect?: (user: UserType) => void;
+  onUserSelect: (user: UserType) => void;
 }) {
   const { data: artists } = useQuery({
     queryKey: ['artists'],
@@ -29,11 +29,8 @@ function ArtistList({
     refetchOnWindowFocus: false,
   });
 
-  const [selectedUser, setSelectedUser] = useState<UserType>();
-
   const handleEditIconClick = (user: UserType) => {
-    setSelectedUser(user);
-    if (onUserSelect) {
+    if (user) {
       onUserSelect(user);
     }
   };
@@ -42,7 +39,6 @@ function ArtistList({
     <div className={styles.container}>
       <div className={styles.artistContainer}>
         {artists?.map((artist: any) => (
-          // eslint-disable-next-line react/jsx-key
           <div className={styles.card} key={artist.artistId}>
             <div className={styles.carddetails}>
               <div className={styles.cardImage}>

@@ -151,7 +151,7 @@ function CustomForm() {
           <button className={styles.confirmButton} onSubmit={handleSubmit}>
             Confirmar
           </button>
-          <Link href="/dashboard/artist">
+          <Link href="/artist">
             {' '}
             <button className={styles.cancelButton}>Cancelar</button>
           </Link>
