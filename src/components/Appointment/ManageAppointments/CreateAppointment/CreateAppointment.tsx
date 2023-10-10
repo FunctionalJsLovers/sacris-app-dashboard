@@ -350,7 +350,7 @@ const CreateAppointment = () => {
                   <input
                     className={styles.inputWithTitle}
                     name="estimatedTime"
-                    placeholder="Tiempo estimado en minutos"
+                    placeholder="Tiempo estimado en horas"
                     value={sessionData.estimatedTime}
                     onChange={handleSessionChange}
                   />

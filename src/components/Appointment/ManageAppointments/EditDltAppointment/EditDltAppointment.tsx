@@ -619,12 +619,14 @@ function EditDltAppointment({
         </div>
       )}
       {showDltConfirmationSession && (
-        <div className={styles.confirmationPopup}>
-          <p>¿Estás seguro de que deseas eliminar la sesión?</p>
-          <button onClick={handleDeleteSession}>Eliminar</button>
-          <button onClick={() => setShowDltConfirmationSession(false)}>
-            Cancelar
-          </button>
+        <div className={styles.confirmationBackdrop}>
+          <div className={styles.confirmationPopup}>
+            <p>¿Estás seguro de que deseas eliminar la sesión?</p>
+            <button onClick={handleDeleteSession}>Eliminar</button>
+            <button onClick={() => setShowDltConfirmationSession(false)}>
+              Cancelar
+            </button>
+          </div>
         </div>
       )}
     </div>
