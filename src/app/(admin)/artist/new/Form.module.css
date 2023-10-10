@@ -2,7 +2,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
   background-color: white;
 }
 
@@ -21,27 +20,23 @@
 .textarea,
 .input {
   width: 90%;
-  height: 54px;
+  height: 45px;
   flex-shrink: 0;
   border: none;
   border-radius: 10px;
   background: #e2e2e2;
-  margin-bottom: 20px;
   font-feature-settings:
     'clig' off,
     'liga' off;
   font-family: Inter;
-  font-size: 24px;
+  font-size: 16px;
   font-style: normal;
-  font-weight: 400;
-  line-height: 20px;
+  color: black;
 }
 
 .formButtons {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
-  justify-content: space-between;
 }
 
 .confirmButton {
@@ -56,11 +51,12 @@
   font-feature-settings:
     'clig' off,
     'liga' off;
-  font-family: Inter;
-  font-size: 32px;
+  font-family: var(--font), sans-serif;
+  font-size: 28px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
+  margin-right: 10px;
 }
 
 .cancelButton {
@@ -75,11 +71,12 @@
   font-feature-settings:
     'clig' off,
     'liga' off;
-  font-family: Inter;
-  font-size: 32px;
+  font-family: var(--font), sans-serif;
+  font-size: 28px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
+  margin-left: 10px;
 }
 
 .label {
@@ -87,13 +84,18 @@
   font-feature-settings:
     'clig' off,
     'liga' off;
-  font-family: Inter;
-  font-size: 24px;
+  font-family: var(--font), sans-serif;
+  font-size: 22px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
   /* 83.333% */
   padding: 20px;
+}
+.span {
+  display: block;
+  color: tomato;
+  font-size: x;
 }
 
 .img {
@@ -132,6 +134,10 @@
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
+}
+
+.div {
+  margin-bottom: 10px;
 }
 
 @media (max-width: 768px) {

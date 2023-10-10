@@ -4,80 +4,55 @@ import styles from './Form.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useMutation } from 'react-query';
+import { useForm } from 'react-hook-form';
+import { createArtist } from '@/services/ArtistsAPI';
 
 function CustomForm() {
+  const [cancelButtonVisible, setCancelButtonVisible] = useState(true);
+  const [errorQuery, setErrorQuery] = useState(true);
+
   const [file, setFile] = useState(null);
   const [artist, setArtist] = useState({
     name: '',
     phone: '',
     email: '',
   });
-  const mutation = useMutation(
-    async function (artistData: any) {
-      const response = await fetch(
-        'https://handsomely-divine-abstracted-bed.deploy.space/artists/',
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
-          body: JSON.stringify(artistData),
-        },
-      );
-      return await response.json();
+  const mutation = useMutation(createArtist);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue,
+    reset,
+  } = useForm({
+    defaultValues: {
+      name: '',
+      phone: '',
+      email: '', //,
+      // description: '',
+      // username: '',
+      // instagram: ''
     },
-    {
+  });
+
+  const onSubmit = handleSubmit((artist) => {
+    mutation.mutate(artist, {
+      onError: function (error) {
+        console.error(error);
+      },
       onSuccess: function (json) {
         console.log('creado');
+        setErrorQuery(false);
       },
-      onError: function (error) {
-        console.log(error);
-      },
-    },
-  );
-
-  const handleChange = (e: any) => {
-    setArtist({
-      ...artist,
-      [e.target.name]: e.target.value,
     });
-  };
-
-  const handlePhoneBlur = () => {
-    const phoneValue = artist.phone;
-    if (phoneValue && !/^\d+$/.test(phoneValue)) {
-      alert('El campo Teléfono debe contener solo números.');
-      setArtist({
-        ...artist,
-        phone: ' ',
-      });
-    }
-  };
-  const handleNameBlur = () => {
-    const nameValue = artist.name;
-    if (nameValue && !/^[a-zA-Z]+$/.test(nameValue)) {
-      alert('El campo Nombre debe contener solo letras.');
-      setArtist({
-        ...artist,
-        name: '',
-      });
-    }
-  };
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    if (artist.name === '' || artist.phone === '' || artist.email === '') {
-      alert(
-        'Por favor, complete todos los campos requeridos (Nombre, Teléfono, Email).',
-      );
-      return;
-    }
-    mutation.mutate(artist);
-    console.log(artist);
-  };
+    reset();
+    setCancelButtonVisible(false);
+  });
 
   return (
-    <form className={styles.formContainer} onSubmit={handleSubmit}>
+    <form className={styles.formContainer} onSubmit={onSubmit}>
       <div className={styles.formLeft}>
         <div className={styles.img}>
           {' '}
@@ -98,62 +73,199 @@ function CustomForm() {
             setFile(e.target.files[0]);
           }}
         />
-        <label className={styles.label} htmlFor="email">
-          Mail
-        </label>
-        <br />
-        <input
-          type="text"
-          name="email"
-          className={styles.input}
-          onChange={handleChange}
-        />
-        <label className={styles.label} htmlFor="description">
-          Descripción
-        </label>
-        <textarea name="description" className={styles.textarea} />
+        <div className={styles.div}>
+          <label className={styles.label} htmlFor="email">
+            Mail
+          </label>
+          <br />
+          <input
+            type="email"
+            className={styles.input}
+            {...register('email', {
+              required: {
+                value: true,
+                message: 'Correo es requerido',
+              },
+              pattern: {
+                value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                message: 'Correo no válido',
+              },
+            })}
+          />
+          {errors.email && (
+            <span className={styles.span}> {errors.email.message} </span>
+          )}
+        </div>
+        <div className={styles.div}>
+          <label className={styles.label} htmlFor="description">
+            Descripción
+          </label>
+          <textarea
+            className={styles.textarea}
+            //  {...register('description', {
+            //    required: {
+            //      value: true,
+            //      message: 'Descripcion es requerida'
+            //    },
+
+            //    pattern: {
+            //      value: /^(?!\s)[A-Za-z0-9\s]+$/,
+            //      message: 'descripcion no válida'
+            //    },
+            //    maxLength: 150,
+            //    minLength: 2
+            // })}
+          />
+          {/* {errors.description && <span className={styles.span}> {(errors.description.message)} </span>}
+        {errors.description?.type === 'maxLength' && (
+          <span className={styles.span}>Descripcion no debe ser mayor a 150 caracteres</span>
+        )}
+        {errors.description?.type === 'minLength' && (
+          <span className={styles.span}>Descripcion debe ser mayor a 2 caracteres</span>
+        )} */}
+        </div>
       </div>
       <div className={styles.formRight}>
-        <label className={styles.label} htmlFor="name">
-          Nombre
-        </label>
-        <input
-          type="text"
-          name="name"
-          className={styles.input}
-          onChange={handleChange}
-          onBlur={handleNameBlur}
-        />
-        <label className={styles.label} htmlFor="username">
-          User Name
-        </label>
-        <input type="text" name="username" className={styles.input} />
-        <label className={styles.label} htmlFor="categories">
-          Categorías
-        </label>
-        <input type="text" name="categories" className={styles.input} />
-        <label className={styles.label} htmlFor="phone">
-          Teléfono
-        </label>
-        <input
-          type="text"
-          name="phone"
-          className={styles.input}
-          onChange={handleChange}
-          onBlur={handlePhoneBlur}
-        />
-        <label className={styles.label} htmlFor="instagram">
-          Instagram
-        </label>
-        <input type="text" name="instagram" className={styles.input} />
+        <div className={styles.div}>
+          <label className={styles.label} htmlFor="name">
+            Nombre
+          </label>
+          <input
+            type="text"
+            className={styles.input}
+            {...register('name', {
+              required: {
+                value: true,
+                message: 'Nombre es requerido',
+              },
 
+              pattern: {
+                value: /^(?!\s)[A-Za-z\s]+$/,
+                message: 'nombre no válido',
+              },
+              maxLength: 20,
+              minLength: 2,
+            })}
+          />
+          {errors.name && (
+            <span className={styles.span}> {errors.name.message} </span>
+          )}
+          {errors.name?.type === 'maxLength' && (
+            <span className={styles.span}>
+              Nombre no debe ser mayor a 20 caracteres
+            </span>
+          )}
+          {errors.name?.type === 'minLength' && (
+            <span className={styles.span}>
+              Nombre debe ser mayor a 2 caracteres
+            </span>
+          )}
+        </div>
+        <div className={styles.div}>
+          <label className={styles.label} htmlFor="username">
+            User Name
+          </label>
+          <input
+            type="text"
+            className={styles.input}
+            //  {...register('username', {
+            //    required: {
+            //      value: true,
+            //      message: 'User Name es requerida'
+            //    },
+
+            //    pattern: {
+            //      value: /^(?!\s)[A-Za-z0-9\s]+$/,
+            //      message: 'User Name no válida'
+            //    },
+            //    maxLength: 15,
+            //    minLength: 2
+            //  })}
+          />
+          {/* {errors.username && <span className={styles.span}> {(errors.username.message)} </span>}
+       {errors.username?.type === 'maxLength' && (
+         <span className={styles.span}>User Name no debe ser mayor a 15 caracteres</span>
+       )}
+       {errors.username?.type === 'minLength' && (
+         <span className={styles.span}>User Name debe ser mayor a 2 caracteres</span>
+       )} */}
+        </div>
+        <div className={styles.div}>
+          <label className={styles.label} htmlFor="categories">
+            Categorías
+          </label>
+          <input type="text" name="categories" className={styles.input} />
+        </div>
+        <div className={styles.div}>
+          <label className={styles.label} htmlFor="phone">
+            Teléfono
+          </label>
+          <input
+            type="text"
+            className={styles.input}
+            {...register('phone', {
+              required: {
+                value: true,
+                message: 'Telefono es requerido',
+              },
+              pattern: {
+                value: /^(\d+|\d*\.\d+)$/,
+                message: 'telefono no válido',
+              },
+              maxLength: 10,
+              minLength: 2,
+            })}
+          />
+          {errors.phone && (
+            <span className={styles.span}> {errors.phone.message} </span>
+          )}
+          {errors.phone?.type === 'maxLength' && (
+            <span className={styles.span}>
+              Teléfono no debe ser mayor a 10 caracteres
+            </span>
+          )}
+          {errors.phone?.type === 'minLength' && (
+            <span className={styles.span}>
+              Teléfono debe ser mayor a 2 caracteres
+            </span>
+          )}
+        </div>
+        <div className={styles.div}>
+          <label className={styles.label} htmlFor="instagram">
+            Instagram
+          </label>
+          <input
+            type="text"
+            className={styles.input}
+            // {...register('instagram', {
+            //   required: {
+            //     value: true,
+            //     message: 'Instagram es requerido'
+            //   },
+
+            //   pattern: {
+            //     value: /^(?!\s)[A-Za-z0-9\s]+$/,
+            //     message: 'Instagram no válido'
+            //   },
+            //   minLength: 2
+            // })}
+          />
+          {/* {errors.instagram && <span className={styles.span}> {(errors.instagram.message)} </span>}
+      {errors.instagram?.type === 'minLength' && (
+        <span className={styles.span}>Instagram debe ser mayor a 2 caracteres</span>
+      )} */}
+        </div>
         <div className={styles.formButtons}>
-          <button className={styles.confirmButton} onSubmit={handleSubmit}>
-            Confirmar
-          </button>
+          {cancelButtonVisible && (
+            <button className={styles.confirmButton} onSubmit={onSubmit}>
+              Confirmar
+            </button>
+          )}
           <Link href="/artist">
             {' '}
-            <button className={styles.cancelButton}>Cancelar</button>
+            {cancelButtonVisible && (
+              <button className={styles.cancelButton}>Cancelar</button>
+            )}{' '}
           </Link>
         </div>
         {mutation.isLoading && (
@@ -161,21 +273,19 @@ function CustomForm() {
             <h1 className={styles.label}>Creando Artista...</h1>
           </div>
         )}
-        {mutation.isSuccess && (
+
+        {mutation.isSuccess && errorQuery && (
           <div className={styles.msg}>
-            <h1 className={styles.label}>se a creado correctamente</h1>
-            <Link href="/dashboard/artist">
-              {' '}
-              <button className={styles.menuButton}> Volver</button>{' '}
+            <Link href="/artist">
+              <button className={styles.menuButton}>Volver</button>
             </Link>
           </div>
         )}
-        {mutation.isError && (
-          <div className={styles.errorMsg}>
-            <h1>
-              Ha ocurrido un error. El artista ya existe o ha habido un problema
-              en el servidor.
-            </h1>
+        {!errorQuery && (
+          <div className={styles.msg}>
+            <Link href="/artist">
+              <button className={styles.menuButton}>Volver</button>
+            </Link>
           </div>
         )}
       </div>

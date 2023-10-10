@@ -48,3 +48,17 @@ export async function deleteArtist(id: string) {
   );
   return response.json();
 }
+
+export async function createArtist(artistData: any) {
+  const response = await fetch(
+    'https://handsomely-divine-abstracted-bed.deploy.space/artists/',
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(artistData),
+    },
+  );
+  return await response.json();
+}

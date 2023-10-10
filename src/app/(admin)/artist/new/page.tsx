@@ -1,3 +1,4 @@
+import NavBar from '@/components/NavBar/NavBar';
 import React from 'react';
 import styles from './styles.module.css';
 import AccountSection from '@/components/AccountSection/AccountSection';
@@ -12,7 +13,9 @@ const Artists: React.FC = () => {
       />
       <div className={styles.calendarArtist}>
         <div className={styles.title}>Artista</div>
-        <CustomForm></CustomForm>
+        <div className={styles.container}>
+          <CustomForm></CustomForm>
+        </div>
       </div>
     </div>
   );
