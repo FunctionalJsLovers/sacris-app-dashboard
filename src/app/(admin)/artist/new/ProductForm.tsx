@@ -1,85 +1,82 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable react/react-in-jsx-scope */
-'use client'
-import { useState } from 'react'
-import styles from './Form.module.css'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useMutation } from 'react-query'
+'use client';
+import { useState } from 'react';
+import styles from './Form.module.css';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useMutation } from 'react-query';
 
-function CustomForm () {
-  const [file, setFile] = useState(null)
+function CustomForm() {
+  const [file, setFile] = useState(null);
   const [artist, setArtist] = useState({
     name: '',
     phone: '',
-    email: ''
-  })
-  const mutation = useMutation(async function (artistData: any) {
-    const response = await fetch(
-      'https://handsomely-divine-abstracted-bed.deploy.space/artists/',
-      {
-        headers: {
-          'Content-Type': 'application/json'
+    email: '',
+  });
+  const mutation = useMutation(
+    async function (artistData: any) {
+      const response = await fetch(
+        'https://handsomely-divine-abstracted-bed.deploy.space/artists/',
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify(artistData),
         },
-        method: 'POST',
-        body: JSON.stringify(artistData)
-      }
-    )
-    return await response.json()
-  },
-  {
-    onSuccess: function (json) {
-      console.log('creado')
+      );
+      return await response.json();
     },
-    onError: function (error) {
-      console.log(error)
-    }
-  })
+    {
+      onSuccess: function (json) {
+        console.log('creado');
+      },
+      onError: function (error) {
+        console.log(error);
+      },
+    },
+  );
 
   const handleChange = (e: any) => {
     setArtist({
       ...artist,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handlePhoneBlur = () => {
-    const phoneValue = artist.phone
+    const phoneValue = artist.phone;
     if (phoneValue && !/^\d+$/.test(phoneValue)) {
-      alert('El campo Teléfono debe contener solo números.')
+      alert('El campo Teléfono debe contener solo números.');
       setArtist({
         ...artist,
-        phone: ' '
-      })
+        phone: ' ',
+      });
     }
-  }
+  };
   const handleNameBlur = () => {
-    const nameValue = artist.name
+    const nameValue = artist.name;
     if (nameValue && !/^[a-zA-Z]+$/.test(nameValue)) {
-      alert('El campo Nombre debe contener solo letras.')
+      alert('El campo Nombre debe contener solo letras.');
       setArtist({
         ...artist,
-        name: ''
-      })
+        name: '',
+      });
     }
-  }
+  };
 
   const handleSubmit = async (e: any) => {
-    e.preventDefault()
-    if ((artist.name === '') || (artist.phone === '') || (artist.email === '')) {
+    e.preventDefault();
+    if (artist.name === '' || artist.phone === '' || artist.email === '') {
       alert(
-        'Por favor, complete todos los campos requeridos (Nombre, Teléfono, Email).'
-      )
-      return
+        'Por favor, complete todos los campos requeridos (Nombre, Teléfono, Email).',
+      );
+      return;
     }
-    mutation.mutate(artist)
-    console.log(artist)
-  }
+    mutation.mutate(artist);
+    console.log(artist);
+  };
 
   return (
-    // eslint-disable-next-line react/react-in-jsx-scope, @typescript-eslint/no-misused-promises
     <form className={styles.formContainer} onSubmit={handleSubmit}>
       <div className={styles.formLeft}>
         <div className={styles.img}>
@@ -98,7 +95,7 @@ function CustomForm () {
           name="image"
           className={styles.inputImage}
           onChange={(e: any) => {
-            setFile(e.target.files[0])
+            setFile(e.target.files[0]);
           }}
         />
         <label className={styles.label} htmlFor="email">
@@ -159,20 +156,31 @@ function CustomForm () {
             <button className={styles.cancelButton}>Cancelar</button>
           </Link>
         </div>
-        {mutation.isLoading && <div className={styles.msg}>
-          <h1 className={styles.label}>Creando Artista...</h1></div>}
-        {mutation.isSuccess && <div className={styles.msg}>
-          <h1 className={styles.label}>se a creado correctamente</h1>
-          <Link href="/dashboard/artist">
-            {' '}<button className={styles.menuButton}> Volver</button> </Link></div>}
+        {mutation.isLoading && (
+          <div className={styles.msg}>
+            <h1 className={styles.label}>Creando Artista...</h1>
+          </div>
+        )}
+        {mutation.isSuccess && (
+          <div className={styles.msg}>
+            <h1 className={styles.label}>se a creado correctamente</h1>
+            <Link href="/dashboard/artist">
+              {' '}
+              <button className={styles.menuButton}> Volver</button>{' '}
+            </Link>
+          </div>
+        )}
         {mutation.isError && (
           <div className={styles.errorMsg}>
-            <h1>Ha ocurrido un error. El artista ya existe o ha habido un problema en el servidor.</h1>
+            <h1>
+              Ha ocurrido un error. El artista ya existe o ha habido un problema
+              en el servidor.
+            </h1>
           </div>
         )}
       </div>
     </form>
-  )
+  );
 }
 
-export default CustomForm
+export default CustomForm;

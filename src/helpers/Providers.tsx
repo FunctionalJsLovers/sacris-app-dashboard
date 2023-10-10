@@ -1,18 +1,20 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable react/react-in-jsx-scope */
-'use client'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { type ReactNode } from 'react'
+'use client';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactNode } from 'react';
+import { SessionProvider } from 'next-auth/react';
 
-export default async function Providers (params: PageProps) {
-  const queryClient = new QueryClient()
+// eslint-disable-next-line @next/next/no-async-client-component
+export default async function Providers(params: PageProps) {
+  const queryClient = new QueryClient();
   return (
-        <QueryClientProvider client={queryClient}>
-            {params.children}
-        </QueryClientProvider>
-  )
+    <SessionProvider>
+      <QueryClientProvider client={queryClient}>
+        {params.children}
+      </QueryClientProvider>
+    </SessionProvider>
+  );
 }
 
 interface PageProps {
-  children: ReactNode
+  children: ReactNode;
 }
