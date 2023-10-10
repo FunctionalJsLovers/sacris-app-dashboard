@@ -12,25 +12,31 @@ export default function AdminLayout({ children }: PageProps) {
     {
       name: 'Artistas',
       path: '/artist',
-      icon: '/images/iconsNSelect/artists.png',
+      icon: 'ri:account-circle-line',
+      text: 'None',
+    },
+    {
+      name: 'Citas',
+      path: '/dashboard/appointments',
+      icon: 'ri:calendar-todo-fill',
       text: 'None',
     },
     {
       name: 'Calendario',
       path: '/calendar',
-      icon: '/images/iconsNSelect/calendar.png',
+      icon: 'ri:calendar-2-line',
       text: 'None',
     },
     {
       name: 'Productos',
       path: '/',
-      icon: '/images/iconsNSelect/products.png',
+      icon: 'ri:inbox-2-line',
       text: 'None',
     },
     {
       name: 'Reportes',
       path: '/',
-      icon: '/images/iconsNSelect/reports.png',
+      icon: 'ri:bar-chart-box-line',
       text: 'None',
     },
   ];

@@ -4,12 +4,19 @@ import styles from './styles.module.css';
 import AccountSection from '@/components/AccountSection/AccountSection';
 import Artist from '@/components/Artist/page';
 
-const routes = [
+{
+  /*const routes = [
   {
     name: 'Artistas',
     path: '/dashboard/artist',
     icon: '/images/iconsSelect/artists.png',
     text: 'Red',
+  },
+  {
+    name: 'Citas',
+    path: '/dashboard/appointments',
+    icon: '/images/iconsNSelect/appointments.png',
+    text: 'None',
   },
   {
     name: 'Calendario',
@@ -29,11 +36,13 @@ const routes = [
     icon: '/images/iconsNSelect/reports.png',
     text: 'None',
   },
-];
+];*/
+}
+
 const Artists: React.FC = () => {
   return (
     <div className={styles.allArtist}>
-      <NavBar routes={routes} />
+      {/*<NavBar routes={routes} />*/}
 
       <AccountSection
         notificationCount={2}
