@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { createArtist } from '@/services/ArtistsAPI';
+import { Modal } from 'antd';
 
 function CustomForm() {
   const [cancelButtonVisible, setCancelButtonVisible] = useState(true);
@@ -41,6 +42,7 @@ function CustomForm() {
     mutation.mutate(artist, {
       onError: function (error) {
         console.error(error);
+        setErrorQuery(true);
       },
       onSuccess: function (json) {
         console.log('creado');
@@ -53,6 +55,9 @@ function CustomForm() {
 
   return (
     <form className={styles.formContainer} onSubmit={onSubmit}>
+      <Modal open={errorQuery}>
+        <p>ERROR</p>
+      </Modal>
       <div className={styles.formLeft}>
         <div className={styles.img}>
           {' '}
