@@ -60,11 +60,12 @@ const NavBar: React.FC<NavBarProps> = ({ routes }) => {
               href={route.path}
               onClick={() => handleMenuItemClick(route.path)}>
               <div className={styles.link}>
-                <span
-                  className={
-                    route.path === selected ? styles.textRed : styles.text
-                  }>
-                  <Icon icon={route.icon} width={25} height={25}></Icon>
+                <span>
+                  <Icon
+                    icon={route.icon}
+                    color={route.path === selected ? '#cb3230' : 'BBBFC1'}
+                    width={25}
+                    height={25}></Icon>
                 </span>
                 {expanded && (
                   <span
