@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { createArtist } from '@/services/ArtistsAPI';
+import { Modal } from 'antd';
 
 function CustomForm() {
   const [cancelButtonVisible, setCancelButtonVisible] = useState(true);
@@ -17,7 +18,16 @@ function CustomForm() {
     phone: '',
     email: '',
   });
-  const mutation = useMutation(createArtist);
+
+  const { mutate: addUser } = useMutation({
+    mutationFn: createArtist,
+    onSuccess: async () => {
+      console.log('success');
+    },
+    onError: async (error) => {
+      console.log('error', error);
+    },
+  });
 
   const {
     register,
@@ -38,18 +48,36 @@ function CustomForm() {
   });
 
   const onSubmit = handleSubmit((artist) => {
-    mutation.mutate(artist, {
-      onError: function (error) {
-        console.error(error);
-      },
-      onSuccess: function (json) {
-        console.log('creado');
-        setErrorQuery(false);
-      },
-    });
+    addUser(artist);
     reset();
     setCancelButtonVisible(false);
+    console.log(artist);
   });
+  /*if (mutation.isLoading) {
+    return 'creando...';
+  }
+
+  if (mutation.isError) {
+    return (
+      <div className={styles.msg}>
+        <Link href="/artist">
+          <button className={styles.menuButton}>mal</button>
+          <h1 className={styles.label}></h1>
+        </Link>
+      </div>
+    );
+  }
+
+  if (mutation.isSuccess) {
+    return (
+      <div className={styles.msg}>
+        <Link href="/artist">
+          <button className={styles.menuButton}>bien</button>
+          <h1 className={styles.label}></h1>
+        </Link>
+      </div>
+    );
+  }*/
 
   return (
     <form className={styles.formContainer} onSubmit={onSubmit}>
@@ -268,26 +296,6 @@ function CustomForm() {
             )}{' '}
           </Link>
         </div>
-        {mutation.isLoading && (
-          <div className={styles.msg}>
-            <h1 className={styles.label}>Creando Artista...</h1>
-          </div>
-        )}
-
-        {mutation.isSuccess && errorQuery && (
-          <div className={styles.msg}>
-            <Link href="/artist">
-              <button className={styles.menuButton}>Volver</button>
-            </Link>
-          </div>
-        )}
-        {!errorQuery && (
-          <div className={styles.msg}>
-            <Link href="/artist">
-              <button className={styles.menuButton}>Volver</button>
-            </Link>
-          </div>
-        )}
       </div>
     </form>
   );

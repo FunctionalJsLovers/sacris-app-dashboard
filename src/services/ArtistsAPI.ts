@@ -60,5 +60,10 @@ export async function createArtist(artistData: any) {
       body: JSON.stringify(artistData),
     },
   );
-  return await response.json();
+  if (!response.ok) {
+    const errorResponse = await response.text();
+    throw new Error(errorResponse);
+  }
+  const user = await response.json();
+  return user;
 }
