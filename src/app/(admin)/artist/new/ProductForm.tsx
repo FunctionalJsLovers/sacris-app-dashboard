@@ -79,6 +79,32 @@ function CustomForm() {
     );
   }*/
 
+  /*if (mutation.isLoading) {
+    return 'creando...';
+  }
+
+  if (mutation.isError) {
+    return (
+      <div className={styles.msg}>
+        <Link href="/artist">
+          <button className={styles.menuButton}>mal</button>
+          <h1 className={styles.label}></h1>
+        </Link>
+      </div>
+    );
+  }
+
+  if (mutation.isSuccess) {
+    return (
+      <div className={styles.msg}>
+        <Link href="/artist">
+          <button className={styles.menuButton}>bien</button>
+          <h1 className={styles.label}></h1>
+        </Link>
+      </div>
+    );
+  }*/
+
   return (
     <form className={styles.formContainer} onSubmit={onSubmit}>
       <div className={styles.formLeft}>

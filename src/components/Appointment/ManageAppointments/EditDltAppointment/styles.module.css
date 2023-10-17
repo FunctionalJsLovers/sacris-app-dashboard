@@ -1,12 +1,10 @@
 .containerEditAppointment {
   background-color: #f4f4f4;
-  width: 70vw;
-  height: 80vh;
   border-radius: 10px;
+  height: 70vh;
 }
 
 .title {
-  margin: 20px;
   color: #111111;
   font-family: 'Times New Roman', sans-serif;
 }
@@ -20,7 +18,6 @@
 .rightSection {
   flex: 1;
   padding: 20px;
-  margin: 10px;
 }
 
 .leftSection {
@@ -35,13 +32,13 @@
 }
 
 .formGroup {
-  margin-top: 20px;
-  margin-bottom: 15px;
+  margin-bottom: 2vh;
 }
 
 .labelWithTitle {
   display: block;
   font-weight: bold;
+  font-size: 13px;
   margin-bottom: 5px;
   color: #111111;
 }
@@ -64,6 +61,7 @@
   border: none;
   cursor: pointer;
   border-radius: 5px;
+  margin-top: 1vh;
 }
 
 .buttonDelete {

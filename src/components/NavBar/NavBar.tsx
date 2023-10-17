@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles.module.css';
 import Image from 'next/image';
 import { signOut } from 'next-auth/react';
@@ -19,6 +19,17 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ routes }) => {
   const [expanded, setExpanded] = useState(false);
+  const [selected, setSelected] = useState('true');
+
+  const handleMenuItemClick = (label: string) => {
+    setSelected(label);
+    localStorage.setItem('selected', String(label));
+  };
+
+  useEffect(() => {
+    const selectedValue = localStorage.getItem('selected');
+    setSelected(selectedValue ? selectedValue : '');
+  }, [selected]);
 
   const handleToggleExpand = () => {
     setExpanded(!expanded);
@@ -45,15 +56,21 @@ const NavBar: React.FC<NavBarProps> = ({ routes }) => {
       <ul>
         {routes.map((route, index) => (
           <li key={index}>
-            <Link href={route.path}>
+            <Link
+              href={route.path}
+              onClick={() => handleMenuItemClick(route.path)}>
               <div className={styles.link}>
                 <span>
-                  <Icon icon={route.icon} width={25} height={25}></Icon>
+                  <Icon
+                    icon={route.icon}
+                    color={route.path === selected ? '#cb3230' : 'BBBFC1'}
+                    width={25}
+                    height={25}></Icon>
                 </span>
                 {expanded && (
                   <span
                     className={
-                      route.text === 'Red' ? styles.textRed : styles.text
+                      route.path === selected ? styles.textRed : styles.text
                     }>
                     {route.name}
                   </span>
