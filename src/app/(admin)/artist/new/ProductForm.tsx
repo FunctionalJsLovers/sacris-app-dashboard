@@ -39,25 +39,40 @@ function CustomForm() {
   });
 
   const onSubmit = handleSubmit((artist) => {
-    mutation.mutate(artist, {
-      onError: function (error) {
-        console.error(error);
-        setErrorQuery(true);
-      },
-      onSuccess: function (json) {
-        console.log('creado');
-        setErrorQuery(false);
-      },
-    });
+    mutation.mutate(artist);
     reset();
     setCancelButtonVisible(false);
+    console.log(artist);
   });
+
+  if (mutation.isLoading) {
+    return 'creando...';
+  }
+
+  if (mutation.isError) {
+    return (
+      <div className={styles.msg}>
+        <Link href="/artist">
+          <button className={styles.menuButton}>mal</button>
+          <h1 className={styles.label}></h1>
+        </Link>
+      </div>
+    );
+  }
+
+  if (mutation.isSuccess) {
+    return (
+      <div className={styles.msg}>
+        <Link href="/artist">
+          <button className={styles.menuButton}>bien</button>
+          <h1 className={styles.label}></h1>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <form className={styles.formContainer} onSubmit={onSubmit}>
-      <Modal open={errorQuery}>
-        <p>ERROR</p>
-      </Modal>
       <div className={styles.formLeft}>
         <div className={styles.img}>
           {' '}
@@ -273,26 +288,6 @@ function CustomForm() {
             )}{' '}
           </Link>
         </div>
-        {mutation.isLoading && (
-          <div className={styles.msg}>
-            <h1 className={styles.label}>Creando Artista...</h1>
-          </div>
-        )}
-
-        {mutation.isSuccess && errorQuery && (
-          <div className={styles.msg}>
-            <Link href="/artist">
-              <button className={styles.menuButton}>Volver</button>
-            </Link>
-          </div>
-        )}
-        {!errorQuery && (
-          <div className={styles.msg}>
-            <Link href="/artist">
-              <button className={styles.menuButton}>Volver</button>
-            </Link>
-          </div>
-        )}
       </div>
     </form>
   );

@@ -1,8 +1,10 @@
 .formContainer {
   display: flex;
   justify-content: space-between;
+  border: 1px solid #ccc;
   align-items: center;
   background-color: white;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .formLeft {
@@ -19,19 +21,19 @@
 
 .textarea,
 .input {
+  flex-grow: 1;
+  outline: none;
+  color: var(--gray-gray-400, #a0aec0);
+  font-family: Helvetica;
+  font-size: 12px;
   width: 90%;
   height: 45px;
-  flex-shrink: 0;
   border: none;
   border-radius: 10px;
-  background: #e2e2e2;
-  font-feature-settings:
-    'clig' off,
-    'liga' off;
-  font-family: Inter;
-  font-size: 16px;
   font-style: normal;
   color: black;
+  border-color: black;
+  border: 1px solid #ccc;
 }
 
 .formButtons {
@@ -48,11 +50,8 @@
   cursor: pointer;
   width: 200px;
   height: 55px;
-  font-feature-settings:
-    'clig' off,
-    'liga' off;
-  font-family: var(--font), sans-serif;
-  font-size: 28px;
+  font-family: Helvetica;
+  font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
@@ -68,11 +67,8 @@
   cursor: pointer;
   width: 200px;
   height: 55px;
-  font-feature-settings:
-    'clig' off,
-    'liga' off;
-  font-family: var(--font), sans-serif;
-  font-size: 28px;
+  font-family: Helvetica;
+  font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
@@ -80,17 +76,13 @@
 }
 
 .label {
-  color: rgba(0, 0, 0, 0.5);
-  font-feature-settings:
-    'clig' off,
-    'liga' off;
+  display: flex;
+  width: 400px;
   font-family: var(--font), sans-serif;
-  font-size: 22px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 20px;
-  /* 83.333% */
-  padding: 20px;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-right: 50px;
+  color: #111111;
 }
 .span {
   display: block;

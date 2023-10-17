@@ -60,5 +60,5 @@ export async function createArtist(artistData: any) {
       body: JSON.stringify(artistData),
     },
   );
-  return await response.json();
+  return response.json();
 }
