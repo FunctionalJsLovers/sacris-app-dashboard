@@ -15,7 +15,7 @@ import { addHours } from 'date-fns';
 type Session = {
   id: string;
   date: string;
-  estimatedTime: number;
+  estimated_time: number;
   status: string;
   price: number;
   appointment_id: string;
@@ -184,7 +184,7 @@ function ComCalendar() {
           start: new Date(appointment.date),
           end: new Date(
             new Date(appointment.date).getTime() +
-              appointment.estimatedTime * 3600000,
+              appointment.estimated_time * 3600000,
           ),
           color: getColorForState(appointment.status),
         }))}
@@ -212,12 +212,11 @@ function ComCalendar() {
             <p>
               Fin:{' '}
               {new Date(
-                addHours(
-                  new Date(selectedEvent.date),
-                  selectedEvent.estimatedTime,
-                ),
+                new Date(selectedEvent.date).getTime() +
+                  selectedEvent.estimated_time * 60 * 60 * 1000,
               ).toLocaleString()}
             </p>
+
             <p>Estado: {selectedEvent.status}</p>
             <p>Nombre Artista: {artistName}</p>
             <p>Nombre Cliente: {clientName}</p>

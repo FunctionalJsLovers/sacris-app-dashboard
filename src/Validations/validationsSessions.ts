@@ -21,12 +21,14 @@ export function validateSessionFields(sessionData: any): {
     }
   }
 
-  if (!sessionData.estimatedTime) {
-    errors.estimatedTime = 'El campo de tiempo estimado es obligatorio.';
-  } else if (isNaN(Number(sessionData.estimatedTime))) {
-    errors.estimatedTime = 'El campo de tiempo estimado debe ser un número.';
-  } else if (sessionData.estimatedTime > 6) {
-    errors.estimatedTime = 'Las horas son demasiadas, cree una nueva sesión';
+  if (!sessionData.estimated_time) {
+    errors.estimated_time = 'El campo de tiempo estimado es obligatorio.';
+  } else if (isNaN(Number(sessionData.estimated_time))) {
+    errors.estimated_time = 'El campo de tiempo estimado debe ser un número.';
+  } else if (sessionData.estimated_time <= 0) {
+    errors.estimated_time = 'El tiempo estimado debe ser mayor de 0';
+  } else if (sessionData.estimated_time > 6) {
+    errors.estimated_time = 'Las horas son demasiadas, cree una nueva sesión';
   }
 
   if (sessionData.status === 'none' || sessionData.status === 'Seleccionar..') {
@@ -37,11 +39,9 @@ export function validateSessionFields(sessionData: any): {
     errors.price = 'El campo precio es obligatorio.';
   } else if (isNaN(Number(sessionData.price))) {
     errors.price = 'El campo precio debe ser un número.';
+  } else if (isNaN(Number(sessionData.price <= 0))) {
+    errors.price = 'El campo precio debe ser mayor que 0.';
   }
-
-  /*if (!sessionData.id) {
-    errors.id = 'El campo identificador de cita es obligatorio.';
-  }*/
 
   return errors;
 }

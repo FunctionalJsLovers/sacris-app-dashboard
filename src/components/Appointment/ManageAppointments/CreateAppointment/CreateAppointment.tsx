@@ -9,6 +9,11 @@ import {
   validateAppointmentFields,
 } from '@/Validations/validationsSessions';
 
+interface ArtistCategory {
+  id: string;
+  artist_id: string;
+  category_id: string;
+}
 interface Artist {
   id: string;
   name: string;
@@ -39,7 +44,19 @@ const CreateAppointment = () => {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [artistCategories, setArtistCategories] = useState<ArtistCategory[]>(
+    [],
+  );
   const apiBaseUrl = 'http://34.220.171.214:9000/admin';
+
+  const fetchArtistCategories = async () => {
+    try {
+      const response = await axios.get(`${apiBaseUrl}/artistCategories`);
+      setArtistCategories(response.data.artistCategories);
+    } catch (error) {
+      console.error('Error al cargar las categorías de los artistas:', error);
+    }
+  };
 
   const fetchArtists = async () => {
     try {
@@ -72,6 +89,7 @@ const CreateAppointment = () => {
     fetchArtists();
     fetchClients();
     fetchCategories();
+    fetchArtistCategories();
   }, []);
 
   const [formData, setFormData] = useState({
@@ -102,6 +120,16 @@ const CreateAppointment = () => {
     }));
   };
 
+  console.log('Tratando de enviar: ', formData);
+
+  const clearFormData = () => {
+    setFormData({
+      description: '',
+      artist_id: '',
+      client_id: '',
+      category_id: '',
+    });
+  };
   const createAppointment = async () => {
     try {
       const fieldErrors = validateAppointmentFields(formData);
@@ -110,7 +138,7 @@ const CreateAppointment = () => {
         const appointmentResponse = await createAppointmentMutation.mutateAsync(
           formData as any,
         );
-        const appointmentId = appointmentResponse.data.id;
+        const appointmentId = appointmentResponse.data.appointments[0].id;
         console.log(`Cita creada con ID: ${appointmentId}`);
         setSuccessMessage(`Cita creada con ID: ${appointmentId}`);
         clearFormData();
@@ -129,16 +157,6 @@ const CreateAppointment = () => {
       setError('Ocurrió un error al intentar crear la cita');
     }
   };
-
-  const clearFormData = () => {
-    setFormData({
-      description: '',
-      artist_id: '',
-      client_id: '',
-      category_id: '',
-    });
-  };
-
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
@@ -200,11 +218,16 @@ const CreateAppointment = () => {
                 value={formData.category_id}
                 onChange={handleSelectChange}>
                 <option value="">Seleccionar</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
+                {artistCategories.map((artistCategory) => {
+                  const category = categories.find(
+                    (c) => c.id === artistCategory.category_id,
+                  );
+                  return (
+                    <option key={artistCategory.id} value={artistCategory.id}>
+                      {category ? category.name : 'Categoría no encontrada'}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>

@@ -10,7 +10,7 @@
 }
 
 .allAppointmentSectionDE {
-  height: 144vh;
+  height: 140vh;
 }
 
 .appointmentsContent,
@@ -46,7 +46,7 @@
 
 .appointmentsContainer {
   display: flex;
-  height: 100%;
+  height: 80%;
   margin-top: 20px;
 }
 

@@ -23,16 +23,14 @@ function SessionOperations({
   const [success, setSuccess] = useState<string | null>(null);
   const [showDltConfirmationSession, setShowDltConfirmationSession] =
     useState(false);
-  const apiBaseUrl = 'http://34.208.255.175:9000/admin';
-  const [dateString, setDateString] = useState('');
+  const apiBaseUrl = 'http://34.220.171.214:9000/admin';
 
   const [sessionData, setSessionData] = useState({
-    sessionId: '',
     date: '',
-    estimatedTime: '',
+    estimated_time: '',
     status: '',
     price: '',
-    appointmentId: '',
+    appointment_id: '',
   });
 
   const queryClient = useQueryClient();
@@ -42,15 +40,15 @@ function SessionOperations({
       try {
         if (sessionId) {
           const response = await axios.get(
-            `https://handsomely-divine-abstracted-bed.deploy.space/sessions/${sessionId}`,
+            `${apiBaseUrl}/sessions/${sessionId}`,
           );
           setSessionData({
             ...sessionData,
             date: response.data.date,
-            estimatedTime: response.data.estimatedTime,
+            estimated_time: response.data.estimated_time,
             status: response.data.status,
             price: response.data.price,
-            appointmentId: response.data.appointmentIdFk,
+            appointment_id: response.data.appointment_id,
           });
         } else {
           setError('El identificador de la cita no se encontró');
@@ -66,7 +64,7 @@ function SessionOperations({
 
   const editSessionMutation = useMutation(
     (newData) =>
-      axios.put(
+      axios.patch(
         `https://handsomely-divine-abstracted-bed.deploy.space/sessions/${sessionId}`,
         newData,
       ),
@@ -87,14 +85,30 @@ function SessionOperations({
     },
   );
 
+  const clearSessionData = () => {
+    setSessionData({
+      date: '',
+      estimated_time: '',
+      status: '',
+      price: '',
+      appointment_id: '',
+    });
+  };
+
   const createSession = async () => {
     const fieldErrors = validateSessionFields(sessionData);
     try {
       if (!Object.keys(fieldErrors).length) {
+        const sessionDataNumber = {
+          ...sessionData,
+          estimated_time: parseFloat(sessionData.estimated_time),
+          price: parseFloat(sessionData.price),
+        };
+        console.log('Tratando de enviar: ', sessionDataNumber);
         const sessionResponse = await createSessionMutation.mutateAsync(
-          sessionData as any,
+          sessionDataNumber as any,
         );
-        const sessionId = sessionResponse.data.sessionId;
+        const sessionId = sessionResponse.data.sessions.id;
         console.log(`Sesión creada con ID: ${sessionId}`);
         clearSessionData();
       } else {
@@ -103,10 +117,12 @@ function SessionOperations({
         for (const field in fieldErrors) {
           setError(fieldErrors[field]);
         }
+        clearSessionData();
       }
     } catch (error) {
       console.error(error);
       setError('Ocurrió un error al intentar crear la sesión');
+      clearSessionData();
     }
   };
 
@@ -116,16 +132,13 @@ function SessionOperations({
     try {
       //if (sessionData.id && !Object.keys(fieldErrors).length) {
       if (!Object.keys(fieldErrors).length) {
-        //await editSessionMutation.mutateAsync(sessionData as any);
+        await editSessionMutation.mutateAsync(sessionData as any);
         console.log('Sesión actualizada con éxito');
         setSuccess('Sesión actualizada con éxito');
         clearSessionData();
-        //} else if (!sessionData.id) {
-        //setError('El campo de ID de Sesión es obligatorio.');
       } else {
         console.error('El campo id no está definido.');
         setError('Algunos campos no son válidos');
-
         for (const field in fieldErrors) {
           setError(fieldErrors[field]);
         }
@@ -135,33 +148,6 @@ function SessionOperations({
     }
   };
 
-  {
-    /*
-  //Este es para dar click y que aparezca
-  const handleIdSessionClick = async () => {
-    try {
-      if (sessionData.id) {
-        const response = await axios.get(
-          `https://handsomely-divine-abstracted-bed.deploy.space/sessions/${sessionData.id}`,
-        );
-
-        setSessionData({
-          ...sessionData,
-          date: response.data.date,
-          estimatedTime: response.data.estimatedTime,
-          status: response.data.status,
-          price: response.data.price,
-          id: response.data.appointmentIdFk,
-        });
-      } else {
-        setError('Algunos campos de sesión están vacíos o no son válidos');
-      }
-    } catch (error) {
-      console.error(error);
-      setError('No se encontró el identificador de sesión.');
-    }
-  };*/
-  }
   const handleDeleteSession = async () => {
     try {
       if (sessionId) {
@@ -180,17 +166,6 @@ function SessionOperations({
     } finally {
       setShowDltConfirmationSession(false);
     }
-  };
-
-  const clearSessionData = () => {
-    setSessionData({
-      sessionId: '',
-      date: '',
-      estimatedTime: '',
-      status: '',
-      price: '',
-      appointmentId: '',
-    });
   };
 
   return (
@@ -226,18 +201,18 @@ function SessionOperations({
         <div className={styles.formGroup}>
           <div className={styles.timeStatusContainer}>
             <div>
-              <label className={styles.labelWithTitle} htmlFor="estimatedTime">
+              <label className={styles.labelWithTitle} htmlFor="estimated_time">
                 Tiempo estimado:
               </label>
               <input
                 className={styles.inputWithTitle}
-                name="estimatedTime"
+                name="estimated_time"
                 placeholder="Tiempo estimado en horas "
-                value={sessionData.estimatedTime}
+                value={sessionData.estimated_time}
                 onChange={(e) =>
                   setSessionData({
                     ...sessionData,
-                    estimatedTime: e.target.value,
+                    estimated_time: e.target.value,
                   })
                 }
               />
@@ -284,11 +259,11 @@ function SessionOperations({
             className={styles.inputWithTitle}
             name="appointmentIdFk"
             placeholder="Identificador de la cita"
-            value={sessionData.appointmentId}
+            value={sessionData.appointment_id}
             onChange={(e) =>
               setSessionData({
                 ...sessionData,
-                appointmentId: e.target.value,
+                appointment_id: e.target.value,
               })
             }
           />

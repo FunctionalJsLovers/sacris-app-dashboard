@@ -4,8 +4,23 @@ import { Icon } from '@iconify/react';
 import Error from '@/components/PopUps/Error/Error';
 import Success from '@/components/PopUps/Success/Success';
 import SessionOperations from '@/components/Sessions/ManageSessions/SessionOperations/SessionOperations';
+import axios from 'axios';
 
-const Sessions = () => {
+interface SessionProps {
+  appointmentId: string;
+}
+
+interface Session {
+  id: string;
+  date: string;
+  estimated_time: number;
+  status: string;
+  price: number;
+  appointment_id: string;
+}
+
+const Sessions = ({ appointmentId }: SessionProps) => {
+  const [allSessions, setAllSessions] = useState<Session[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [createMode, setCreateMode] = useState(true);
@@ -13,6 +28,27 @@ const Sessions = () => {
   const [deleteMode, setIsDeleteMode] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
+    null,
+  );
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://34.220.171.214:9000/admin/appointments/${appointmentId}/sessions`,
+      )
+      .then((response) => {
+        if (Array.isArray(response.data.sessions)) {
+          setAllSessions(response.data.sessions);
+        } else {
+          console.error('No se encontró sesiones válidas:', response.data);
+        }
+      })
+      .catch((error) => {
+        console.error('Error al cargar las sesiones:', error);
+      });
+  }, []);
+
   const clearAllModes = () => {
     setIsEditMode(false);
     setIsDeleteMode(false);
@@ -31,6 +67,11 @@ const Sessions = () => {
       setIsCreating(false);
     }
   });
+
+  const handleEditClick = () => {
+    clearAllModes();
+    setIsEditMode(true);
+  };
 
   return (
     <div className={styles.containerSession}>
@@ -82,16 +123,16 @@ const Sessions = () => {
       <div className={styles.sessionSection}>
         <div className={styles.sectionListSessions}>
           <div className={styles.listSessions}>
-            {/*{filteredSessions.map((appointment) => (
-                <span
-                    key={appointment.id}
-                    onClick={() => {
-                      setSelectedAppointmentId(appointment.id);
-                      handleEditClick();
-                    }}>
-                  {appointment.id}
-                </span>
-            ))}*/}
+            {allSessions.map((session) => (
+              <span
+                key={session.id}
+                onClick={() => {
+                  setSelectedSessionId(session.id);
+                  handleEditClick();
+                }}>
+                {session.id}
+              </span>
+            ))}
           </div>
         </div>
         <div className={styles.rightSection}>
@@ -112,6 +153,20 @@ const Sessions = () => {
           {deleteMode && (
             <SessionOperations
               sessionId={' '}
+              isEditing={isEditing}
+              isCreating={isCreating}
+            />
+          )}
+          {selectedSessionId && editMode && (
+            <SessionOperations
+              sessionId={selectedSessionId}
+              isEditing={isEditing}
+              isCreating={isCreating}
+            />
+          )}
+          {selectedSessionId && deleteMode && (
+            <SessionOperations
+              sessionId={selectedSessionId}
               isEditing={isEditing}
               isCreating={isCreating}
             />

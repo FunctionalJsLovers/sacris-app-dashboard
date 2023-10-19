@@ -78,6 +78,8 @@ const Appointments: React.FC = () => {
 
   const handleEditClick = () => {
     clearAll();
+    setIsEditing(true);
+    setIsEditMode(true);
     setShowEditAppointment(true);
   };
 
@@ -223,7 +225,9 @@ const Appointments: React.FC = () => {
               </div>
             )}
 
-            {showSessionContent && <Sessions />}
+            {selectedAppointmentId && showSessionContent && (
+              <Sessions appointmentId={selectedAppointmentId} />
+            )}
           </div>
         </div>
       </div>
