@@ -1,34 +1,49 @@
-.containerCreateAppointment {
+.containerSession {
   background-color: #f4f4f4;
   border-radius: 10px;
+  margin-top: 1vh;
 }
 
 .title {
   color: #111111;
   font-family: 'Times New Roman', sans-serif;
-  text-align: center;
-  margin-bottom: 1vh;
 }
 
-.createSection {
+.sessionSection {
   display: flex;
-  justify-content: space-between;
 }
 
 .leftSection,
 .rightSection {
   flex: 1;
-  padding: 8px;
+  padding: 20px;
+  margin: 10px;
 }
 
 .leftSection {
   border-right: 1px solid #ccc;
 }
 
-.rightSection {
+.header {
+  padding: 10px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+}
+
+.icons {
+  display: flex;
+  margin-left: auto;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  color: black;
+}
+
+.iconAdd,
+.iconDelete,
+.iconEdit {
+  width: 30px;
+  height: 30px;
+  margin: 10px;
+  cursor: pointer;
 }
 
 .formGroup {
@@ -63,8 +78,17 @@
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  margin-top: 1vh;
-  margin-bottom: 2vh;
+  margin-top: 2vh;
+}
+
+.timeStatusContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timeStatusContainer .inputWithTitle {
+  width: 20vw;
 }
 
 .successMessage {
@@ -72,4 +96,27 @@
   font-size: 15px;
   font-family: 'Times New Roman', sans-serif;
   margin-top: 25px;
+}
+
+.sectionListSessions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  height: 50vh;
+  background-color: #878787;
+  border-radius: 5px;
+  padding: 10px;
+  overflow-y: auto;
+  margin-left: 15px;
+}
+
+.listSessions span {
+  display: block;
+  padding: 5px;
+  background-color: #bbbfc1;
+  color: #111111;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
 }

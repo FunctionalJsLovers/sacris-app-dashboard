@@ -10,15 +10,15 @@ import Error from '@/components/PopUps/Error/Error';
 import { useQuery } from 'react-query';
 import { getAllSessions } from '@/services/SessionsAPI';
 import axios from 'axios';
+import { addHours } from 'date-fns';
 
 type Session = {
-  sessionId: string;
-  createdAt: string;
+  id: string;
   date: string;
   estimatedTime: number;
   status: string;
-  price: string;
-  appointmentIdFk: string;
+  price: number;
+  appointment_id: string;
   description: string;
 };
 
@@ -35,6 +35,7 @@ function ComCalendar() {
     'sessions',
     getAllSessions,
   );
+  const apiBaseUrl = 'http://34.220.171.214:9000/admin';
 
   const getColorForState = (state: string): string => {
     switch (state) {
@@ -60,20 +61,14 @@ function ComCalendar() {
   }, [fetchError]);
 
   useEffect(() => {
-    if (sessionsData) {
-      setSessions(sessionsData);
-    }
-  });
-
-  useEffect(() => {
     if (fetchError) {
       setError('No se pudo cargar la información de las citas');
     }
   }, [fetchError]);
 
   useEffect(() => {
-    if (sessionsData) {
-      setSessions(sessionsData);
+    if (sessionsData && sessionsData.sessions) {
+      setSessions(sessionsData.sessions);
     }
   }, [sessionsData]);
 
@@ -89,58 +84,81 @@ function ComCalendar() {
     }
   }, []);
 
-  const fetchAppointmentData = (event: Session) => {
-    const appointmentId = event.appointmentIdFk;
+  {
+    /*  const fetchAppointmentData = (event: Session) => {
+    const appointment_id = event.appointment_id;
     axios
-      .get(
-        `https://handsomely-divine-abstracted-bed.deploy.space/appointments/${appointmentId}`,
-      )
+        .get(
+            `${apiBaseUrl}/appointments/${appointment_id}`,
+        )
+        .then((response) => {
+          const appointmentData = response.data.appointments[0];
+          setAppointmentDescription(appointmentData.description);
+          axios
+              .get(
+                  `${apiBaseUrl}/artists/${appointmentData.artist_id}`,
+              )
+              .then((artistResponse) => {
+                const artistData = artistResponse.data.artists[0];
+                console.log("Artista: ", artistResponse)
+                setArtistName(artistData.name);
+              })
+              .catch((error) => {
+                console.error('Error al obtener el nombre del artista: ', error);
+                setError('Error al obtener el nombre del artista');
+              });
+          axios
+              .get(
+                  `${apiBaseUrl}/clients/${response.data.client_id}`,
+              )
+              .then((clientResponse) => {
+                const clientData = clientResponse.data.clients[0];
+                setClientName(clientData.name);
+              })
+              .catch((error) => {
+                console.error('Error al obtener el nombre del cliente: ', error);
+                setError('Error al obtener el nombre del cliente');
+              });
+          axios
+              .get(
+                  `${apiBaseUrl}/categories/${response.data.category_id}`,
+              )
+              .then((categoryResponse) => {
+                const categoryData = categoryResponse.data.categories[0];
+                setCategoryName(categoryData.name);
+              })
+              .catch((error) => {
+                console.error(
+                    'Error al obtener el nombre de la categoría: ',
+                    error,
+                );
+                setError('Error al obtener el nombre de la categoría');
+              });
+        })
+        .catch((error) => {
+          console.error('Error al obtener la información de la cita:', error);
+          setError('Error al obtener la información de la cita');
+        });
+  };
+*/
+  }
+
+  const fetchAppointmentData = (event: Session) => {
+    const appointment_id = event.appointment_id;
+    axios
+      .get(`${apiBaseUrl}/appointments/${appointment_id}`)
       .then((response) => {
-        setAppointmentDescription(response.data.description);
-        axios
-          .get(
-            `https://handsomely-divine-abstracted-bed.deploy.space/artists/${response.data.artistIdFk}`,
-          )
-          .then((artistResponse) => {
-            setArtistName(artistResponse.data.name);
-          })
-          .catch((error) => {
-            console.error('Error al obtener el nombre del artista: ', error);
-            setError('Error al obtener el nombre del artista');
-          });
-        axios
-          .get(
-            `https://handsomely-divine-abstracted-bed.deploy.space/clients/${response.data.clientIdFk}`,
-          )
-          .then((clientResponse) => {
-            setClientName(clientResponse.data.name);
-          })
-          .catch((error) => {
-            console.error('Error al obtener el nombre del cliente: ', error);
-            setError('Error al obtener el nombre del cliente');
-          });
-        axios
-          .get(
-            `https://handsomely-divine-abstracted-bed.deploy.space/categories/${response.data.categoryIdFk}`,
-          )
-          .then((categoryResponse) => {
-            setCategoryName(categoryResponse.data.name);
-          })
-          .catch((error) => {
-            console.error(
-              'Error al obtener el nombre de la categoría: ',
-              error,
-            );
-            setError('Error al obtener el nombre de la categoría');
-          });
+        const appointmentData = response.data.appointments[0];
+        setAppointmentDescription(appointmentData.description);
+        setArtistName(appointmentData.artist_id);
+        setClientName(appointmentData.client_id);
+        setCategoryName(appointmentData.category_id);
       })
       .catch((error) => {
         console.error('Error al obtener la información de la cita:', error);
         setError('Error al obtener la información de la cita');
       });
   };
-
-  console.log(sessionsData);
 
   return (
     <div className={styles.fullCalendar}>
@@ -160,10 +178,9 @@ function ComCalendar() {
           list: 'List',
         }}
         height={'80vh'}
-        timeZone="UTC"
         events={sessions.map((appointment) => ({
-          id: appointment.sessionId,
-          title: appointment.sessionId,
+          id: appointment.id,
+          title: appointment.id,
           start: new Date(appointment.date),
           end: new Date(
             new Date(appointment.date).getTime() +
@@ -173,7 +190,7 @@ function ComCalendar() {
         }))}
         eventClick={(clickInfo) => {
           const event = sessions.find(
-            (appointment) => appointment.sessionId === clickInfo.event.id,
+            (appointment) => appointment.id === clickInfo.event.id,
           );
           if (event) {
             setSelectedEvent(event);
@@ -190,23 +207,16 @@ function ComCalendar() {
         <div className={styles.popup}>
           <div className={styles.popupContent}>
             <h2>{appointmentDescription}</h2>
-            <p>ID: {selectedEvent.sessionId}</p>
-            <p>
-              Inicio:{' '}
-              {new Date(selectedEvent.date)
-                .toISOString()
-                .replace(/T/, ' ')
-                .replace(/\..+/, '')}
-            </p>
+            <p>ID: {selectedEvent.id}</p>
+            <p>Inicio: {new Date(selectedEvent.date).toLocaleString()}</p>
             <p>
               Fin:{' '}
               {new Date(
-                new Date(selectedEvent.date).getTime() +
-                  selectedEvent.estimatedTime * 60000,
-              )
-                .toISOString()
-                .replace(/T/, ' ')
-                .replace(/\..+/, '')}
+                addHours(
+                  new Date(selectedEvent.date),
+                  selectedEvent.estimatedTime,
+                ),
+              ).toLocaleString()}
             </p>
             <p>Estado: {selectedEvent.status}</p>
             <p>Nombre Artista: {artistName}</p>

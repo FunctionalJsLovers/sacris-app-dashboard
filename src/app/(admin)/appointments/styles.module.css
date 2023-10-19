@@ -1,17 +1,33 @@
-.allAppointmentSection {
-  height: 100vh;
-  max-height: 100vh;
+.allAppointmentSection,
+.allAppointmentSectionDE {
+  width: 100%;
   display: flex;
   background-color: #e3e3e3;
 }
 
-.appointmentsContent {
+.allAppointmentSection {
+  height: 100vh;
+}
+
+.allAppointmentSectionDE {
+  height: 144vh;
+}
+
+.appointmentsContent,
+.appointmentsContentSession {
   display: flex;
   flex-direction: column;
   width: 90%;
-  height: auto;
   padding: 20px;
   margin: 0 auto 10px 100px;
+}
+
+.appointmentsContent {
+  height: 100%;
+}
+
+.appointmentsContentSession {
+  height: 82.5%;
 }
 
 .appointmentsHeader {
@@ -24,15 +40,14 @@
 .title {
   justify-content: flex-start;
   font-size: 40px;
-  margin-bottom: 2vh;
   font-family: 'Times New Roman', sans-serif;
   color: #111111;
 }
 
 .appointmentsContainer {
   display: flex;
+  height: 100%;
   margin-top: 20px;
-  height: 70vh;
 }
 
 .appointmentsListSection {
@@ -41,7 +56,6 @@
   align-items: center;
   width: 250px;
   height: 100%;
-  max-height: 100%;
   background-color: #f4f4f4;
   border-radius: 5px;
   padding: 10px;
@@ -68,11 +82,10 @@
   cursor: pointer;
 }
 
-.appointmentSessionContainer {
+.onlyAppointmentContainer {
   margin-left: 20px;
   width: 100%;
   flex: 1;
-  max-height: 90%;
   border-radius: 5px;
   height: 100%;
 }
@@ -82,7 +95,7 @@
   margin-left: auto;
   background-color: #f4f4f4;
   border-radius: 5px;
-  margin-top: 4vh;
+  margin-top: 1vh;
 }
 
 .iconAdd,
@@ -92,4 +105,30 @@
   height: 30px;
   margin: 10px;
   cursor: pointer;
+}
+
+.lineSeparator {
+  margin-top: 0.5vh;
+  display: flex;
+  align-items: center;
+}
+
+.halfLine,
+.fullLine {
+  height: 2px;
+  background-color: #878787;
+}
+
+.arrowIcon {
+  margin-right: 1vh;
+  margin-left: 1vh;
+  cursor: pointer;
+}
+
+.halfLine {
+  flex: 1;
+}
+
+.fullLine {
+  flex: 1;
 }

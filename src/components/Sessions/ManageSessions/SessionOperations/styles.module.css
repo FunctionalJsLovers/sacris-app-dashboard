@@ -1,26 +1,11 @@
-.containerEditAppointment {
-  background-color: #f4f4f4;
-  border-radius: 10px;
+.edtDltContainer {
+  height: 100%;
+  width: 100%;
 }
 
 .title {
   color: #111111;
   font-family: 'Times New Roman', sans-serif;
-}
-
-.createSection {
-  display: flex;
-  justify-content: space-between;
-}
-
-.leftSection,
-.rightSection {
-  flex: 1;
-  padding: 20px;
-}
-
-.leftSection {
-  border-right: 1px solid #ccc;
 }
 
 .formGroup {
@@ -30,8 +15,8 @@
 
 .labelWithTitle {
   display: block;
-  font-size: 1vw;
   font-weight: bold;
+  font-size: 1vw;
   margin-bottom: 5px;
   color: #111111;
 }
@@ -46,30 +31,36 @@
   color: #111111;
 }
 
-.button {
-  font-family: Inter, sans-serif;
-  font-size: 1vw;
-  background-color: #2d3748;
-  color: #ffffff;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
+.inputDate {
+  width: 162%;
+  height: 5vh;
+  padding: 10px;
+  border: 1px solid #2d3748;
   border-radius: 5px;
-  margin-top: 1vh;
-  margin-bottom: 2vh;
+  background-color: #f4f4f4;
+  color: #111111;
 }
 
+.button,
+.buttonAdd,
 .buttonDelete {
   font-family: Inter, sans-serif;
   font-size: 1vw;
-  background-color: #540f08;
   color: #ffffff;
   padding: 10px 20px;
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  margin-top: 1vh;
-  margin-bottom: 2vh;
+  margin-top: 2vh;
+}
+
+.button,
+.buttonAdd {
+  background-color: #2d3748;
+}
+
+.buttonDelete {
+  background-color: #540f08;
 }
 
 .timeStatusContainer {
@@ -78,7 +69,15 @@
   align-items: center;
 }
 
-.showInfoAppointment {
+.timeStatusContainer .inputWithTitle {
+  width: 20vw;
+}
+
+.idInput {
+  position: relative;
+}
+
+.showInfoSession {
   position: absolute;
   top: 50%;
   right: 10px;

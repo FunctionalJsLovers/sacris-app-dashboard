@@ -1,0 +1,19 @@
+.containerDefault {
+  display: flex;
+  flex-direction: column;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconWarning {
+  color: #878787;
+}
+
+.containerDefault h2 {
+  width: 300px;
+  color: #878787;
+  text-align: justify;
+}

@@ -4,12 +4,21 @@ export function validateSessionFields(sessionData: any): {
   const errors: { [key: string]: string } = {};
 
   {
-    /*const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
-    if (!sessionData.date ) {
-        errors.date = "El campo fecha es obligatorio.";
+    const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
+    if (!sessionData.date) {
+      errors.date = 'El campo fecha es obligatorio.';
     } else if (!dateRegex.test(sessionData.date)) {
-        errors.date = "El formato de la fecha no es válido. Debe ser:  \"AAAA-MM-DDTHH:MM:SS.sssZ\".";
-    }*/
+      errors.date =
+        'El formato de la fecha no es válido. Debe ser:  "AAAA-MM-DDTHH:MM:SS"';
+    } else {
+      const date = new Date(sessionData.date);
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      if (hours < 8 || hours > 22 || (hours === 22 && minutes > 0)) {
+        errors.date =
+          'La cita debe estar dentro del horario laboral de 8 am a 10 pm.';
+      }
+    }
   }
 
   if (!sessionData.estimatedTime) {
@@ -20,11 +29,7 @@ export function validateSessionFields(sessionData: any): {
     errors.estimatedTime = 'Las horas son demasiadas, cree una nueva sesión';
   }
 
-  if (
-    !sessionData.status ||
-    sessionData.status === 'none' ||
-    sessionData.status === 'Seleccionar..'
-  ) {
+  if (sessionData.status === 'none' || sessionData.status === 'Seleccionar..') {
     errors.status = 'Debe seleccionar un estado válido.';
   }
 
@@ -34,9 +39,9 @@ export function validateSessionFields(sessionData: any): {
     errors.price = 'El campo precio debe ser un número.';
   }
 
-  if (!sessionData.appointmentIdFk) {
-    errors.appointmentIdFk = 'El campo identificador de cita es obligatorio.';
-  }
+  /*if (!sessionData.id) {
+    errors.id = 'El campo identificador de cita es obligatorio.';
+  }*/
 
   return errors;
 }
@@ -44,7 +49,7 @@ export function validateSessionFields(sessionData: any): {
 export function validateAppointmentFields(formData: any): {
   [key: string]: string;
 } {
-  const requiredFields = ['artistIdFk', 'clientIdFk', 'categoryIdFk'];
+  const requiredFields = ['artist_id', 'client_id', 'category_id'];
   const errors: { [key: string]: string } = {};
 
   for (const field of requiredFields) {

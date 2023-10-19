@@ -6,13 +6,15 @@ import axios from 'axios';
 import EditDltAppointment from '@/components/Appointment/ManageAppointments/EditDltAppointment/EditDltAppointment';
 import CreateAppointment from '@/components/Appointment/ManageAppointments/CreateAppointment/CreateAppointment';
 import { Icon } from '@iconify/react/dist/iconify.js';
+import Default from '@/components/Default/Default';
+import Sessions from '@/components/Sessions/ManageSessions/Sessions';
 
 interface Appointment {
-  appointmentId: string;
+  id: string;
   description: string;
-  artistId: string;
-  clientId: string;
-  categoryId: string;
+  artist_id: string;
+  client_id: string;
+  category_id: string;
 }
 
 const Appointments: React.FC = () => {
@@ -29,17 +31,24 @@ const Appointments: React.FC = () => {
   const [showCreateAppointment, setShowCreateAppointment] = useState(false);
   const [showEditAppointment, setShowEditAppointment] = useState(false);
   const [showDeleteAppointment, setShowDeleteAppointment] = useState(false);
+  const [showSessionContent, setShowSessionContent] = useState(false);
   const [isEditing, setIsEditing] = useState(true);
   const [editMode, setIsEditMode] = useState(false);
   const [deleteMode, setIsDeleteMode] = useState(false);
+  const [defaultMode, setIsDefaultMode] = useState(true);
 
   useEffect(() => {
     axios
-      .get(
-        'https://handsomely-divine-abstracted-bed.deploy.space/appointments/?totalCount=false',
-      )
+      .get('http://34.220.171.214:9000/admin/appointments/')
       .then((response) => {
-        setAllAppointments(response.data);
+        if (Array.isArray(response.data.appointments)) {
+          setAllAppointments(response.data.appointments);
+        } else {
+          console.error(
+            'La respuesta no contiene una matriz de citas válida:',
+            response.data,
+          );
+        }
       })
       .catch((error) => {
         console.error('Error al cargar las citas:', error);
@@ -48,19 +57,19 @@ const Appointments: React.FC = () => {
 
   useEffect(() => {
     const filtered = allAppointments.filter((appointment) =>
-      appointment.appointmentId
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()),
+      appointment.id.toLowerCase().includes(searchTerm.toLowerCase()),
     );
     setFilteredAppointments(filtered);
   }, [searchTerm, allAppointments]);
 
   const clearAll = () => {
+    setShowSessionContent(false);
     setShowEditAppointment(false);
     setShowCreateAppointment(false);
     setEditWithoutId(false);
     setShowDeleteAppointment(false);
     setDeleteWithoutId(false);
+    setIsDefaultMode(false);
   };
   const handleCreateClick = () => {
     clearAll();
@@ -82,18 +91,33 @@ const Appointments: React.FC = () => {
     setDeleteWithoutId(true);
   };
 
+  const handleSessionSection = () => {
+    setShowSessionContent(true);
+  };
+
   const clearModes = () => {
     setIsDeleteMode(false);
     setIsEditMode(false);
+    setIsDefaultMode(false);
   };
 
   return (
-    <div className={styles.allAppointmentSection}>
+    <div
+      className={
+        showSessionContent
+          ? styles.allAppointmentSectionDE
+          : styles.allAppointmentSection
+      }>
       <AccountSection
         notificationCount={2}
         photoUrl="https://th.bing.com/th/id/OIP.hFh4Uw00oR7qfvoCqnG8fQHaEK?w=186&h=104&c=7&r=0&o=5&dpr=1.3&pid=1.7"
       />
-      <div className={styles.appointmentsContent}>
+      <div
+        className={
+          showSessionContent
+            ? styles.appointmentsContentSession
+            : styles.appointmentsContent
+        }>
         <div className={styles.appointmentsHeader}>
           <div className={styles.title}>Citas</div>
           <div className={styles.icons}>
@@ -151,40 +175,55 @@ const Appointments: React.FC = () => {
             <div className={styles.listAppointments}>
               {filteredAppointments.map((appointment) => (
                 <span
-                  key={appointment.appointmentId}
+                  key={appointment.id}
                   onClick={() => {
-                    setSelectedAppointmentId(appointment.appointmentId);
+                    setSelectedAppointmentId(appointment.id);
                     handleEditClick();
                   }}>
-                  {appointment.appointmentId}
+                  {appointment.id}
                 </span>
               ))}
             </div>
           </div>
-          <div className={styles.appointmentSessionContainer}>
+          <div className={styles.onlyAppointmentContainer}>
+            {defaultMode && <Default />}
+
             {selectedAppointmentId && showEditAppointment && (
               <EditDltAppointment
-                appointmentId={selectedAppointmentId}
+                appointment_id={selectedAppointmentId}
                 isEditing={isEditing}
               />
             )}
 
             {editWithoutId && (
-              <EditDltAppointment appointmentId={' '} isEditing={isEditing} />
+              <EditDltAppointment appointment_id={' '} isEditing={isEditing} />
             )}
 
             {selectedAppointmentId && showDeleteAppointment && (
               <EditDltAppointment
-                appointmentId={selectedAppointmentId}
+                appointment_id={selectedAppointmentId}
                 isEditing={isEditing}
               />
             )}
 
             {deleteWithoutId && (
-              <EditDltAppointment appointmentId={' '} isEditing={isEditing} />
+              <EditDltAppointment appointment_id={' '} isEditing={isEditing} />
             )}
 
             {showCreateAppointment && <CreateAppointment />}
+            {!showCreateAppointment && !defaultMode && (
+              <div className={styles.lineSeparator}>
+                <div className={styles.halfLine}></div>
+                <Icon
+                  className={styles.arrowIcon}
+                  icon={'ri:arrow-down-double-line'}
+                  color={'grey'}
+                  onClick={handleSessionSection}></Icon>
+                <div className={styles.fullLine}></div>
+              </div>
+            )}
+
+            {showSessionContent && <Sessions />}
           </div>
         </div>
       </div>
