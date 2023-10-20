@@ -14,8 +14,11 @@ import { useState } from 'react';
 interface UserType {
   name: string;
   email: string;
-  artistId: string;
+  id: string;
   phone: string;
+  instagram: string;
+  description: string;
+  username: string;
 }
 
 function ArtistList({
@@ -31,6 +34,7 @@ function ArtistList({
 
   const handleEditIconClick = (user: UserType) => {
     if (user) {
+      console.log(user);
       onUserSelect(user);
     }
   };
@@ -39,7 +43,7 @@ function ArtistList({
     <div className={styles.container}>
       <div className={styles.artistContainer}>
         {artists?.artists?.map((artist: any) => (
-          <div className={styles.card} key={artist.artistId}>
+          <div className={styles.card} key={artist.id}>
             <div className={styles.carddetails}>
               <div className={styles.cardImage}>
                 <Image

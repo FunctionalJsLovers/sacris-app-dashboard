@@ -14,7 +14,7 @@ interface UserType {
   name: string;
   email: string;
   phone: string;
-  artistId: string;
+  id: string;
 }
 
 export async function editArtist(data: UserType) {
@@ -22,10 +22,10 @@ export async function editArtist(data: UserType) {
     name: data.name,
     email: data.email,
     phone: data.phone,
-    artistId: data.artistId,
+    artistId: data.id,
   };
   const response = await fetch(
-    `https://handsomely-divine-abstracted-bed.deploy.space/artists/${data.artistId}`,
+    `https://handsomely-divine-abstracted-bed.deploy.space/artists/${data.id}`,
     {
       method: 'PUT',
       headers: {

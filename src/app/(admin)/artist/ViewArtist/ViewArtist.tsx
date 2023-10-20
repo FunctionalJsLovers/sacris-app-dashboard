@@ -9,8 +9,11 @@ import { Modal } from 'antd';
 interface UserType {
   name: string;
   email: string;
-  artistId: string;
+  id: string;
+  instagram: string;
+  description: string;
   phone: string;
+  username: string;
 }
 
 function ViewArtist({
@@ -58,7 +61,7 @@ function ViewArtist({
           <Button
             type="primary"
             onClick={() => {
-              onDelete(user.artistId);
+              onDelete(user.id);
               setDeleteUser(false);
             }}>
             Confirmar
@@ -104,7 +107,7 @@ function ViewArtist({
           <div className={styles.description}>
             <p>Descripción</p>
             <Input
-              defaultValue={editedUser.email}
+              defaultValue={editedUser.description}
               disabled={!editState}
               style={{ width: '640px', height: '100px' }}
             />
@@ -125,7 +128,7 @@ function ViewArtist({
           <div className={styles.userName}>
             <p>Nombre de usuario</p>
             <Input
-              defaultValue={editedUser.name}
+              defaultValue={editedUser.username}
               disabled={!editState}
               style={inputStyles}
             />
@@ -153,7 +156,7 @@ function ViewArtist({
           <div className={styles.instagram}>
             <p>Instagram</p>
             <Input
-              defaultValue={editedUser.email}
+              defaultValue={editedUser.instagram}
               disabled={!editState}
               style={inputStyles}
             />
