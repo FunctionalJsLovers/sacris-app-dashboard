@@ -35,7 +35,7 @@ const Sessions = ({ appointmentId }: SessionProps) => {
   useEffect(() => {
     axios
       .get(
-        `http://34.220.171.214:9000/admin/appointments/${appointmentId}/sessions`,
+        `http://52.38.52.160:9000/admin/appointments/${appointmentId}/sessions`,
       )
       .then((response) => {
         if (Array.isArray(response.data.sessions)) {
@@ -71,6 +71,11 @@ const Sessions = ({ appointmentId }: SessionProps) => {
   const handleEditClick = () => {
     clearAllModes();
     setIsEditMode(true);
+  };
+
+  const handleDeleteClick = () => {
+    clearAllModes();
+    setIsDeleteMode(true);
   };
 
   return (
@@ -128,7 +133,12 @@ const Sessions = ({ appointmentId }: SessionProps) => {
                 key={session.id}
                 onClick={() => {
                   setSelectedSessionId(session.id);
-                  handleEditClick();
+                  console.log('Seleccionada: ', selectedSessionId);
+                  if (editMode) {
+                    handleEditClick();
+                  } else {
+                    handleDeleteClick();
+                  }
                 }}>
                 {session.id}
               </span>
@@ -143,14 +153,14 @@ const Sessions = ({ appointmentId }: SessionProps) => {
               isCreating={isCreating}
             />
           )}
-          {editMode && (
+          {editMode && !selectedSessionId && (
             <SessionOperations
               sessionId={' '}
               isEditing={isEditing}
               isCreating={isCreating}
             />
           )}
-          {deleteMode && (
+          {deleteMode && !selectedSessionId && (
             <SessionOperations
               sessionId={' '}
               isEditing={isEditing}

@@ -11,12 +11,17 @@ export function validateSessionFields(sessionData: any): {
       errors.date =
         'El formato de la fecha no es válido. Debe ser:  "AAAA-MM-DDTHH:MM:SS"';
     } else {
+      const currentDate = new Date();
       const date = new Date(sessionData.date);
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-      if (hours < 8 || hours > 22 || (hours === 22 && minutes > 0)) {
-        errors.date =
-          'La cita debe estar dentro del horario laboral de 8 am a 10 pm.';
+      if (date <= currentDate) {
+        errors.date = 'La fecha debe ser mayor que la fecha actual.';
+      } else {
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        if (hours < 8 || hours > 22 || (hours === 22 && minutes > 0)) {
+          errors.date =
+            'La cita debe estar dentro del horario laboral de 8 am a 10 pm.';
+        }
       }
     }
   }

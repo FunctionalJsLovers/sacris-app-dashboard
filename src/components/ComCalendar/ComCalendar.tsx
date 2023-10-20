@@ -10,7 +10,6 @@ import Error from '@/components/PopUps/Error/Error';
 import { useQuery } from 'react-query';
 import { getAllSessions } from '@/services/SessionsAPI';
 import axios from 'axios';
-import { addHours } from 'date-fns';
 
 type Session = {
   id: string;
@@ -35,16 +34,24 @@ function ComCalendar() {
     'sessions',
     getAllSessions,
   );
-  const apiBaseUrl = 'http://34.220.171.214:9000/admin';
+  const apiBaseUrl = 'http://52.38.52.160:9000/admin';
 
   const getColorForState = (state: string): string => {
     switch (state) {
-      case 'sin pagar' || 'Sin pagar':
+      case 'sin pagar':
         return 'red';
-      case 'pagado' || 'Pagado':
+      case 'unpaid':
+        return 'red';
+      case 'pagado':
         return 'green';
-      case 'abonado' || 'Abonado':
+      case 'totally_paid':
+        return 'green';
+      case 'prepaid':
         return 'blue';
+      case 'abonado':
+        return 'blue';
+      case 'scheduled':
+        return 'yellow';
       default:
         return 'gray';
     }
@@ -84,75 +91,35 @@ function ComCalendar() {
     }
   }, []);
 
-  {
-    /*  const fetchAppointmentData = (event: Session) => {
-    const appointment_id = event.appointment_id;
-    axios
-        .get(
-            `${apiBaseUrl}/appointments/${appointment_id}`,
-        )
-        .then((response) => {
-          const appointmentData = response.data.appointments[0];
-          setAppointmentDescription(appointmentData.description);
-          axios
-              .get(
-                  `${apiBaseUrl}/artists/${appointmentData.artist_id}`,
-              )
-              .then((artistResponse) => {
-                const artistData = artistResponse.data.artists[0];
-                console.log("Artista: ", artistResponse)
-                setArtistName(artistData.name);
-              })
-              .catch((error) => {
-                console.error('Error al obtener el nombre del artista: ', error);
-                setError('Error al obtener el nombre del artista');
-              });
-          axios
-              .get(
-                  `${apiBaseUrl}/clients/${response.data.client_id}`,
-              )
-              .then((clientResponse) => {
-                const clientData = clientResponse.data.clients[0];
-                setClientName(clientData.name);
-              })
-              .catch((error) => {
-                console.error('Error al obtener el nombre del cliente: ', error);
-                setError('Error al obtener el nombre del cliente');
-              });
-          axios
-              .get(
-                  `${apiBaseUrl}/categories/${response.data.category_id}`,
-              )
-              .then((categoryResponse) => {
-                const categoryData = categoryResponse.data.categories[0];
-                setCategoryName(categoryData.name);
-              })
-              .catch((error) => {
-                console.error(
-                    'Error al obtener el nombre de la categoría: ',
-                    error,
-                );
-                setError('Error al obtener el nombre de la categoría');
-              });
-        })
-        .catch((error) => {
-          console.error('Error al obtener la información de la cita:', error);
-          setError('Error al obtener la información de la cita');
-        });
-  };
-*/
-  }
-
   const fetchAppointmentData = (event: Session) => {
+    console.log('Si entra xd');
     const appointment_id = event.appointment_id;
     axios
       .get(`${apiBaseUrl}/appointments/${appointment_id}`)
       .then((response) => {
         const appointmentData = response.data.appointments[0];
         setAppointmentDescription(appointmentData.description);
-        setArtistName(appointmentData.artist_id);
-        setClientName(appointmentData.client_id);
-        setCategoryName(appointmentData.category_id);
+        axios
+          .get(`${apiBaseUrl}/artists/${appointmentData.artist_id}`)
+          .then((artistResponse) => {
+            const artistData = artistResponse.data.artists[0];
+            console.log('Artista: ', artistResponse);
+            setArtistName(artistData.name);
+          })
+          .catch((error) => {
+            console.error('Error al obtener el nombre del artista: ', error);
+            setError('Error al obtener el nombre del artista');
+          });
+        axios
+          .get(`${apiBaseUrl}/clients/${appointmentData.client_id}`)
+          .then((clientResponse) => {
+            const clientData = clientResponse.data.clients[0];
+            setClientName(clientData.name);
+          })
+          .catch((error) => {
+            console.error('Error al obtener el nombre del cliente: ', error);
+            setError('Error al obtener el nombre del cliente');
+          });
       })
       .catch((error) => {
         console.error('Error al obtener la información de la cita:', error);
@@ -216,12 +183,10 @@ function ComCalendar() {
                   selectedEvent.estimated_time * 60 * 60 * 1000,
               ).toLocaleString()}
             </p>
-
             <p>Estado: {selectedEvent.status}</p>
             <p>Nombre Artista: {artistName}</p>
             <p>Nombre Cliente: {clientName}</p>
-            <p>Categoría: {categoryName}</p>
-            <p>Precio: {selectedEvent.price}</p>
+            <p>Precio: {selectedEvent.price} $</p>
             <button onClick={handleClosePopup}>Cerrar</button>
           </div>
         </div>

@@ -39,7 +39,7 @@ const Appointments: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get('http://34.220.171.214:9000/admin/appointments/')
+      .get('http://52.38.52.160:9000/admin/appointments/')
       .then((response) => {
         if (Array.isArray(response.data.appointments)) {
           setAllAppointments(response.data.appointments);
@@ -70,6 +70,7 @@ const Appointments: React.FC = () => {
     setShowDeleteAppointment(false);
     setDeleteWithoutId(false);
     setIsDefaultMode(false);
+    clearModes();
   };
   const handleCreateClick = () => {
     clearAll();
@@ -180,7 +181,12 @@ const Appointments: React.FC = () => {
                   key={appointment.id}
                   onClick={() => {
                     setSelectedAppointmentId(appointment.id);
-                    handleEditClick();
+                    if (isEditing) {
+                      handleEditClick();
+                    } else {
+                      clearAll();
+                      setIsDeleteMode(true);
+                    }
                   }}>
                   {appointment.id}
                 </span>
@@ -190,25 +196,25 @@ const Appointments: React.FC = () => {
           <div className={styles.onlyAppointmentContainer}>
             {defaultMode && <Default />}
 
-            {selectedAppointmentId && showEditAppointment && (
+            {selectedAppointmentId && editMode && (
               <EditDltAppointment
                 appointment_id={selectedAppointmentId}
                 isEditing={isEditing}
               />
             )}
 
-            {editWithoutId && (
+            {editWithoutId && !selectedAppointmentId && (
               <EditDltAppointment appointment_id={' '} isEditing={isEditing} />
             )}
 
-            {selectedAppointmentId && showDeleteAppointment && (
+            {selectedAppointmentId && deleteMode && (
               <EditDltAppointment
                 appointment_id={selectedAppointmentId}
                 isEditing={isEditing}
               />
             )}
 
-            {deleteWithoutId && (
+            {deleteWithoutId && !selectedAppointmentId && (
               <EditDltAppointment appointment_id={' '} isEditing={isEditing} />
             )}
 

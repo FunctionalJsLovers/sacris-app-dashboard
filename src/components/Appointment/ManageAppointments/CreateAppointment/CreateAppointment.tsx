@@ -47,7 +47,7 @@ const CreateAppointment = () => {
   const [artistCategories, setArtistCategories] = useState<ArtistCategory[]>(
     [],
   );
-  const apiBaseUrl = 'http://34.220.171.214:9000/admin';
+  const apiBaseUrl = 'http://52.38.52.160:9000/admin';
 
   const fetchArtistCategories = async () => {
     try {

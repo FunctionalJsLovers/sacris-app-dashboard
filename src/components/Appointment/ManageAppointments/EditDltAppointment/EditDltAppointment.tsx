@@ -45,7 +45,7 @@ function EditDltAppointment({
   const [categories, setCategories] = useState<Category[]>([]);
   const [showDltConfirmationAppointment, setShowDltConfirmationAppointment] =
     useState(false);
-  const apiBaseUrl = 'http://34.220.171.214:9000/admin';
+  const apiBaseUrl = 'http://52.38.52.160:9000/admin';
 
   const [formData, setFormData] = useState({
     id: '',
@@ -85,19 +85,20 @@ function EditDltAppointment({
 
   const editAppointmentMutation = useMutation(
     (newData) =>
-      axios.put(`${apiBaseUrl}/appointments/${appointment_id}`, newData),
+      axios.patch(`${apiBaseUrl}/appointments/${appointment_id}`, newData),
     {},
   );
 
   const handleEditAppointment = async () => {
     try {
       const fieldErrors = validateAppointmentFields(formData);
-      if (
-        formData.id &&
-        formData.description &&
-        !Object.keys(fieldErrors).length
-      ) {
-        await editAppointmentMutation.mutateAsync(formData as any);
+      if (!Object.keys(fieldErrors).length) {
+        const editAppointmentData = {
+          appointment: {
+            description: formData.description,
+          },
+        };
+        await editAppointmentMutation.mutateAsync(editAppointmentData as any);
         console.log('Cita actualizada con éxito');
         setSuccess('Cita actualizada con éxito');
         clearFormData();
@@ -119,6 +120,7 @@ function EditDltAppointment({
   };
 
   const handleDeleteAppointment = async () => {
+    console.log('Aqui esta: ', appointment_id);
     try {
       if (appointment_id) {
         await axios.delete(`${apiBaseUrl}/appointments/${appointment_id}`);
@@ -208,18 +210,24 @@ function EditDltAppointment({
               </div>
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.labelWithTitle} htmlFor="description">
-                Descripción:
+              <label className={styles.labelWithTitle} htmlFor="artist">
+                Artista:
               </label>
-              <input
+              <select
                 className={styles.inputWithTitle}
-                name="description"
-                placeholder="Descripción de la cita"
-                value={formData.description}
+                placeholder={'Identificador del artista'}
+                name="artist_id"
+                value={formData.artist_id}
                 onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-              />
+                  setFormData({ ...formData, artist_id: e.target.value })
+                }>
+                <option value="">Seleccionar</option>
+                {artists.map((artist) => (
+                  <option key={artist.id} value={artist.id}>
+                    {artist.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className={styles.formGroup}>
               <label className={styles.labelWithTitle} htmlFor="client">
@@ -243,6 +251,7 @@ function EditDltAppointment({
             </div>
           </div>
           <div className={styles.rightSection}>
+            {/* Espacio para meter la cita
             <div className={styles.formGroup}>
               <label className={styles.labelWithTitle} htmlFor="name">
                 Nombre:
@@ -253,26 +262,20 @@ function EditDltAppointment({
                 placeholder="Nombre característico de la cita"
                 //value={formData.description}
               />
-            </div>
+            </div>*/}
             <div className={styles.formGroup}>
-              <label className={styles.labelWithTitle} htmlFor="artist">
-                Artista:
+              <label className={styles.labelWithTitle} htmlFor="description">
+                Descripción:
               </label>
-              <select
+              <input
                 className={styles.inputWithTitle}
-                placeholder={'Identificador del artista'}
-                name="artist_id"
-                value={formData.artist_id}
+                name="description"
+                placeholder="Descripción de la cita"
+                value={formData.description}
                 onChange={(e) =>
-                  setFormData({ ...formData, artist_id: e.target.value })
-                }>
-                <option value="">Seleccionar</option>
-                {artists.map((artist) => (
-                  <option key={artist.id} value={artist.id}>
-                    {artist.name}
-                  </option>
-                ))}
-              </select>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+              />
             </div>
             <div className={styles.formGroup}>
               <label className={styles.labelWithTitle} htmlFor="category">

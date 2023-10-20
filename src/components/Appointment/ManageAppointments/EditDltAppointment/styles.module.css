@@ -23,6 +23,12 @@
   border-right: 1px solid #ccc;
 }
 
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .formGroup {
   margin-top: 1vh;
   margin-bottom: 1vh;

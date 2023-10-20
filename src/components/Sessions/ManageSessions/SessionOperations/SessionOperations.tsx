@@ -7,6 +7,7 @@ import Success from '@/components/PopUps/Success/Success';
 import { validateSessionFields } from '@/Validations/validationsSessions';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import useForceUpdate from 'antd/es/_util/hooks/useForceUpdate';
 
 interface EditAppointmentProps {
   sessionId: string;
@@ -23,7 +24,8 @@ function SessionOperations({
   const [success, setSuccess] = useState<string | null>(null);
   const [showDltConfirmationSession, setShowDltConfirmationSession] =
     useState(false);
-  const apiBaseUrl = 'http://34.220.171.214:9000/admin';
+  const apiBaseUrl = 'http://52.38.52.160:9000/admin';
+  const forceUpdate = useForceUpdate();
 
   const [sessionData, setSessionData] = useState({
     date: '',
@@ -42,14 +44,17 @@ function SessionOperations({
           const response = await axios.get(
             `${apiBaseUrl}/sessions/${sessionId}`,
           );
-          setSessionData({
-            ...sessionData,
-            date: response.data.date,
-            estimated_time: response.data.estimated_time,
-            status: response.data.status,
-            price: response.data.price,
-            appointment_id: response.data.appointment_id,
-          });
+          if (response.data.session && response.data.session.length > 0) {
+            const sessionDataR = response.data.session[0];
+            setSessionData((prevData) => ({
+              ...prevData,
+              date: sessionDataR.date,
+              estimated_time: sessionDataR.estimated_time,
+              status: sessionDataR.status,
+              price: sessionDataR.price,
+              appointment_id: sessionDataR.appointment_id,
+            }));
+          }
         } else {
           setError('El identificador de la cita no se encontró');
         }
@@ -58,16 +63,12 @@ function SessionOperations({
         setError('No se pudo cargar la cita.');
       }
     };
-
+    forceUpdate();
     fetchData();
   }, [sessionId]);
 
   const editSessionMutation = useMutation(
-    (newData) =>
-      axios.patch(
-        `https://handsomely-divine-abstracted-bed.deploy.space/sessions/${sessionId}`,
-        newData,
-      ),
+    (newData) => axios.patch(`${apiBaseUrl}/sessions/${sessionId}`, newData),
     {
       onSettled: () => {
         queryClient.invalidateQueries(['session', 'sessionId']);
@@ -100,16 +101,23 @@ function SessionOperations({
     try {
       if (!Object.keys(fieldErrors).length) {
         const sessionDataNumber = {
-          ...sessionData,
-          estimated_time: parseFloat(sessionData.estimated_time),
-          price: parseFloat(sessionData.price),
+          session: {
+            date: sessionData.date,
+            estimated_time: parseFloat(sessionData.estimated_time),
+            status: sessionData.status,
+            price: parseFloat(sessionData.price),
+            appointment_id: sessionData.appointment_id,
+          },
         };
         console.log('Tratando de enviar: ', sessionDataNumber);
         const sessionResponse = await createSessionMutation.mutateAsync(
           sessionDataNumber as any,
         );
-        const sessionId = sessionResponse.data.sessions.id;
-        console.log(`Sesión creada con ID: ${sessionId}`);
+        if (sessionResponse.data.errors) {
+          setError(sessionResponse.data.errors.date);
+          setError(sessionResponse.data.errors.session);
+          setError(sessionResponse.data.errors.appointment_id);
+        }
         clearSessionData();
       } else {
         console.error('Algunos campos no están definidos o no son válidos');
@@ -117,27 +125,32 @@ function SessionOperations({
         for (const field in fieldErrors) {
           setError(fieldErrors[field]);
         }
-        clearSessionData();
       }
     } catch (error) {
       console.error(error);
       setError('Ocurrió un error al intentar crear la sesión');
-      clearSessionData();
     }
   };
 
   const handleEditSession = async () => {
     const fieldErrors = validateSessionFields(sessionData);
-
+    const sessionDataEdit = {
+      session: {
+        date: sessionData.date,
+        estimated_time: parseFloat(sessionData.estimated_time),
+        status: sessionData.status,
+        price: parseFloat(sessionData.price),
+      },
+    };
     try {
-      //if (sessionData.id && !Object.keys(fieldErrors).length) {
       if (!Object.keys(fieldErrors).length) {
-        await editSessionMutation.mutateAsync(sessionData as any);
+        console.log('Editar: ', sessionDataEdit);
+        await editSessionMutation.mutateAsync(sessionDataEdit as any);
         console.log('Sesión actualizada con éxito');
         setSuccess('Sesión actualizada con éxito');
         clearSessionData();
       } else {
-        console.error('El campo id no está definido.');
+        console.error('Algunos campos no son válidos');
         setError('Algunos campos no son válidos');
         for (const field in fieldErrors) {
           setError(fieldErrors[field]);
@@ -151,9 +164,7 @@ function SessionOperations({
   const handleDeleteSession = async () => {
     try {
       if (sessionId) {
-        await axios.delete(
-          `https://handsomely-divine-abstracted-bed.deploy.space/sessions/${sessionId}`,
-        );
+        await axios.delete(`${apiBaseUrl}/sessions/${sessionId}`);
         console.log('Sesión eliminada con éxito');
         setSuccess('Sesión eliminada con éxito');
         clearSessionData();
@@ -230,9 +241,10 @@ function SessionOperations({
                   setSessionData({ ...sessionData, status: e.target.value })
                 }>
                 <option value={'none'}>Seleccionar..</option>
-                <option value={'pagado'}>Pagado</option>
-                <option value="sin pagar">Sin pagar</option>
-                <option value={'abonado'}>Abonado</option>
+                <option value={'totally_paid'}>Pagado</option>
+                <option value="unpaid">Sin pagar</option>
+                <option value={'prepaid'}>Abonado</option>
+                <option value={'scheduled'}>Agendado</option>
               </select>
             </div>
           </div>
