@@ -300,9 +300,9 @@ function CustomForm() {
         {isLoading && <h1>creando...</h1>}
 
         {isError && (
-          <Modal open={true} footer={null} width={250} style={{ height: 400 }}>
+          <Modal open={true} footer={null} width={260} style={{ height: 400 }}>
             <div className={styles.msg}>
-              <h1 className={styles.label}>Artista creado</h1>
+              <h1 className={styles.label}> Ya Existe Artista </h1>
               <Link href="/artist">
                 <button className={styles.menuButton}>Volver</button>
                 <h1 className={styles.label}></h1>
@@ -312,9 +312,9 @@ function CustomForm() {
         )}
 
         {isSuccess && (
-          <Modal open={true} footer={null} width={250} style={{ height: 400 }}>
+          <Modal open={true} footer={null} width={260} style={{ height: 400 }}>
             <div className={styles.msg}>
-              <h1 className={styles.label}>Artista creado</h1>
+              <h1 className={styles.label}>Artista Creado</h1>
               <Link href="/artist">
                 <button className={styles.menuButton}>Volver</button>
               </Link>
