@@ -17,8 +17,11 @@ import { editArtist, deleteArtist } from '@/services/ArtistsAPI';
 interface UserType {
   name: string;
   email: string;
-  artistId: string;
+  id: string;
   phone: string;
+  instagram: string;
+  description: string;
+  username: string;
 }
 
 function Artist() {
@@ -64,7 +67,7 @@ function Artist() {
           {selectedArtist && (
             <ViewArtist
               user={selectedArtist}
-              key={selectedArtist.artistId}
+              key={selectedArtist.id}
               onSubmit={onSubmit}
               onDelete={onDelete}
             />
