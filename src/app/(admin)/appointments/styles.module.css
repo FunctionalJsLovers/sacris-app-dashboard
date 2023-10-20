@@ -1,25 +1,53 @@
-.allAppointmentSection {
-  height: 100vh;
+.allAppointmentSection,
+.allAppointmentSectionDE {
+  width: 100%;
   display: flex;
   background-color: #e3e3e3;
 }
 
-.appointmentsContent {
-  display: flex;
-  width: 90%;
-  height: auto;
-  margin: 70px auto 10px 100px;
+.allAppointmentSection {
+  height: 100vh;
 }
 
-.editAppointment {
+.allAppointmentSectionDE {
+  height: 140vh;
+}
+
+.appointmentsContent,
+.appointmentsContentSession {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  padding: 20px;
+  margin: 0 auto 10px 100px;
+}
+
+.appointmentsContent {
+  height: 100%;
+}
+
+.appointmentsContentSession {
+  height: 82.5%;
+}
+
+.appointmentsHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1vh;
 }
 
 .title {
-  position: relative;
-  bottom: 40px;
+  justify-content: flex-start;
   font-size: 40px;
   font-family: 'Times New Roman', sans-serif;
   color: #111111;
+}
+
+.appointmentsContainer {
+  display: flex;
+  height: 80%;
+  margin-top: 20px;
 }
 
 .appointmentsListSection {
@@ -27,10 +55,7 @@
   flex-direction: column;
   align-items: center;
   width: 250px;
-  height: 90%;
-  max-height: 90%;
-  margin-top: 60px;
-  margin-left: -50px;
+  height: 100%;
   background-color: #f4f4f4;
   border-radius: 5px;
   padding: 10px;
@@ -38,7 +63,6 @@
 }
 
 .inputSearch {
-  display: flex;
   width: 100%;
   padding: 10px;
   border: 3px solid #2d3748;
@@ -58,27 +82,20 @@
   cursor: pointer;
 }
 
-.appointmentSessionContainer {
-  margin-top: 30px;
+.onlyAppointmentContainer {
   margin-left: 20px;
-  width: 80%;
-  margin-right: 20px;
-  height: 100%;
-  max-height: 90%;
+  width: 100%;
+  flex: 1;
   border-radius: 5px;
-  padding: 10px;
+  height: 100%;
 }
 
 .icons {
   display: flex;
-  justify-content: space-between;
-  position: absolute;
-  left: 81vw;
-  width: 200px;
-  height: 50px;
-  margin-right: 10px;
+  margin-left: auto;
   background-color: #f4f4f4;
   border-radius: 5px;
+  margin-top: 1vh;
 }
 
 .iconAdd,
@@ -90,20 +107,28 @@
   cursor: pointer;
 }
 
-.iconAdd {
-  background-image: url('https://cdn.icon-icons.com/icons2/72/PNG/256/add_14430.png');
-  background-size: cover;
-  background-repeat: no-repeat;
+.lineSeparator {
+  margin-top: 0.5vh;
+  display: flex;
+  align-items: center;
 }
 
-.iconEdit {
-  background-image: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698652-icon-136-document-edit-512.png');
-  background-size: cover;
-  background-repeat: no-repeat;
+.halfLine,
+.fullLine {
+  height: 2px;
+  background-color: #878787;
 }
 
-.iconDelete {
-  background-image: url('https://th.bing.com/th/id/OIP.dgmbQ5S7WE5w5OLExONedQHaHa?pid=ImgDet&rs=1');
-  background-size: cover;
-  background-repeat: no-repeat;
+.arrowIcon {
+  margin-right: 1vh;
+  margin-left: 1vh;
+  cursor: pointer;
+}
+
+.halfLine {
+  flex: 1;
+}
+
+.fullLine {
+  flex: 1;
 }

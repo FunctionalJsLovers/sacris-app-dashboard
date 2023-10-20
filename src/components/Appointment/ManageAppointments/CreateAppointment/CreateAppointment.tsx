@@ -9,25 +9,31 @@ import {
   validateAppointmentFields,
 } from '@/Validations/validationsSessions';
 
+interface ArtistCategory {
+  id: string;
+  artist_id: string;
+  category_id: string;
+}
 interface Artist {
-  artistId: string;
+  id: string;
   name: string;
   phone: string;
   email: string;
-  adminIdFk: string;
+  admin_id: string;
+  description: string;
+  instagram: string;
+  username: string;
 }
 
 interface Client {
-  clientId: string;
-  createdAt: string;
+  id: string;
   name: string;
   phone: string;
   email: string;
 }
 
 interface Category {
-  categoryId: string;
-  createdAt: string;
+  id: string;
   name: string;
 }
 
@@ -38,46 +44,68 @@ const CreateAppointment = () => {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [artistCategories, setArtistCategories] = useState<ArtistCategory[]>(
+    [],
+  );
+  const apiBaseUrl = 'http://52.38.52.160:9000/admin';
+
+  const fetchArtistCategories = async () => {
+    try {
+      const response = await axios.get(`${apiBaseUrl}/artistCategories`);
+      setArtistCategories(response.data.artistCategories);
+    } catch (error) {
+      console.error('Error al cargar las categorías de los artistas:', error);
+    }
+  };
+
+  const fetchArtists = async () => {
+    try {
+      const response = await axios.get(`${apiBaseUrl}/artists`);
+      setArtists(response.data.artists);
+    } catch (error) {
+      console.error('Error al cargar los artistas:', error);
+    }
+  };
+
+  const fetchClients = async () => {
+    try {
+      const response = await axios.get(`${apiBaseUrl}/clients`);
+      setClients(response.data.clients);
+    } catch (error) {
+      console.error('Error al cargar los clientes:', error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${apiBaseUrl}/categories`);
+      setCategories(response.data.categories);
+    } catch (error) {
+      console.error('Error al cargar las categorías:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchArtists();
+    fetchClients();
+    fetchCategories();
+    fetchArtistCategories();
+  }, []);
 
   const [formData, setFormData] = useState({
     description: '',
-    artistIdFk: '',
-    clientIdFk: '',
-    categoryIdFk: '',
-  });
-
-  const [sessionData, setSessionData] = useState({
-    date: '',
-    estimatedTime: '',
-    status: '',
-    price: '',
-    appointmentIdFk: '',
+    artist_id: '',
+    client_id: '',
+    category_id: '',
   });
 
   const createAppointmentMutation = useMutation(
     (newAppointment) =>
-      axios.post(
-        'https://handsomely-divine-abstracted-bed.deploy.space/appointments/',
-        newAppointment,
-      ),
+      axios.post(`${apiBaseUrl}/appointments`, newAppointment),
     {
       onSuccess: () => {
         console.log('Cita creada con éxito');
         setSuccess('Cita creada con éxito');
-      },
-    },
-  );
-
-  const createSessionMutation = useMutation(
-    (newSession) =>
-      axios.post(
-        'https://handsomely-divine-abstracted-bed.deploy.space/sessions/',
-        newSession,
-      ),
-    {
-      onSuccess: () => {
-        console.log('Sesión creada con éxito');
-        setSuccess('Sesión creada con éxito');
       },
     },
   );
@@ -92,30 +120,25 @@ const CreateAppointment = () => {
     }));
   };
 
-  const handleSessionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setSessionData((prevSessionData) => ({
-      ...prevSessionData,
-      [name]: value,
-    }));
-  };
+  console.log('Tratando de enviar: ', formData);
 
-  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    setSessionData((prevSessionData) => ({
-      ...prevSessionData,
-      [name]: value,
-    }));
+  const clearFormData = () => {
+    setFormData({
+      description: '',
+      artist_id: '',
+      client_id: '',
+      category_id: '',
+    });
   };
-
   const createAppointment = async () => {
     try {
       const fieldErrors = validateAppointmentFields(formData);
+      console.log('Datos: ', formData);
       if (formData.description && !Object.keys(fieldErrors).length) {
         const appointmentResponse = await createAppointmentMutation.mutateAsync(
           formData as any,
         );
-        const appointmentId = appointmentResponse.data.appointmentId;
+        const appointmentId = appointmentResponse.data.appointments[0].id;
         console.log(`Cita creada con ID: ${appointmentId}`);
         setSuccessMessage(`Cita creada con ID: ${appointmentId}`);
         clearFormData();
@@ -134,51 +157,6 @@ const CreateAppointment = () => {
       setError('Ocurrió un error al intentar crear la cita');
     }
   };
-
-  const createSession = async () => {
-    const fieldErrors = validateSessionFields(sessionData);
-
-    try {
-      if (!Object.keys(fieldErrors).length) {
-        const sessionResponse = await createSessionMutation.mutateAsync(
-          sessionData as any,
-        );
-        const sessionId = sessionResponse.data.sessionId;
-        console.log(`Sesión creada con ID: ${sessionId}`);
-        clearSessionData();
-      } else {
-        console.error('Algunos campos no están definidos o no son válidos');
-        setError('Algunos campos no son válidos');
-
-        for (const field in fieldErrors) {
-          setError(fieldErrors[field]);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-      setError('Ocurrió un error al intentar crear la sesión');
-    }
-  };
-
-  const clearFormData = () => {
-    setFormData({
-      description: '',
-      artistIdFk: '',
-      clientIdFk: '',
-      categoryIdFk: '',
-    });
-  };
-
-  const clearSessionData = () => {
-    setSessionData({
-      date: '',
-      estimatedTime: '',
-      status: '',
-      price: '',
-      appointmentIdFk: '',
-    });
-  };
-
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
@@ -186,48 +164,6 @@ const CreateAppointment = () => {
       [name]: value,
     }));
   };
-
-  //Obtener los artistas
-  useEffect(() => {
-    axios
-      .get(
-        'https://handsomely-divine-abstracted-bed.deploy.space/artists/?totalCount=false',
-      )
-      .then((response) => {
-        setArtists(response.data);
-      })
-      .catch((error) => {
-        console.log('Error al cargar los artistas: ', error);
-      });
-  }, []);
-
-  //Obtener los clients
-  useEffect(() => {
-    axios
-      .get(
-        'https://handsomely-divine-abstracted-bed.deploy.space/clients/?totalCount=false',
-      )
-      .then((response) => {
-        setClients(response.data);
-      })
-      .catch((error) => {
-        console.log('Error al cargar los clientes: ', error);
-      });
-  }, []);
-
-  //Obtener las categorías jejeje
-  useEffect(() => {
-    axios
-      .get(
-        'https://handsomely-divine-abstracted-bed.deploy.space/categories/?totalCount=false',
-      )
-      .then((response) => {
-        setCategories(response.data);
-      })
-      .catch((error) => {
-        console.log('Error al cargar las categorías: ', error);
-      });
-  }, []);
 
   return (
     <div className={styles.containerCreateAppointment}>
@@ -238,10 +174,9 @@ const CreateAppointment = () => {
       <center>
         <h1 className={styles.title}>Crear cita</h1>
       </center>
-      <div className={styles.createSection}>
-        <div className={styles.leftSection}>
-          <h2>Cita</h2>
-          <form onSubmit={createAppointment}>
+      <form onSubmit={createAppointment}>
+        <div className={styles.createSection}>
+          <div className={styles.leftSection}>
             <div className={styles.formGroup}>
               <label className={styles.labelWithTitle} htmlFor="description">
                 Descripción:
@@ -255,39 +190,18 @@ const CreateAppointment = () => {
               />
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.labelWithTitle} htmlFor="artist">
-                Artista:
-              </label>
-              <div className={styles.inputArtist}>
-                <select
-                  className={styles.inputWithTitle}
-                  placeholder={'Identificador del artista'}
-                  name="artistIdFk"
-                  value={formData.artistIdFk}
-                  onChange={handleSelectChange}>
-                  <option value="">Seleccionar</option>
-                  {artists.map((artist) => (
-                    <option key={artist.artistId} value={artist.artistId}>
-                      {artist.name}
-                    </option>
-                  ))}
-                </select>
-                <span className={styles.iconPencil}></span>
-              </div>
-            </div>
-            <div className={styles.formGroup}>
               <label className={styles.labelWithTitle} htmlFor="client">
                 Cliente:
               </label>
               <select
                 className={styles.inputWithTitle}
                 placeholder={'Identificador del cliente'}
-                name="clientIdFk"
-                value={formData.clientIdFk}
+                name="client_id"
+                value={formData.client_id}
                 onChange={handleSelectChange}>
                 <option value="">Seleccionar</option>
                 {clients.map((client) => (
-                  <option key={client.clientId} value={client.clientId}>
+                  <option key={client.id} value={client.id}>
                     {client.name}
                   </option>
                 ))}
@@ -300,117 +214,71 @@ const CreateAppointment = () => {
               <select
                 className={styles.inputWithTitle}
                 placeholder={'Identificador de la categoría'}
-                name="categoryIdFk"
-                value={formData.categoryIdFk}
+                name="category_id"
+                value={formData.category_id}
                 onChange={handleSelectChange}>
                 <option value="">Seleccionar</option>
-                {categories.map((category) => (
-                  <option key={category.categoryId} value={category.categoryId}>
-                    {category.name}
-                  </option>
-                ))}
+                {artistCategories.map((artistCategory) => {
+                  const category = categories.find(
+                    (c) => c.id === artistCategory.category_id,
+                  );
+                  return (
+                    <option key={artistCategory.id} value={artistCategory.id}>
+                      {category ? category.name : 'Categoría no encontrada'}
+                    </option>
+                  );
+                })}
               </select>
             </div>
-            <center>
-              <button
-                type={'button'}
-                className={styles.button}
-                onClick={createAppointment}>
-                Agregar cita
-              </button>
-            </center>
-          </form>
-          {successMessage && (
-            <div className={styles.successMessage}>{successMessage}</div>
-          )}
-        </div>
-        <div className={styles.rightSection}>
-          <h2>Sesión</h2>
-          <form onSubmit={createSession}>
+          </div>
+          <div className={styles.rightSection}>
             <div className={styles.formGroup}>
-              <label className={styles.labelWithTitle} htmlFor="date">
-                Fecha:
+              <label className={styles.labelWithTitle} htmlFor="name">
+                Nombre:
               </label>
               <input
                 className={styles.inputWithTitle}
-                name="date"
-                placeholder="Fecha y hora de la cita"
-                value={sessionData.date}
-                onChange={handleSessionChange}
+                name="name"
+                placeholder="Nombre"
+                //value={}
+                //onChange={handleAppointmentChange}
               />
             </div>
             <div className={styles.formGroup}>
-              <div className={styles.timeStatusContainer}>
-                <div>
-                  <label
-                    className={styles.labelWithTitle}
-                    htmlFor="estimatedTime">
-                    Tiempo estimado:
-                  </label>
-                  <input
-                    className={styles.inputWithTitle}
-                    name="estimatedTime"
-                    placeholder="Tiempo estimado en horas"
-                    value={sessionData.estimatedTime}
-                    onChange={handleSessionChange}
-                  />
-                </div>
-                <div>
-                  <label className={styles.labelWithTitle} htmlFor="status">
-                    Estado:
-                  </label>
-                  <select
-                    className={styles.inputWithTitle}
-                    name="status"
-                    placeholder="Estado"
-                    value={sessionData.status}
-                    onChange={handleStatusChange}>
-                    <option value={'none'}>Seleccionar..</option>
-                    <option value={'pagado'}>Pagado</option>
-                    <option value="sin pagar">Sin pagar</option>
-                    <option value={'abonado'}>Abonado</option>
-                  </select>
-                </div>
+              <label className={styles.labelWithTitle} htmlFor="artist">
+                Artista:
+              </label>
+              <div className={styles.inputArtist}>
+                <select
+                  className={styles.inputWithTitle}
+                  placeholder={'Identificador del artista'}
+                  name="artist_id"
+                  value={formData.artist_id}
+                  onChange={handleSelectChange}>
+                  <option value="">Seleccionar</option>
+                  {artists.map((artist) => (
+                    <option key={artist.id} value={artist.id}>
+                      {artist.name}
+                    </option>
+                  ))}
+                </select>
+                <span className={styles.iconPencil}></span>
               </div>
             </div>
-            <div className={styles.formGroup}>
-              <label className={styles.labelWithTitle} htmlFor="price">
-                Precio:
-              </label>
-              <input
-                className={styles.inputWithTitle}
-                name="price"
-                placeholder="Precio del tatuaje"
-                value={sessionData.price}
-                onChange={handleSessionChange}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label
-                className={styles.labelWithTitle}
-                htmlFor="appointmentIdFk">
-                Cita:
-              </label>
-              <input
-                className={styles.inputWithTitle}
-                name="appointmentIdFk"
-                placeholder="Identificador de la cita"
-                value={sessionData.appointmentIdFk}
-                onChange={handleSessionChange}
-              />
-            </div>
-            <center>
-              <button
-                type={'button'}
-                className={styles.button}
-                data-action={'create-session'}
-                onClick={createSession}>
-                Agregar sesión
-              </button>
-            </center>
-          </form>
+          </div>
         </div>
-      </div>
+        <center>
+          <button
+            type={'button'}
+            className={styles.button}
+            onClick={createAppointment}>
+            Agregar cita
+          </button>
+        </center>
+        {successMessage && (
+          <div className={styles.successMessage}>{successMessage}</div>
+        )}
+      </form>
     </div>
   );
 };

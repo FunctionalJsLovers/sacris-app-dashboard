@@ -5,49 +5,16 @@ import AccountSection from '@/components/AccountSection/AccountSection';
 import axios from 'axios';
 import EditDltAppointment from '@/components/Appointment/ManageAppointments/EditDltAppointment/EditDltAppointment';
 import CreateAppointment from '@/components/Appointment/ManageAppointments/CreateAppointment/CreateAppointment';
-import NavBar from '@/components/NavBar/NavBar';
-
-{
-  /*const routes = [
-  {
-    name: 'Artistas',
-    path: '/dashboard/artist',
-    icon: '/images/iconsNSelect/artists.png',
-    text: 'None',
-  },
-  {
-    name: 'Citas',
-    path: '/dashboard/appointments',
-    icon: '/images/iconsSelect/appointments.png',
-    text: 'Red',
-  },
-  {
-    name: 'Calendario',
-    path: '/dashboard/calendar',
-    icon: '/images/iconsNSelect/calendar.png',
-    text: 'None',
-  },
-  {
-    name: 'Productos',
-    path: '/',
-    icon: '/images/iconsNSelect/products.png',
-    text: 'None',
-  },
-  {
-    name: 'Reportes',
-    path: '/',
-    icon: '/images/iconsNSelect/reports.png',
-    text: 'None',
-  },
-];*/
-}
+import { Icon } from '@iconify/react/dist/iconify.js';
+import Default from '@/components/Default/Default';
+import Sessions from '@/components/Sessions/ManageSessions/Sessions';
 
 interface Appointment {
-  appointmentId: string;
+  id: string;
   description: string;
-  artistId: string;
-  clientId: string;
-  categoryId: string;
+  artist_id: string;
+  client_id: string;
+  category_id: string;
 }
 
 const Appointments: React.FC = () => {
@@ -64,15 +31,24 @@ const Appointments: React.FC = () => {
   const [showCreateAppointment, setShowCreateAppointment] = useState(false);
   const [showEditAppointment, setShowEditAppointment] = useState(false);
   const [showDeleteAppointment, setShowDeleteAppointment] = useState(false);
+  const [showSessionContent, setShowSessionContent] = useState(false);
   const [isEditing, setIsEditing] = useState(true);
+  const [editMode, setIsEditMode] = useState(false);
+  const [deleteMode, setIsDeleteMode] = useState(false);
+  const [defaultMode, setIsDefaultMode] = useState(true);
 
   useEffect(() => {
     axios
-      .get(
-        'https://handsomely-divine-abstracted-bed.deploy.space/appointments/?totalCount=false',
-      )
+      .get('http://52.38.52.160:9000/admin/appointments/')
       .then((response) => {
-        setAllAppointments(response.data);
+        if (Array.isArray(response.data.appointments)) {
+          setAllAppointments(response.data.appointments);
+        } else {
+          console.error(
+            'La respuesta no contiene una matriz de citas válida:',
+            response.data,
+          );
+        }
       })
       .catch((error) => {
         console.error('Error al cargar las citas:', error);
@@ -81,19 +57,20 @@ const Appointments: React.FC = () => {
 
   useEffect(() => {
     const filtered = allAppointments.filter((appointment) =>
-      appointment.appointmentId
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()),
+      appointment.id.toLowerCase().includes(searchTerm.toLowerCase()),
     );
     setFilteredAppointments(filtered);
   }, [searchTerm, allAppointments]);
 
   const clearAll = () => {
+    setShowSessionContent(false);
     setShowEditAppointment(false);
     setShowCreateAppointment(false);
     setEditWithoutId(false);
     setShowDeleteAppointment(false);
     setDeleteWithoutId(false);
+    setIsDefaultMode(false);
+    clearModes();
   };
   const handleCreateClick = () => {
     clearAll();
@@ -102,6 +79,8 @@ const Appointments: React.FC = () => {
 
   const handleEditClick = () => {
     clearAll();
+    setIsEditing(true);
+    setIsEditMode(true);
     setShowEditAppointment(true);
   };
 
@@ -115,79 +94,147 @@ const Appointments: React.FC = () => {
     setDeleteWithoutId(true);
   };
 
+  const handleSessionSection = () => {
+    setShowSessionContent(true);
+  };
+
+  const clearModes = () => {
+    setIsDeleteMode(false);
+    setIsEditMode(false);
+    setIsDefaultMode(false);
+  };
+
   return (
-    <div className={styles.allAppointmentSection}>
-      {/*<NavBar routes={routes} />*/}
+    <div
+      className={
+        showSessionContent
+          ? styles.allAppointmentSectionDE
+          : styles.allAppointmentSection
+      }>
       <AccountSection
         notificationCount={2}
         photoUrl="https://th.bing.com/th/id/OIP.hFh4Uw00oR7qfvoCqnG8fQHaEK?w=186&h=104&c=7&r=0&o=5&dpr=1.3&pid=1.7"
       />
-      <div className={styles.appointmentsContent}>
-        <div className={styles.title}>Citas</div>
-        <div className={styles.icons}>
-          <span
-            className={styles.iconAdd}
-            onClick={() => {
-              handleCreateClick();
-            }}></span>
-          <span
-            className={styles.iconEdit}
-            onClick={() => {
-              handleEditWithoutId();
-              setIsEditing(true);
-            }}></span>
-          <span
-            className={styles.iconDelete}
-            onClick={() => {
-              handleDeleteWithoutId();
-              setIsEditing(false);
-            }}></span>
-        </div>
-        <div className={styles.appointmentsListSection}>
-          <input
-            type={'text'}
-            className={styles.inputSearch}
-            placeholder={'Identificador de la cita'}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <div className={styles.listAppointments}>
-            {filteredAppointments.map((appointment) => (
-              <span
-                key={appointment.appointmentId}
-                onClick={() => {
-                  setSelectedAppointmentId(appointment.appointmentId);
-                  handleEditClick();
-                }}>
-                {appointment.appointmentId}
-              </span>
-            ))}
+      <div
+        className={
+          showSessionContent
+            ? styles.appointmentsContentSession
+            : styles.appointmentsContent
+        }>
+        <div className={styles.appointmentsHeader}>
+          <div className={styles.title}>Citas</div>
+          <div className={styles.icons}>
+            <span
+              className={styles.iconAdd}
+              onClick={() => {
+                handleCreateClick();
+                clearModes();
+              }}>
+              <Icon
+                icon={'ri:add-circle-fill'}
+                color={showCreateAppointment ? '#cb3230' : '#BBBFC1'}
+                width={30}
+                height={30}></Icon>
+            </span>
+            <span
+              className={styles.iconEdit}
+              onClick={() => {
+                handleEditWithoutId();
+                setIsEditing(true);
+                clearModes();
+                setIsEditMode(true);
+              }}>
+              <Icon
+                icon={'tabler:edit'}
+                color={editMode ? '#cb3230' : '#BBBFC1'}
+                width={30}
+                height={30}></Icon>
+            </span>
+            <span
+              className={styles.iconDelete}
+              onClick={() => {
+                handleDeleteWithoutId();
+                setIsEditing(false);
+                clearModes();
+                setIsDeleteMode(true);
+              }}>
+              <Icon
+                icon={'typcn:delete-outline'}
+                color={deleteMode ? '#cb3230' : '#BBBFC1'}
+                width={30}
+                height={30}></Icon>
+            </span>
           </div>
         </div>
-        <div className={styles.appointmentSessionContainer}>
-          {selectedAppointmentId && showEditAppointment && (
-            <EditDltAppointment
-              appointmentId={selectedAppointmentId}
-              isEditing={isEditing}
+        <div className={styles.appointmentsContainer}>
+          <div className={styles.appointmentsListSection}>
+            <input
+              type={'text'}
+              className={styles.inputSearch}
+              placeholder={'Identificador de la cita'}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-          )}
+            <div className={styles.listAppointments}>
+              {filteredAppointments.map((appointment) => (
+                <span
+                  key={appointment.id}
+                  onClick={() => {
+                    setSelectedAppointmentId(appointment.id);
+                    if (isEditing) {
+                      handleEditClick();
+                    } else {
+                      clearAll();
+                      setIsDeleteMode(true);
+                    }
+                  }}>
+                  {appointment.id}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className={styles.onlyAppointmentContainer}>
+            {defaultMode && <Default />}
 
-          {editWithoutId && (
-            <EditDltAppointment appointmentId={' '} isEditing={isEditing} />
-          )}
+            {selectedAppointmentId && editMode && (
+              <EditDltAppointment
+                appointment_id={selectedAppointmentId}
+                isEditing={isEditing}
+              />
+            )}
 
-          {selectedAppointmentId && showDeleteAppointment && (
-            <EditDltAppointment
-              appointmentId={selectedAppointmentId}
-              isEditing={isEditing}
-            />
-          )}
+            {editWithoutId && !selectedAppointmentId && (
+              <EditDltAppointment appointment_id={' '} isEditing={isEditing} />
+            )}
 
-          {deleteWithoutId && (
-            <EditDltAppointment appointmentId={' '} isEditing={isEditing} />
-          )}
+            {selectedAppointmentId && deleteMode && (
+              <EditDltAppointment
+                appointment_id={selectedAppointmentId}
+                isEditing={isEditing}
+              />
+            )}
 
-          {showCreateAppointment && <CreateAppointment />}
+            {deleteWithoutId && !selectedAppointmentId && (
+              <EditDltAppointment appointment_id={' '} isEditing={isEditing} />
+            )}
+
+            {showCreateAppointment && <CreateAppointment />}
+            {!showCreateAppointment && !defaultMode && (
+              <div className={styles.lineSeparator}>
+                <div className={styles.halfLine}></div>
+                <Icon
+                  className={styles.arrowIcon}
+                  icon={'ri:arrow-down-double-line'}
+                  color={'grey'}
+                  onClick={handleSessionSection}></Icon>
+                <div className={styles.fullLine}></div>
+              </div>
+            )}
+
+            {selectedAppointmentId && showSessionContent && (
+              <Sessions appointmentId={selectedAppointmentId} />
+            )}
+          </div>
         </div>
       </div>
     </div>

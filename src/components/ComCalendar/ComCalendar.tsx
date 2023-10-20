@@ -12,13 +12,12 @@ import { getAllSessions } from '@/services/SessionsAPI';
 import axios from 'axios';
 
 type Session = {
-  sessionId: string;
-  createdAt: string;
+  id: string;
   date: string;
-  estimatedTime: number;
+  estimated_time: number;
   status: string;
-  price: string;
-  appointmentIdFk: string;
+  price: number;
+  appointment_id: string;
   description: string;
 };
 
@@ -35,15 +34,24 @@ function ComCalendar() {
     'sessions',
     getAllSessions,
   );
+  const apiBaseUrl = 'http://52.38.52.160:9000/admin';
 
   const getColorForState = (state: string): string => {
     switch (state) {
-      case 'sin pagar' || 'Sin pagar':
+      case 'sin pagar':
         return 'red';
-      case 'pagado' || 'Pagado':
+      case 'unpaid':
+        return 'red';
+      case 'pagado':
         return 'green';
-      case 'abonado' || 'Abonado':
+      case 'totally_paid':
+        return 'green';
+      case 'prepaid':
         return 'blue';
+      case 'abonado':
+        return 'blue';
+      case 'scheduled':
+        return 'yellow';
       default:
         return 'gray';
     }
@@ -60,20 +68,14 @@ function ComCalendar() {
   }, [fetchError]);
 
   useEffect(() => {
-    if (sessionsData) {
-      setSessions(sessionsData);
-    }
-  });
-
-  useEffect(() => {
     if (fetchError) {
       setError('No se pudo cargar la información de las citas');
     }
   }, [fetchError]);
 
   useEffect(() => {
-    if (sessionsData) {
-      setSessions(sessionsData);
+    if (sessionsData && sessionsData.sessions) {
+      setSessions(sessionsData.sessions);
     }
   }, [sessionsData]);
 
@@ -90,48 +92,33 @@ function ComCalendar() {
   }, []);
 
   const fetchAppointmentData = (event: Session) => {
-    const appointmentId = event.appointmentIdFk;
+    console.log('Si entra xd');
+    const appointment_id = event.appointment_id;
     axios
-      .get(
-        `https://handsomely-divine-abstracted-bed.deploy.space/appointments/${appointmentId}`,
-      )
+      .get(`${apiBaseUrl}/appointments/${appointment_id}`)
       .then((response) => {
-        setAppointmentDescription(response.data.description);
+        const appointmentData = response.data.appointments[0];
+        setAppointmentDescription(appointmentData.description);
         axios
-          .get(
-            `https://handsomely-divine-abstracted-bed.deploy.space/artists/${response.data.artistIdFk}`,
-          )
+          .get(`${apiBaseUrl}/artists/${appointmentData.artist_id}`)
           .then((artistResponse) => {
-            setArtistName(artistResponse.data.name);
+            const artistData = artistResponse.data.artists[0];
+            console.log('Artista: ', artistResponse);
+            setArtistName(artistData.name);
           })
           .catch((error) => {
             console.error('Error al obtener el nombre del artista: ', error);
             setError('Error al obtener el nombre del artista');
           });
         axios
-          .get(
-            `https://handsomely-divine-abstracted-bed.deploy.space/clients/${response.data.clientIdFk}`,
-          )
+          .get(`${apiBaseUrl}/clients/${appointmentData.client_id}`)
           .then((clientResponse) => {
-            setClientName(clientResponse.data.name);
+            const clientData = clientResponse.data.clients[0];
+            setClientName(clientData.name);
           })
           .catch((error) => {
             console.error('Error al obtener el nombre del cliente: ', error);
             setError('Error al obtener el nombre del cliente');
-          });
-        axios
-          .get(
-            `https://handsomely-divine-abstracted-bed.deploy.space/categories/${response.data.categoryIdFk}`,
-          )
-          .then((categoryResponse) => {
-            setCategoryName(categoryResponse.data.name);
-          })
-          .catch((error) => {
-            console.error(
-              'Error al obtener el nombre de la categoría: ',
-              error,
-            );
-            setError('Error al obtener el nombre de la categoría');
           });
       })
       .catch((error) => {
@@ -139,8 +126,6 @@ function ComCalendar() {
         setError('Error al obtener la información de la cita');
       });
   };
-
-  console.log(sessionsData);
 
   return (
     <div className={styles.fullCalendar}>
@@ -160,20 +145,19 @@ function ComCalendar() {
           list: 'List',
         }}
         height={'80vh'}
-        timeZone="UTC"
         events={sessions.map((appointment) => ({
-          id: appointment.sessionId,
-          title: appointment.sessionId,
+          id: appointment.id,
+          title: appointment.id,
           start: new Date(appointment.date),
           end: new Date(
             new Date(appointment.date).getTime() +
-              appointment.estimatedTime * 3600000,
+              appointment.estimated_time * 3600000,
           ),
           color: getColorForState(appointment.status),
         }))}
         eventClick={(clickInfo) => {
           const event = sessions.find(
-            (appointment) => appointment.sessionId === clickInfo.event.id,
+            (appointment) => appointment.id === clickInfo.event.id,
           );
           if (event) {
             setSelectedEvent(event);
@@ -190,29 +174,19 @@ function ComCalendar() {
         <div className={styles.popup}>
           <div className={styles.popupContent}>
             <h2>{appointmentDescription}</h2>
-            <p>ID: {selectedEvent.sessionId}</p>
-            <p>
-              Inicio:{' '}
-              {new Date(selectedEvent.date)
-                .toISOString()
-                .replace(/T/, ' ')
-                .replace(/\..+/, '')}
-            </p>
+            <p>ID: {selectedEvent.id}</p>
+            <p>Inicio: {new Date(selectedEvent.date).toLocaleString()}</p>
             <p>
               Fin:{' '}
               {new Date(
                 new Date(selectedEvent.date).getTime() +
-                  selectedEvent.estimatedTime * 60000,
-              )
-                .toISOString()
-                .replace(/T/, ' ')
-                .replace(/\..+/, '')}
+                  selectedEvent.estimated_time * 60 * 60 * 1000,
+              ).toLocaleString()}
             </p>
             <p>Estado: {selectedEvent.status}</p>
             <p>Nombre Artista: {artistName}</p>
             <p>Nombre Cliente: {clientName}</p>
-            <p>Categoría: {categoryName}</p>
-            <p>Precio: {selectedEvent.price}</p>
+            <p>Precio: {selectedEvent.price} $</p>
             <button onClick={handleClosePopup}>Cerrar</button>
           </div>
         </div>
