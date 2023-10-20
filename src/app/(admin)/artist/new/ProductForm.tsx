@@ -6,20 +6,26 @@ import Link from 'next/link';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { createArtist } from '@/services/ArtistsAPI';
+import { uploadFile } from '@/services/Storage';
 import { Modal } from 'antd';
-
 function CustomForm() {
   const [cancelButtonVisible, setCancelButtonVisible] = useState(true);
   const [errorQuery, setErrorQuery] = useState(true);
 
   const [file, setFile] = useState(null);
+
   const [artist, setArtist] = useState({
     name: '',
     phone: '',
     email: '',
   });
 
-  const { mutate: addUser } = useMutation({
+  const {
+    mutate: addUser,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useMutation({
     mutationFn: createArtist,
     onSuccess: async () => {
       console.log('success');
@@ -40,10 +46,11 @@ function CustomForm() {
     defaultValues: {
       name: '',
       phone: '',
-      email: '', //,
-      // description: '',
-      // username: '',
-      // instagram: ''
+      email: '',
+      admin_id: 'e694203f-1f9d-42df-8f8f-bbfa03a05555',
+      description: '',
+      instagram: '',
+      username: '',
     },
   });
 
@@ -52,58 +59,9 @@ function CustomForm() {
     reset();
     setCancelButtonVisible(false);
     console.log(artist);
+    uploadFile(artist.phone, file);
+    setFile(null);
   });
-  /*if (mutation.isLoading) {
-    return 'creando...';
-  }
-
-  if (mutation.isError) {
-    return (
-      <div className={styles.msg}>
-        <Link href="/artist">
-          <button className={styles.menuButton}>mal</button>
-          <h1 className={styles.label}></h1>
-        </Link>
-      </div>
-    );
-  }
-
-  if (mutation.isSuccess) {
-    return (
-      <div className={styles.msg}>
-        <Link href="/artist">
-          <button className={styles.menuButton}>bien</button>
-          <h1 className={styles.label}></h1>
-        </Link>
-      </div>
-    );
-  }*/
-
-  /*if (mutation.isLoading) {
-    return 'creando...';
-  }
-
-  if (mutation.isError) {
-    return (
-      <div className={styles.msg}>
-        <Link href="/artist">
-          <button className={styles.menuButton}>mal</button>
-          <h1 className={styles.label}></h1>
-        </Link>
-      </div>
-    );
-  }
-
-  if (mutation.isSuccess) {
-    return (
-      <div className={styles.msg}>
-        <Link href="/artist">
-          <button className={styles.menuButton}>bien</button>
-          <h1 className={styles.label}></h1>
-        </Link>
-      </div>
-    );
-  }*/
 
   return (
     <form className={styles.formContainer} onSubmit={onSubmit}>
@@ -122,6 +80,7 @@ function CustomForm() {
         <input
           type="file"
           name="image"
+          accept="image"
           className={styles.inputImage}
           onChange={(e: any) => {
             setFile(e.target.files[0]);
@@ -156,27 +115,33 @@ function CustomForm() {
           </label>
           <textarea
             className={styles.textarea}
-            //  {...register('description', {
-            //    required: {
-            //      value: true,
-            //      message: 'Descripcion es requerida'
-            //    },
+            {...register('description', {
+              required: {
+                value: true,
+                message: 'Descripcion es requerida',
+              },
 
-            //    pattern: {
-            //      value: /^(?!\s)[A-Za-z0-9\s]+$/,
-            //      message: 'descripcion no válida'
-            //    },
-            //    maxLength: 150,
-            //    minLength: 2
-            // })}
+              pattern: {
+                value: /^(?!\s)[A-Za-z0-9\s]+$/,
+                message: 'descripcion no válida',
+              },
+              maxLength: 150,
+              minLength: 2,
+            })}
           />
-          {/* {errors.description && <span className={styles.span}> {(errors.description.message)} </span>}
-        {errors.description?.type === 'maxLength' && (
-          <span className={styles.span}>Descripcion no debe ser mayor a 150 caracteres</span>
-        )}
-        {errors.description?.type === 'minLength' && (
-          <span className={styles.span}>Descripcion debe ser mayor a 2 caracteres</span>
-        )} */}
+          {errors.description && (
+            <span className={styles.span}> {errors.description.message} </span>
+          )}
+          {errors.description?.type === 'maxLength' && (
+            <span className={styles.span}>
+              Descripcion no debe ser mayor a 150 caracteres
+            </span>
+          )}
+          {errors.description?.type === 'minLength' && (
+            <span className={styles.span}>
+              Descripcion debe ser mayor a 2 caracteres
+            </span>
+          )}
         </div>
       </div>
       <div className={styles.formRight}>
@@ -222,27 +187,33 @@ function CustomForm() {
           <input
             type="text"
             className={styles.input}
-            //  {...register('username', {
-            //    required: {
-            //      value: true,
-            //      message: 'User Name es requerida'
-            //    },
+            {...register('username', {
+              required: {
+                value: true,
+                message: 'User Name es requerida',
+              },
 
-            //    pattern: {
-            //      value: /^(?!\s)[A-Za-z0-9\s]+$/,
-            //      message: 'User Name no válida'
-            //    },
-            //    maxLength: 15,
-            //    minLength: 2
-            //  })}
+              pattern: {
+                value: /^(?!\s)[A-Za-z0-9\s]+$/,
+                message: 'User Name no válida',
+              },
+              maxLength: 15,
+              minLength: 2,
+            })}
           />
-          {/* {errors.username && <span className={styles.span}> {(errors.username.message)} </span>}
-       {errors.username?.type === 'maxLength' && (
-         <span className={styles.span}>User Name no debe ser mayor a 15 caracteres</span>
-       )}
-       {errors.username?.type === 'minLength' && (
-         <span className={styles.span}>User Name debe ser mayor a 2 caracteres</span>
-       )} */}
+          {errors.username && (
+            <span className={styles.span}> {errors.username.message} </span>
+          )}
+          {errors.username?.type === 'maxLength' && (
+            <span className={styles.span}>
+              User Name no debe ser mayor a 15 caracteres
+            </span>
+          )}
+          {errors.username?.type === 'minLength' && (
+            <span className={styles.span}>
+              User Name debe ser mayor a 2 caracteres
+            </span>
+          )}
         </div>
         <div className={styles.div}>
           <label className={styles.label} htmlFor="categories">
@@ -291,23 +262,27 @@ function CustomForm() {
           <input
             type="text"
             className={styles.input}
-            // {...register('instagram', {
-            //   required: {
-            //     value: true,
-            //     message: 'Instagram es requerido'
-            //   },
+            {...register('instagram', {
+              required: {
+                value: true,
+                message: 'Instagram es requerido',
+              },
 
-            //   pattern: {
-            //     value: /^(?!\s)[A-Za-z0-9\s]+$/,
-            //     message: 'Instagram no válido'
-            //   },
-            //   minLength: 2
-            // })}
+              pattern: {
+                value: /^(?!\s)[A-Za-z0-9\s]+$/,
+                message: 'Instagram no válido',
+              },
+              minLength: 2,
+            })}
           />
-          {/* {errors.instagram && <span className={styles.span}> {(errors.instagram.message)} </span>}
-      {errors.instagram?.type === 'minLength' && (
-        <span className={styles.span}>Instagram debe ser mayor a 2 caracteres</span>
-      )} */}
+          {errors.instagram && (
+            <span className={styles.span}> {errors.instagram.message} </span>
+          )}
+          {errors.instagram?.type === 'minLength' && (
+            <span className={styles.span}>
+              Instagram debe ser mayor a 2 caracteres
+            </span>
+          )}
         </div>
         <div className={styles.formButtons}>
           {cancelButtonVisible && (
@@ -322,6 +297,30 @@ function CustomForm() {
             )}{' '}
           </Link>
         </div>
+        {isLoading && <h1>creando...</h1>}
+
+        {isError && (
+          <Modal open={true} footer={null} width={250} style={{ height: 400 }}>
+            <div className={styles.msg}>
+              <h1 className={styles.label}>Artista creado</h1>
+              <Link href="/artist">
+                <button className={styles.menuButton}>Volver</button>
+                <h1 className={styles.label}></h1>
+              </Link>
+            </div>
+          </Modal>
+        )}
+
+        {isSuccess && (
+          <Modal open={true} footer={null} width={250} style={{ height: 400 }}>
+            <div className={styles.msg}>
+              <h1 className={styles.label}>Artista creado</h1>
+              <Link href="/artist">
+                <button className={styles.menuButton}>Volver</button>
+              </Link>
+            </div>
+          </Modal>
+        )}
       </div>
     </form>
   );

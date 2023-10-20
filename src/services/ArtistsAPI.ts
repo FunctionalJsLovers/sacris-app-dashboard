@@ -1,7 +1,5 @@
 export async function getAllArtists() {
-  const response = await fetch(
-    'https://handsomely-divine-abstracted-bed.deploy.space/artists/',
-  );
+  const response = await fetch('http://52.38.52.160:9000/admin/artists/');
   return await response.json();
 }
 
@@ -50,16 +48,13 @@ export async function deleteArtist(id: string) {
 }
 
 export async function createArtist(artistData: any) {
-  const response = await fetch(
-    'https://handsomely-divine-abstracted-bed.deploy.space/artists/',
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify(artistData),
+  const response = await fetch('http://52.38.52.160:9000/admin/artists/', {
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    method: 'POST',
+    body: JSON.stringify(artistData),
+  });
   if (!response.ok) {
     const errorResponse = await response.text();
     throw new Error(errorResponse);
