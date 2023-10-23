@@ -43,7 +43,7 @@ function Client() {
             />
           </div>
           <div className={styles.buttonContainer}>
-            <Link href="./artist/new">
+            <Link href="./clients/new">
               {' '}
               <button>
                 <RiUserAddLine className={styles.icons} color="black" />
