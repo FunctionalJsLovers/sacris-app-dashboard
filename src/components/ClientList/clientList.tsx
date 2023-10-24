@@ -31,7 +31,6 @@ function ClientList({
 
   const handleEditIconClick = (user: UserType) => {
     if (user) {
-      console.log(user);
       onUserSelect(user);
     }
   };
