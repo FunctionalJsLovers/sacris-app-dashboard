@@ -1,4 +1,6 @@
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 export async function getAllSessions() {
-  const response = await fetch('http://52.38.52.160:9000/admin/sessions/');
+  const response = await fetch(`${BASE_URL}/admin/sessions/`);
   return response.json();
 }

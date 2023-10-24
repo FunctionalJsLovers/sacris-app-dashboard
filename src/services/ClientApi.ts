@@ -1,10 +1,12 @@
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 export async function getAllClients() {
-  const response = await fetch('http://18.237.102.202:9000/admin/clients/');
+  const response = await fetch(`${BASE_URL}/admin/clients/`);
   return await response.json();
 }
 
 export async function createClient(clientData: any) {
-  const response = await fetch('http://18.237.102.202:9000/admin/clients/', {
+  const response = await fetch(`${BASE_URL}/admin/clients/`, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -17,4 +19,34 @@ export async function createClient(clientData: any) {
   }
   const user = await response.json();
   return user;
+}
+
+interface ClientType {
+  name: string;
+  email: string;
+  phone: string;
+  id: string;
+}
+
+export async function editClient(data: ClientType) {
+  const body = {
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+  };
+  const response = await fetch(`${BASE_URL}/admin/clients/${data.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+  return response.json();
+}
+
+export async function deleteClient(id: string) {
+  const response = await fetch(`${BASE_URL}/admin/clients/${id}`, {
+    method: 'DELETE',
+  });
+  return response.json();
 }

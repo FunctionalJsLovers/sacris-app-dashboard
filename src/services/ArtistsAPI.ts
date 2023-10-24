@@ -1,12 +1,12 @@
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 export async function getAllArtists() {
-  const response = await fetch('http://52.38.52.160:9000/admin/artists/');
+  const response = await fetch(`${BASE_URL}/admin/artists/`);
   return await response.json();
 }
 
 export async function getArtist(id: string) {
-  const response = await fetch(
-    `https://handsomely-divine-abstracted-bed.deploy.space/artists/${id}`,
-  );
+  const response = await fetch(`${BASE_URL}/artists/${id}`);
   return await response.json();
 }
 
@@ -24,31 +24,25 @@ export async function editArtist(data: UserType) {
     phone: data.phone,
     artistId: data.id,
   };
-  const response = await fetch(
-    `https://handsomely-divine-abstracted-bed.deploy.space/artists/${data.id}`,
-    {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
+  const response = await fetch(`${BASE_URL}/artists/${data.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    body: JSON.stringify(body),
+  });
   return response.json();
 }
 
 export async function deleteArtist(id: string) {
-  const response = await fetch(
-    `https://handsomely-divine-abstracted-bed.deploy.space/artists/${id}`,
-    {
-      method: 'DELETE',
-    },
-  );
+  const response = await fetch(`${BASE_URL}/artists/${id}`, {
+    method: 'DELETE',
+  });
   return response.json();
 }
 
 export async function createArtist(artistData: any) {
-  const response = await fetch('http://52.38.52.160:9000/admin/artists/', {
+  const response = await fetch(`${BASE_URL}/admin/artists/`, {
     headers: {
       'Content-Type': 'application/json',
     },
