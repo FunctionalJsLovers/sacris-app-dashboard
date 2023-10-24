@@ -39,9 +39,9 @@ function ComCalendar() {
   const getColorForState = (state: string): string => {
     switch (state) {
       case 'sin pagar':
-        return 'red';
+        return '#BF1714';
       case 'unpaid':
-        return 'red';
+        return '#BF1714';
       case 'pagado':
         return 'green';
       case 'totally_paid':
@@ -51,7 +51,7 @@ function ComCalendar() {
       case 'abonado':
         return 'blue';
       case 'scheduled':
-        return 'yellow';
+        return '#A47A28';
       default:
         return 'gray';
     }
@@ -213,8 +213,8 @@ function ComCalendar() {
                   selectedEvent.estimated_time * 60 * 60 * 1000,
               ).toLocaleString()}
             </p>
-            <p>Estado: {selectedEvent.status}</p>
-            <p>Nombre Artista: {artistName}</p>
+            <p>Estado: {getStatusText(selectedEvent.status)}</p>
+            <p>Nombre Artista: {artistName} </p>
             <p>Nombre Cliente: {clientName}</p>
             <p>Precio: {selectedEvent.price} $</p>
             <button onClick={handleClosePopup}>Cerrar</button>
@@ -226,3 +226,24 @@ function ComCalendar() {
 }
 
 export default ComCalendar;
+
+function getStatusText(status: string) {
+  switch (status) {
+    case 'pagado':
+      return 'Pagado';
+    case 'totally_paid':
+      return 'Pagado';
+    case 'unpaid':
+      return 'Sin pagar';
+    case 'sin pagar':
+      return 'Sin pagar';
+    case 'abonado':
+      return 'Abonado';
+    case 'prepaid':
+      return 'Abonado';
+    case 'scheduled':
+      return 'Agendado';
+    default:
+      return 'Desconocido';
+  }
+}
