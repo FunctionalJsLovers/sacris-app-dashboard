@@ -4,10 +4,7 @@ import { useMutation } from 'react-query';
 import axios from 'axios';
 import Error from '@/components/PopUps/Error/Error';
 import Success from '@/components/PopUps/Success/Success';
-import {
-  validateSessionFields,
-  validateAppointmentFields,
-} from '@/Validations/validationsSessions';
+import { validateAppointmentFields } from '@/Validations/validationsSessions';
 
 interface ArtistCategory {
   id: string;
@@ -47,11 +44,11 @@ const CreateAppointment = () => {
   const [artistCategories, setArtistCategories] = useState<ArtistCategory[]>(
     [],
   );
-  const apiBaseUrl = 'http://52.38.52.160:9000/admin';
+  const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const fetchArtistCategories = async () => {
     try {
-      const response = await axios.get(`${apiBaseUrl}/artistCategories`);
+      const response = await axios.get(`${apiBaseUrl}/admin/artistCategories`);
       setArtistCategories(response.data.artistCategories);
     } catch (error) {
       console.error('Error al cargar las categorías de los artistas:', error);
@@ -60,7 +57,7 @@ const CreateAppointment = () => {
 
   const fetchArtists = async () => {
     try {
-      const response = await axios.get(`${apiBaseUrl}/artists`);
+      const response = await axios.get(`${apiBaseUrl}/admin/artists`);
       setArtists(response.data.artists);
     } catch (error) {
       console.error('Error al cargar los artistas:', error);
@@ -69,7 +66,7 @@ const CreateAppointment = () => {
 
   const fetchClients = async () => {
     try {
-      const response = await axios.get(`${apiBaseUrl}/clients`);
+      const response = await axios.get(`${apiBaseUrl}/admin/clients`);
       setClients(response.data.clients);
     } catch (error) {
       console.error('Error al cargar los clientes:', error);
@@ -78,7 +75,7 @@ const CreateAppointment = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${apiBaseUrl}/categories`);
+      const response = await axios.get(`${apiBaseUrl}/admin/categories`);
       setCategories(response.data.categories);
     } catch (error) {
       console.error('Error al cargar las categorías:', error);
@@ -101,7 +98,7 @@ const CreateAppointment = () => {
 
   const createAppointmentMutation = useMutation(
     (newAppointment) =>
-      axios.post(`${apiBaseUrl}/appointments`, newAppointment),
+      axios.post(`${apiBaseUrl}/admin/appointments`, newAppointment),
     {
       onSuccess: () => {
         console.log('Cita creada con éxito');
@@ -275,9 +272,6 @@ const CreateAppointment = () => {
             Agregar cita
           </button>
         </center>
-        {successMessage && (
-          <div className={styles.successMessage}>{successMessage}</div>
-        )}
       </form>
     </div>
   );

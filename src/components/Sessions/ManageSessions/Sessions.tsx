@@ -31,12 +31,11 @@ const Sessions = ({ appointmentId }: SessionProps) => {
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
     null,
   );
+  const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     axios
-      .get(
-        `http://52.38.52.160:9000/admin/appointments/${appointmentId}/sessions`,
-      )
+      .get(`${apiBaseUrl}/admin/appointments/${appointmentId}/sessions`)
       .then((response) => {
         if (Array.isArray(response.data.sessions)) {
           setAllSessions(response.data.sessions);
@@ -48,6 +47,27 @@ const Sessions = ({ appointmentId }: SessionProps) => {
         console.error('Error al cargar las sesiones:', error);
       });
   }, []);
+
+  const reloadSessions = () => {
+    axios
+      .get(`${apiBaseUrl}/admin/appointments/${appointmentId}/sessions`)
+      .then((response) => {
+        if (Array.isArray(response.data.sessions)) {
+          setAllSessions(response.data.sessions);
+        } else {
+          console.error('No se encontró sesiones válidas:', response.data);
+        }
+      })
+      .catch((error) => {
+        console.error('Error al cargar las sesiones:', error);
+      });
+  };
+
+  useEffect(() => {
+    if (reloadSessions) {
+      reloadSessions();
+    }
+  }, [reloadSessions]);
 
   const clearAllModes = () => {
     setIsEditMode(false);
@@ -133,12 +153,7 @@ const Sessions = ({ appointmentId }: SessionProps) => {
                 key={session.id}
                 onClick={() => {
                   setSelectedSessionId(session.id);
-                  console.log('Seleccionada: ', selectedSessionId);
-                  if (editMode) {
-                    handleEditClick();
-                  } else {
-                    handleDeleteClick();
-                  }
+                  handleEditClick();
                 }}>
                 {session.id}
               </span>
@@ -149,6 +164,7 @@ const Sessions = ({ appointmentId }: SessionProps) => {
           {createMode && (
             <SessionOperations
               sessionId={' '}
+              appointmentId={appointmentId}
               isEditing={isEditing}
               isCreating={isCreating}
             />
@@ -156,6 +172,7 @@ const Sessions = ({ appointmentId }: SessionProps) => {
           {editMode && !selectedSessionId && (
             <SessionOperations
               sessionId={' '}
+              appointmentId={appointmentId}
               isEditing={isEditing}
               isCreating={isCreating}
             />
@@ -163,6 +180,7 @@ const Sessions = ({ appointmentId }: SessionProps) => {
           {deleteMode && !selectedSessionId && (
             <SessionOperations
               sessionId={' '}
+              appointmentId={appointmentId}
               isEditing={isEditing}
               isCreating={isCreating}
             />
@@ -170,6 +188,7 @@ const Sessions = ({ appointmentId }: SessionProps) => {
           {selectedSessionId && editMode && (
             <SessionOperations
               sessionId={selectedSessionId}
+              appointmentId={appointmentId}
               isEditing={isEditing}
               isCreating={isCreating}
             />
@@ -177,6 +196,7 @@ const Sessions = ({ appointmentId }: SessionProps) => {
           {selectedSessionId && deleteMode && (
             <SessionOperations
               sessionId={selectedSessionId}
+              appointmentId={appointmentId}
               isEditing={isEditing}
               isCreating={isCreating}
             />

@@ -18,9 +18,9 @@ export function validateSessionFields(sessionData: any): {
       } else {
         const hours = date.getHours();
         const minutes = date.getMinutes();
-        if (hours < 8 || hours > 22 || (hours === 22 && minutes > 0)) {
+        if (hours < 9 || hours > 22 || (hours === 22 && minutes > 0)) {
           errors.date =
-            'La cita debe estar dentro del horario laboral de 8 am a 10 pm.';
+            'La cita debe estar dentro del horario laboral de 9 am a 10 pm.';
         }
       }
     }
