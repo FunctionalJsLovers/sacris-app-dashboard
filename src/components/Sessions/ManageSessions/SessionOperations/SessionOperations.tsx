@@ -11,12 +11,14 @@ import useForceUpdate from 'antd/es/_util/hooks/useForceUpdate';
 
 interface EditAppointmentProps {
   sessionId: string;
+  appointmentId: string;
   isEditing?: boolean;
   isCreating?: boolean;
 }
 
 function SessionOperations({
   sessionId,
+  appointmentId,
   isEditing,
   isCreating,
 }: EditAppointmentProps) {
@@ -24,7 +26,7 @@ function SessionOperations({
   const [success, setSuccess] = useState<string | null>(null);
   const [showDltConfirmationSession, setShowDltConfirmationSession] =
     useState(false);
-  const apiBaseUrl = 'http://52.38.52.160:9000/admin';
+  const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const forceUpdate = useForceUpdate();
 
   const [sessionData, setSessionData] = useState({
@@ -42,7 +44,7 @@ function SessionOperations({
       try {
         if (sessionId) {
           const response = await axios.get(
-            `${apiBaseUrl}/sessions/${sessionId}`,
+            `${apiBaseUrl}/admin/sessions/${sessionId}`,
           );
           if (response.data.session && response.data.session.length > 0) {
             const sessionDataR = response.data.session[0];
@@ -53,6 +55,12 @@ function SessionOperations({
               status: sessionDataR.status,
               price: sessionDataR.price,
               appointment_id: sessionDataR.appointment_id,
+            }));
+          }
+          if (appointmentId) {
+            setSessionData((prevData) => ({
+              ...prevData,
+              appointment_id: appointmentId,
             }));
           }
         } else {
@@ -68,7 +76,8 @@ function SessionOperations({
   }, [sessionId]);
 
   const editSessionMutation = useMutation(
-    (newData) => axios.patch(`${apiBaseUrl}/sessions/${sessionId}`, newData),
+    (newData) =>
+      axios.patch(`${apiBaseUrl}/admin/sessions/${sessionId}`, newData),
     {
       onSettled: () => {
         queryClient.invalidateQueries(['session', 'sessionId']);
@@ -77,7 +86,7 @@ function SessionOperations({
   );
 
   const createSessionMutation = useMutation(
-    (newSession) => axios.post(`${apiBaseUrl}/sessions`, newSession),
+    (newSession) => axios.post(`${apiBaseUrl}/admin/sessions`, newSession),
     {
       onSuccess: () => {
         console.log('Sesión creada con éxito');
@@ -144,7 +153,6 @@ function SessionOperations({
     };
     try {
       if (!Object.keys(fieldErrors).length) {
-        console.log('Editar: ', sessionDataEdit);
         await editSessionMutation.mutateAsync(sessionDataEdit as any);
         console.log('Sesión actualizada con éxito');
         setSuccess('Sesión actualizada con éxito');
@@ -164,7 +172,7 @@ function SessionOperations({
   const handleDeleteSession = async () => {
     try {
       if (sessionId) {
-        await axios.delete(`${apiBaseUrl}/sessions/${sessionId}`);
+        await axios.delete(`${apiBaseUrl}/admin/sessions/${sessionId}`);
         console.log('Sesión eliminada con éxito');
         setSuccess('Sesión eliminada con éxito');
         clearSessionData();

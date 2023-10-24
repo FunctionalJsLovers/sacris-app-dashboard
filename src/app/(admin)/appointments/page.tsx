@@ -36,10 +36,11 @@ const Appointments: React.FC = () => {
   const [editMode, setIsEditMode] = useState(false);
   const [deleteMode, setIsDeleteMode] = useState(false);
   const [defaultMode, setIsDefaultMode] = useState(true);
+  const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     axios
-      .get('http://52.38.52.160:9000/admin/appointments/')
+      .get(`${apiBaseUrl}/admin/appointments/`)
       .then((response) => {
         if (Array.isArray(response.data.appointments)) {
           setAllAppointments(response.data.appointments);
@@ -54,6 +55,25 @@ const Appointments: React.FC = () => {
         console.error('Error al cargar las citas:', error);
       });
   }, []);
+
+  const reloadAppointments = () => {
+    axios
+      .get(`${apiBaseUrl}/admin/appointments/`)
+      .then((response) => {
+        if (Array.isArray(response.data.appointments)) {
+          setAllAppointments(response.data.appointments);
+        } else {
+          console.error('No se encontró citas válidas:', response.data);
+        }
+      })
+      .catch((error) => {
+        console.error('Error al cargar las citas:', error);
+      });
+  };
+
+  useEffect(() => {
+    reloadAppointments();
+  }, [reloadAppointments()]);
 
   useEffect(() => {
     const filtered = allAppointments.filter((appointment) =>
@@ -181,12 +201,7 @@ const Appointments: React.FC = () => {
                   key={appointment.id}
                   onClick={() => {
                     setSelectedAppointmentId(appointment.id);
-                    if (isEditing) {
-                      handleEditClick();
-                    } else {
-                      clearAll();
-                      setIsDeleteMode(true);
-                    }
+                    handleEditClick();
                   }}>
                   {appointment.id}
                 </span>

@@ -45,7 +45,7 @@ function EditDltAppointment({
   const [categories, setCategories] = useState<Category[]>([]);
   const [showDltConfirmationAppointment, setShowDltConfirmationAppointment] =
     useState(false);
-  const apiBaseUrl = 'http://52.38.52.160:9000/admin';
+  const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const [formData, setFormData] = useState({
     id: '',
@@ -60,7 +60,7 @@ function EditDltAppointment({
       try {
         if (appointment_id) {
           const response = await axios.get(
-            `${apiBaseUrl}/appointments/${appointment_id}`,
+            `${apiBaseUrl}/admin/appointments/${appointment_id}`,
           );
           const appointmentData = response.data.appointments[0];
           setFormData({
@@ -85,7 +85,10 @@ function EditDltAppointment({
 
   const editAppointmentMutation = useMutation(
     (newData) =>
-      axios.patch(`${apiBaseUrl}/appointments/${appointment_id}`, newData),
+      axios.patch(
+        `${apiBaseUrl}/admin/appointments/${appointment_id}`,
+        newData,
+      ),
     {},
   );
 
@@ -120,10 +123,11 @@ function EditDltAppointment({
   };
 
   const handleDeleteAppointment = async () => {
-    console.log('Aqui esta: ', appointment_id);
     try {
       if (appointment_id) {
-        await axios.delete(`${apiBaseUrl}/appointments/${appointment_id}`);
+        await axios.delete(
+          `${apiBaseUrl}/admin/appointments/${appointment_id}`,
+        );
         console.log('Cita eliminada con éxito');
         setSuccess('Cita eliminada con éxito');
         clearFormData();
@@ -150,7 +154,7 @@ function EditDltAppointment({
 
   const fetchArtists = async () => {
     try {
-      const response = await axios.get(`${apiBaseUrl}/artists`);
+      const response = await axios.get(`${apiBaseUrl}/admin/artists`);
       setArtists(response.data.artists);
     } catch (error) {
       console.error('Error al cargar los artistas:', error);
@@ -159,7 +163,7 @@ function EditDltAppointment({
 
   const fetchClients = async () => {
     try {
-      const response = await axios.get(`${apiBaseUrl}/clients`);
+      const response = await axios.get(`${apiBaseUrl}/admin/clients`);
       setClients(response.data.clients);
     } catch (error) {
       console.error('Error al cargar los clientes:', error);
@@ -168,7 +172,7 @@ function EditDltAppointment({
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${apiBaseUrl}/categories`);
+      const response = await axios.get(`${apiBaseUrl}/admin/categories`);
       setCategories(response.data.categories);
     } catch (error) {
       console.error('Error al cargar las categorías:', error);

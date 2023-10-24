@@ -1,4 +1,3 @@
-import NavBar from '@/components/NavBar/NavBar';
 import React from 'react';
 import styles from './styles.module.css';
 import AccountSection from '@/components/AccountSection/AccountSection';
