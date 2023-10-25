@@ -24,21 +24,26 @@ export async function editArtist(data: UserType) {
     phone: data.phone,
     artistId: data.id,
   };
-  const response = await fetch(`${BASE_URL}/artists/${data.id}`, {
+  const response = await fetch(`${BASE_URL}/admin/artists/${data.id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
   });
-  return response.json();
+  if (!response.ok) {
+    const errorResponse = await response.text();
+    throw new Error(errorResponse);
+  }
+  const user = await response.json();
+  return user;
 }
 
 export async function deleteArtist(id: string) {
-  const response = await fetch(`${BASE_URL}/artists/${id}`, {
+  const response = await fetch(`${BASE_URL}/admin/artists/${id}`, {
     method: 'DELETE',
   });
-  return response.json();
+  return response;
 }
 
 export async function createArtist(artistData: any) {
