@@ -48,5 +48,5 @@ export async function deleteClient(id: string) {
   const response = await fetch(`${BASE_URL}/admin/clients/${id}`, {
     method: 'DELETE',
   });
-  return response.json();
+  return response;
 }

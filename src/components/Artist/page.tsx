@@ -1,10 +1,5 @@
 'use client';
-import {
-  RiUserAddLine,
-  RiEditLine,
-  RiDeleteBin2Line,
-  RiSearchLine,
-} from 'react-icons/ri';
+import { RiUserAddLine, RiSearchLine } from 'react-icons/ri';
 import styles from './page.module.css';
 import ArtistList from './artistList';
 import Link from 'next/link';

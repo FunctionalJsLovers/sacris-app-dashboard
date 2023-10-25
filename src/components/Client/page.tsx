@@ -1,10 +1,5 @@
 'use client';
-import {
-  RiUserAddLine,
-  RiEditLine,
-  RiDeleteBin2Line,
-  RiSearchLine,
-} from 'react-icons/ri';
+import { RiUserAddLine, RiSearchLine } from 'react-icons/ri';
 import styles from './page.module.css';
 import ClientList from '../ClientList/clientList';
 import Link from 'next/link';
@@ -13,6 +8,8 @@ import ViewClient from '@/app/(admin)/clients/ViewClient/ViewClient';
 import { Modal } from 'antd';
 import { useMutation } from 'react-query';
 import { editClient, deleteClient } from '@/services/ClientApi';
+import { useQuery } from 'react-query';
+import { getAllClients } from '../../services/ClientApi';
 
 interface UserType {
   name: string;
@@ -24,6 +21,8 @@ interface UserType {
 function Client() {
   const [selectedClient, setSelectedClient] = useState<UserType>();
   const [viewClientState, setViewClientState] = useState<boolean>(false);
+  const [modalAlert, setModalAlert] = useState<boolean>(false);
+  const [modalText, setModalText] = useState<string>('');
 
   const handleUserSelect = (user: UserType) => {
     setSelectedClient(user);
@@ -41,20 +40,42 @@ function Client() {
     },
   });
 
+  const { data: clients, refetch } = useQuery({
+    queryKey: ['clients'],
+    queryFn: getAllClients,
+    refetchOnWindowFocus: false,
+  });
+
   const onSubmit = (editedUser: UserType) => {
     editUser(editedUser);
   };
 
   const onDelete = async (userId: string) => {
     const response = await deleteClient(userId);
-    if (response === true) {
+    if (response.status === 204) {
       setViewClientState(false);
+      setModalAlert(true);
+      setModalText('El artista se ha eliminado correctamente');
+      refetch();
+    } else {
+      setModalAlert(true);
+      setModalText('Hubo un error al eliminar el artista');
     }
   };
 
   return (
     <>
       <div className={styles.all}>
+        <Modal
+          title="Resultado de la operación"
+          open={modalAlert}
+          onCancel={() => setModalAlert(false)}
+          width={400}
+          footer={null}>
+          <div className={styles.saveButtonContainer}>
+            <p>{modalText}</p>
+          </div>
+        </Modal>
         <Modal
           title="Cliente"
           open={viewClientState}
@@ -98,6 +119,7 @@ function Client() {
           </div>
           <div className={styles.back}>
             <ClientList
+              clients={clients?.clients}
               onUserSelect={(client) => handleUserSelect(client)}></ClientList>
           </div>
         </div>
