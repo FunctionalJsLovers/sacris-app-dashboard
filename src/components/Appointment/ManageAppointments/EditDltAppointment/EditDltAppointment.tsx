@@ -198,22 +198,6 @@ function EditDltAppointment({
         <div className={styles.createSection}>
           <div className={styles.leftSection}>
             <div className={styles.formGroup}>
-              <label className={styles.labelWithTitle} htmlFor="identifierApp">
-                Identificador:
-              </label>
-              <div className={styles.idInput}>
-                <input
-                  className={styles.inputWithTitle}
-                  name="id"
-                  value={formData.id}
-                  placeholder={'Identificador de la cita'}
-                  onChange={(e) =>
-                    setFormData({ ...formData, id: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-            <div className={styles.formGroup}>
               <label className={styles.labelWithTitle} htmlFor="artist">
                 Artista:
               </label>

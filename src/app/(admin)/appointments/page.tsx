@@ -15,6 +15,8 @@ interface Appointment {
   artist_id: string;
   client_id: string;
   category_id: string;
+  artistName: string;
+  clientName: string;
 }
 
 const Appointments: React.FC = () => {
@@ -36,14 +38,33 @@ const Appointments: React.FC = () => {
   const [editMode, setIsEditMode] = useState(false);
   const [deleteMode, setIsDeleteMode] = useState(false);
   const [defaultMode, setIsDefaultMode] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     axios
       .get(`${apiBaseUrl}/admin/appointments/`)
-      .then((response) => {
+      .then(async (response) => {
         if (Array.isArray(response.data.appointments)) {
-          setAllAppointments(response.data.appointments);
+          const appointments = response.data.appointments;
+          const appointmentsWithNames = await Promise.all(
+            appointments.map(async (appointment: any) => {
+              const artistResponse = await axios.get(
+                `${apiBaseUrl}/admin/artists/${appointment.artist_id}`,
+              );
+              const clientResponse = await axios.get(
+                `${apiBaseUrl}/admin/clients/${appointment.client_id}`,
+              );
+              return {
+                ...appointment,
+                artistName: artistResponse.data.artists[0].name,
+                clientName: clientResponse.data.clients[0].name,
+              };
+            }),
+          );
+          setAllAppointments(appointmentsWithNames);
+          setLoading(false);
         } else {
           console.error(
             'La respuesta no contiene una matriz de citas válida:',
@@ -59,9 +80,26 @@ const Appointments: React.FC = () => {
   const reloadAppointments = () => {
     axios
       .get(`${apiBaseUrl}/admin/appointments/`)
-      .then((response) => {
+      .then(async (response) => {
         if (Array.isArray(response.data.appointments)) {
-          setAllAppointments(response.data.appointments);
+          const appointments = response.data.appointments;
+          const appointmentsWithNames = await Promise.all(
+            appointments.map(async (appointment: any) => {
+              const artistResponse = await axios.get(
+                `${apiBaseUrl}/admin/artists/${appointment.artist_id}`,
+              );
+              const clientResponse = await axios.get(
+                `${apiBaseUrl}/admin/clients/${appointment.client_id}`,
+              );
+              return {
+                ...appointment,
+                artistName: artistResponse.data.artists[0].name,
+                clientName: clientResponse.data.clients[0].name,
+              };
+            }),
+          );
+          setAllAppointments(appointmentsWithNames);
+          setRefreshKey((oldKey) => oldKey + 1);
         } else {
           console.error('No se encontró citas válidas:', response.data);
         }
@@ -73,11 +111,17 @@ const Appointments: React.FC = () => {
 
   useEffect(() => {
     reloadAppointments();
-  }, [reloadAppointments()]);
+  }, [refreshKey]);
 
   useEffect(() => {
     const filtered = allAppointments.filter((appointment) =>
-      appointment.id.toLowerCase().includes(searchTerm.toLowerCase()),
+      (
+        appointment.artistName.split(' ')[0] +
+        ' - ' +
+        appointment.clientName.split(' ')[0]
+      )
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()),
     );
     setFilteredAppointments(filtered);
   }, [searchTerm, allAppointments]);
@@ -191,7 +235,7 @@ const Appointments: React.FC = () => {
             <input
               type={'text'}
               className={styles.inputSearch}
-              placeholder={'Identificador de la cita'}
+              placeholder={'Artista - cliente'}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -203,7 +247,11 @@ const Appointments: React.FC = () => {
                     setSelectedAppointmentId(appointment.id);
                     handleEditClick();
                   }}>
-                  {appointment.id}
+                  {loading
+                    ? 'Artista - Cliente: No disponible'
+                    : `${appointment.artistName.split(' ')[0]} - ${
+                        appointment.clientName.split(' ')[0]
+                      }`}
                 </span>
               ))}
             </div>

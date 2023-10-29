@@ -8,6 +8,7 @@ import { validateSessionFields } from '@/Validations/validationsSessions';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import useForceUpdate from 'antd/es/_util/hooks/useForceUpdate';
+import { getAllSessions } from '@/services/SessionsAPI';
 
 interface EditAppointmentProps {
   sessionId: string;
@@ -123,9 +124,18 @@ function SessionOperations({
           sessionDataNumber as any,
         );
         if (sessionResponse.data.errors) {
-          setError(sessionResponse.data.errors.date);
-          setError(sessionResponse.data.errors.session);
-          setError(sessionResponse.data.errors.appointment_id);
+          console.log('Si entra: ', sessionResponse.data.errors);
+          const errors = sessionResponse.data.errors;
+          if (errors['date'][0]) {
+            const errorMessage = errors['date'][0];
+            setError(errorMessage);
+          } else if (errors['session'][0]) {
+            const errorMessage = errors['session'][0];
+            setError(errorMessage);
+          } else if (errors['appointment_id'][0]) {
+            const errorMessage = errors['appointment_id'][0];
+            setError(errorMessage);
+          }
         }
         clearSessionData();
       } else {
@@ -271,7 +281,7 @@ function SessionOperations({
             }
           />
         </div>
-        <div className={styles.formGroup}>
+        <div className={styles.formGroupIdAppointment}>
           <label className={styles.labelWithTitle} htmlFor="appointmentIdFk">
             Cita:
           </label>
