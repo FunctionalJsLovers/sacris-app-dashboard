@@ -55,6 +55,10 @@ function CustomForm() {
   });
 
   const onSubmit = handleSubmit((artist) => {
+    if (!file) {
+      alert('Por favor, seleccione un archivo antes de enviar.');
+      return;
+    }
     addUser(artist);
     reset();
     setCancelButtonVisible(false);
