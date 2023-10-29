@@ -31,14 +31,21 @@ function Artist() {
     setViewArtistState(true);
   };
 
+  const handleDataUpdate = () => {
+    setViewArtistState(false);
+    setModalAlert(true);
+    setModalText('El artista se ha editado correctamente');
+    refetch();
+  };
+
   const { mutate: editUser } = useMutation({
     mutationFn: editArtist,
     onSuccess: async () => {
-      setViewArtistState(false);
-      console.log('success');
+      handleDataUpdate();
     },
     onError: async () => {
-      console.log('error');
+      setModalAlert(true);
+      setModalText('Error al eliminar artista');
     },
   });
 

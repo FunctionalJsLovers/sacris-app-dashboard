@@ -7,9 +7,9 @@ import { useState } from 'react';
 import ViewClient from '@/app/(admin)/clients/ViewClient/ViewClient';
 import { Modal } from 'antd';
 import { useMutation } from 'react-query';
-import { editClient, deleteClient } from '@/services/ClientApi';
+import { editClient, deleteClient } from '@/services/ClientAPI';
 import { useQuery } from 'react-query';
-import { getAllClients } from '../../services/ClientApi';
+import { getAllClients } from '../../services/ClientAPI';
 
 interface UserType {
   name: string;
@@ -29,14 +29,21 @@ function Client() {
     setViewClientState(true);
   };
 
+  const handleDataUpdate = () => {
+    setViewClientState(false);
+    setModalAlert(true);
+    setModalText('El cliente se ha editado correctamente');
+    refetch();
+  };
+
   const { mutate: editUser } = useMutation({
     mutationFn: editClient,
     onSuccess: async () => {
-      setViewClientState(false);
-      console.log('success');
+      handleDataUpdate();
     },
     onError: async () => {
-      console.log('error');
+      setModalAlert(true);
+      setModalText('Error al eliminar cliente');
     },
   });
 

@@ -168,7 +168,6 @@ function ViewArtist({
                 disabled={haveChanges()}
                 onClick={() => {
                   onSubmit(editedUser);
-                  setEditState(false);
                 }}>
                 Guardar
               </Button>

@@ -30,9 +30,11 @@ interface ClientType {
 
 export async function editClient(data: ClientType) {
   const body = {
-    name: data.name,
-    email: data.email,
-    phone: data.phone,
+    client: {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+    },
   };
   const response = await fetch(`${BASE_URL}/admin/clients/${data.id}`, {
     method: 'PATCH',
