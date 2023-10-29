@@ -31,14 +31,17 @@ const Sessions = ({ appointmentId }: SessionProps) => {
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
     null,
   );
+  const [loadingSessions, setLoadingSessions] = useState(false);
   const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
+    setLoadingSessions(true);
     axios
       .get(`${apiBaseUrl}/admin/appointments/${appointmentId}/sessions`)
       .then((response) => {
         if (Array.isArray(response.data.sessions)) {
           setAllSessions(response.data.sessions);
+          setLoadingSessions(false);
         } else {
           console.error('No se encontró sesiones válidas:', response.data);
         }
@@ -155,7 +158,11 @@ const Sessions = ({ appointmentId }: SessionProps) => {
                   setSelectedSessionId(session.id);
                   handleEditClick();
                 }}>
-                {session.id}
+                {loadingSessions
+                  ? 'No disponible'
+                  : `${session.date.split('T')[0]} - ${getStatusText(
+                      session.status,
+                    )}`}
               </span>
             ))}
           </div>
@@ -208,3 +215,26 @@ const Sessions = ({ appointmentId }: SessionProps) => {
 };
 
 export default Sessions;
+
+function getStatusText(status: string) {
+  switch (status) {
+    case 'pagado':
+      return 'Pagado';
+    case 'totally_paid':
+      return 'Pagado';
+    case 'unpaid':
+      return 'Sin pagar';
+    case 'sin pagar':
+      return 'Sin pagar';
+    case 'abonado':
+      return 'Abonado';
+    case 'prepaid':
+      return 'Abonado';
+    case 'scheduled':
+      return 'Agendado';
+    case 'Scheduled':
+      return 'Agendado';
+    default:
+      return 'Desconocido';
+  }
+}

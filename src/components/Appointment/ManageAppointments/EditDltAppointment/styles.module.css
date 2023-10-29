@@ -34,6 +34,10 @@
   margin-bottom: 1vh;
 }
 
+.leftSection .formGroup {
+  margin-top: 1.4vh;
+}
+
 .labelWithTitle {
   display: block;
   font-size: 1vw;

@@ -117,8 +117,6 @@ const CreateAppointment = () => {
     }));
   };
 
-  console.log('Tratando de enviar: ', formData);
-
   const clearFormData = () => {
     setFormData({
       description: '',
