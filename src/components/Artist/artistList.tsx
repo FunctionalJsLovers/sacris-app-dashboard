@@ -7,9 +7,6 @@ import {
 } from 'react-icons/ri';
 import styles from './artist.module.css';
 import Image from 'next/image';
-import { useQuery } from 'react-query';
-import { getAllArtists } from '../../services/ArtistsAPI';
-import { useState } from 'react';
 
 interface UserType {
   name: string;
@@ -23,15 +20,11 @@ interface UserType {
 
 function ArtistList({
   onUserSelect,
+  artists,
 }: {
   onUserSelect: (user: UserType) => void;
+  artists: UserType[];
 }) {
-  const { data: artists } = useQuery({
-    queryKey: ['artists'],
-    queryFn: getAllArtists,
-    refetchOnWindowFocus: false,
-  });
-
   const handleEditIconClick = (user: UserType) => {
     if (user) {
       console.log(user);
@@ -42,7 +35,7 @@ function ArtistList({
   return (
     <div className={styles.container}>
       <div className={styles.artistContainer}>
-        {artists?.artists?.map((artist: any) => (
+        {artists?.map((artist: any) => (
           <div className={styles.card} key={artist.id}>
             <div className={styles.carddetails}>
               <div className={styles.cardImage}>

@@ -6,7 +6,7 @@ export async function getAllArtists() {
 }
 
 export async function getArtist(id: string) {
-  const response = await fetch(`${BASE_URL}/artists/${id}`);
+  const response = await fetch(`${BASE_URL}/admin/artists/${id}`);
   return await response.json();
 }
 
@@ -19,12 +19,14 @@ interface UserType {
 
 export async function editArtist(data: UserType) {
   const body = {
-    name: data.name,
-    email: data.email,
-    phone: data.phone,
-    artistId: data.id,
+    artist: {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      artistId: data.id,
+    },
   };
-  const response = await fetch(`${BASE_URL}/artists/${data.id}`, {
+  const response = await fetch(`${BASE_URL}/admin/artists/${data.id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -35,10 +37,10 @@ export async function editArtist(data: UserType) {
 }
 
 export async function deleteArtist(id: string) {
-  const response = await fetch(`${BASE_URL}/artists/${id}`, {
+  const response = await fetch(`${BASE_URL}/admin/artists/${id}`, {
     method: 'DELETE',
   });
-  return response.json();
+  return response;
 }
 
 export async function createArtist(artistData: any) {

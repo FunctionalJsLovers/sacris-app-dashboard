@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
-import { createClient } from '@/services/ClientApi';
+import { createClient } from '@/services/ClientAPI';
 import { uploadFile } from '@/services/Storage';
 import { Modal } from 'antd';
 function CustomForm() {

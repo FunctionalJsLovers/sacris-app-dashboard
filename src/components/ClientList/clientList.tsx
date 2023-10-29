@@ -1,15 +1,6 @@
 'use client';
-import {
-  RiFileUserLine,
-  RiInboxLine,
-  RiCalendarTodoLine,
-  RiExternalLinkLine,
-} from 'react-icons/ri';
+import { RiFileUserLine } from 'react-icons/ri';
 import styles from './client.module.css';
-import Image from 'next/image';
-import { useQuery } from 'react-query';
-import { getAllClients } from '../../services/ClientApi';
-import { useState } from 'react';
 
 interface UserType {
   name: string;
@@ -20,15 +11,11 @@ interface UserType {
 
 function ClientList({
   onUserSelect,
+  clients,
 }: {
   onUserSelect: (user: UserType) => void;
+  clients: UserType[];
 }) {
-  const { data: clients } = useQuery({
-    queryKey: ['clients'],
-    queryFn: getAllClients,
-    refetchOnWindowFocus: false,
-  });
-
   const handleEditIconClick = (user: UserType) => {
     if (user) {
       onUserSelect(user);
@@ -38,7 +25,7 @@ function ClientList({
   return (
     <div className={styles.container}>
       <div className={styles.artistContainer}>
-        {clients?.clients?.map((client: any) => (
+        {clients?.map((client: any) => (
           <div className={styles.card} key={client.id}>
             <div className={styles.carddetails}>
               <div className={styles.name}>
