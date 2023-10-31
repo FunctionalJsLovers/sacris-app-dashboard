@@ -7,8 +7,6 @@ import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import styles from './styles.module.css';
 import Error from '@/components/PopUps/Error/Error';
-import { useQuery } from 'react-query';
-import { getAllSessions } from '@/services/SessionsAPI';
 import axios from 'axios';
 
 type Session = {
@@ -22,7 +20,7 @@ type Session = {
   description: string;
 };
 
-function ComCalendar() {
+function ComCalendarArtist() {
   const [selectedEvent, setSelectedEvent] = useState<Session | null>(null);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [appointmentDescription, setAppointmentDescription] =
@@ -30,19 +28,20 @@ function ComCalendar() {
   const [artistName, setArtistName] = useState<string>('');
   const [clientName, setClientName] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
-  const { data: sessionsData, error: fetchError } = useQuery(
-    'sessions',
-    getAllSessions,
-  );
   const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
+  const [artistsData, setArtistsData] = useState<any[]>([]);
+  const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
 
   const getColorForState = (state: string): string => {
-    switch (state) {
+    switch (state.toLowerCase()) {
       case 'sin pagar':
         return '#BF1714';
       case 'unpaid':
         return '#BF1714';
       case 'pagado':
+        return 'green';
+      case 'paid':
         return 'green';
       case 'totally_paid':
         return 'green';
@@ -58,57 +57,82 @@ function ComCalendar() {
   };
 
   useEffect(() => {
-    const fetchAllData = async () => {
-      try {
-        const sessionsResponse = await getAllSessions();
-        const sessionsWithArtistNames = await Promise.all(
-          sessionsResponse.sessions.map(async (session: any) => {
-            const appointmentResponse = await axios.get(
-              `${apiBaseUrl}/admin/appointments/${session.appointment_id}`,
-            );
-            const appointmentIdResponse =
-              appointmentResponse.data.appointments[0].artist_id;
-            const artistResponse = await axios.get(
-              `${apiBaseUrl}/admin/artists/${appointmentIdResponse}`,
-            );
-            return {
-              ...session,
-              artistName2: artistResponse.data.artist.name,
-            };
-          }),
-        );
-        setSessions(sessionsWithArtistNames);
-      } catch (error) {
-        console.error('Error al obtener los datos: ', error);
-        setError('Error al obtener los datos');
-      }
-    };
-    fetchAllData();
+    axios
+      .get(`${apiBaseUrl}/admin/artists`)
+      .then((response) => {
+        const artistList = response.data.artists;
+        setArtistsData(artistList);
+      })
+      .catch((error) => {
+        console.error('Error al obtener la lista de artistas: ', error);
+      });
   }, []);
 
-  useEffect(() => {}, [sessions]);
+  const handleArtistChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedArtistId = event.target.value;
+    setSelectedArtistId(selectedArtistId);
+  };
 
   const handleClosePopup = () => {
     setSelectedEvent(null);
   };
 
   useEffect(() => {
-    if (fetchError) {
-      setError('No se pudo cargar la información de las citas');
+    if (selectedArtistId) {
+      axios
+        .get(`${apiBaseUrl}/admin/artists/${selectedArtistId}/sessions`)
+        .then(async (response) => {
+          const artistSessions = response.data.sessions;
+          if (artistSessions.length === 0) {
+            setError('El artista seleccionado no tiene ninguna cita asignada');
+            setCalendarEvents([]);
+          } else {
+            const clientNamePromises = artistSessions.map(
+              async (session: any) => {
+                const appointmentId = session.appointment_id;
+                const appointmentResponse = await axios.get(
+                  `${apiBaseUrl}/admin/appointments/${appointmentId}`,
+                );
+                const appointmentData =
+                  appointmentResponse.data.appointments[0];
+                const clientId = appointmentData.client_id;
+                const clientResponse = await axios.get(
+                  `${apiBaseUrl}/admin/clients/${clientId}`,
+                );
+                const clientData = clientResponse.data.client;
+                const clientName = clientData.name;
+                return clientName;
+              },
+            );
+            const clientNames = await Promise.all(clientNamePromises);
+            const calendarEvents = artistSessions.map(
+              (session: any, index: number) => {
+                const title = `Cita cliente: ${clientNames[index]}`;
+                return {
+                  id: session.id,
+                  title: title,
+                  start: new Date(session.date),
+                  end: new Date(
+                    new Date(session.date).getTime() +
+                      session.estimated_time * 3600000,
+                  ),
+                  color: getColorForState(session.status),
+                };
+              },
+            );
+            setSessions(artistSessions);
+            setCalendarEvents(calendarEvents);
+          }
+        })
+        .catch((error) => {
+          console.error('Error al obtener las sesiones del artistas: ', error);
+        });
     }
-  }, [fetchError]);
+  }, [selectedArtistId]);
 
-  useEffect(() => {
-    if (fetchError) {
-      setError('No se pudo cargar la información de las citas');
-    }
-  }, [fetchError]);
+  useEffect(() => {}, [sessions]);
 
-  useEffect(() => {
-    if (sessionsData && sessionsData.sessions) {
-      setSessions(sessionsData.sessions);
-    }
-  }, [sessionsData]);
+  useEffect(() => {}, [calendarEvents]);
 
   useEffect(() => {
     const headerButtons = document.querySelectorAll(
@@ -149,6 +173,7 @@ function ComCalendar() {
             console.error('Error al obtener el nombre del cliente: ', error);
             setError('Error al obtener el nombre del cliente');
           });
+        setSelectedEvent(event);
       })
       .catch((error) => {
         console.error('Error al obtener la información de la cita:', error);
@@ -158,6 +183,17 @@ function ComCalendar() {
 
   return (
     <div className={styles.fullCalendar}>
+      <select
+        className={styles.artistOptions}
+        value={selectedArtistId || ''}
+        onChange={handleArtistChange}>
+        <option value="">Selecciona un artista</option>
+        {artistsData.map((artist) => (
+          <option key={artist.id} value={artist.id}>
+            {artist.name}
+          </option>
+        ))}
+      </select>
       <FullCalendar
         plugins={[dayGridPlugin, listPlugin, timeGridPlugin, interactionPlugin]}
         initialView={'dayGridMonth'}
@@ -173,18 +209,8 @@ function ComCalendar() {
           day: 'Day',
           list: 'List',
         }}
-        height={'80vh'}
-        events={sessions.map((session) => ({
-          id: session.id,
-          title: session.artistName2
-            ? `Cita artista: ${session.artistName2.split(' ')[0]}`
-            : 'Cita - Artista: No disponible',
-          start: new Date(session.date),
-          end: new Date(
-            new Date(session.date).getTime() + session.estimated_time * 3600000,
-          ),
-          color: getColorForState(session.status),
-        }))}
+        height={'70vh'}
+        events={calendarEvents}
         eventClick={(clickInfo) => {
           const event = sessions.find(
             (appointment) => appointment.id === clickInfo.event.id,
@@ -225,13 +251,16 @@ function ComCalendar() {
   );
 }
 
-export default ComCalendar;
+export default ComCalendarArtist;
 
 function getStatusText(status: string) {
-  switch (status) {
+  console.log(status);
+  switch (status.toLowerCase()) {
     case 'pagado':
       return 'Pagado';
     case 'totally_paid':
+      return 'Pagado';
+    case 'paid':
       return 'Pagado';
     case 'unpaid':
       return 'Sin pagar';
