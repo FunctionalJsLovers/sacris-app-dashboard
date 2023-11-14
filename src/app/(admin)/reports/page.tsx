@@ -2,21 +2,21 @@ import React from 'react';
 import styles from './styles.module.css';
 import AccountSection from '@/components/AccountSection/AccountSection';
 import ComCalendar from '@/components/ComCalendar/ComCalendar';
-import ComCalendarArtist from '@/components/ComCalendarArtist/ComCalendarArtist';
+import ComReports from '@/components/ComReports/ComReports';
 
-const Calendar: React.FC = () => {
+const Reports: React.FC = () => {
   return (
-    <div className={styles.allCalendar}>
+    <div className={styles.allReports}>
       <AccountSection
         notificationCount={2}
         photoUrl="https://th.bing.com/th/id/OIP.hFh4Uw00oR7qfvoCqnG8fQHaEK?w=186&h=104&c=7&r=0&o=5&dpr=1.3&pid=1.7"
       />
-      <div className={styles.calendarContent}>
-        <div className={styles.title}>Calendario</div>
-        <ComCalendarArtist />
+      <div className={styles.reportsContent}>
+        <div className={styles.title}>Reportes</div>
+        <ComReports />
       </div>
     </div>
   );
 };
 
-export default Calendar;
+export default Reports;

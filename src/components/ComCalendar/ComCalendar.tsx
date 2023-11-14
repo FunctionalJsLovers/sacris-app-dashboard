@@ -37,7 +37,7 @@ function ComCalendar() {
   const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const getColorForState = (state: string): string => {
-    switch (state) {
+    switch (state.toLowerCase()) {
       case 'sin pagar':
         return '#BF1714';
       case 'unpaid':
@@ -45,6 +45,8 @@ function ComCalendar() {
       case 'pagado':
         return 'green';
       case 'totally_paid':
+        return 'green';
+      case 'paid':
         return 'green';
       case 'prepaid':
         return 'blue';
@@ -228,10 +230,12 @@ function ComCalendar() {
 export default ComCalendar;
 
 function getStatusText(status: string) {
-  switch (status) {
+  switch (status.toLowerCase()) {
     case 'pagado':
       return 'Pagado';
     case 'totally_paid':
+      return 'Pagado';
+    case 'paid':
       return 'Pagado';
     case 'unpaid':
       return 'Sin pagar';

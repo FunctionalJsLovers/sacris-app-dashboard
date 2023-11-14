@@ -1,0 +1,10 @@
+.allReports {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.report {
+  width: 50%;
+  padding: 20px;
+}

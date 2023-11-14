@@ -1,13 +1,18 @@
-'use client';
 import React, { useEffect, useState } from 'react';
+import styles from './styles.module.css';
+import axios from 'axios';
+import Error from '@/components/PopUps/Error/Error';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
-import styles from './styles.module.css';
-import Error from '@/components/PopUps/Error/Error';
-import axios from 'axios';
+import interactionPlugin from '@fullcalendar/interaction';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import { Icon } from '@iconify/react/dist/iconify.js';
+
+interface ArtistCalendarPopupProps {
+  artistId: string;
+  onClose: () => void;
+}
 
 type Session = {
   id: string;
@@ -20,19 +25,16 @@ type Session = {
   description: string;
 };
 
-function ComCalendarArtist() {
-  const [selectedEvent, setSelectedEvent] = useState<Session | null>(null);
+function ArtistCalendarPopup({ artistId, onClose }: ArtistCalendarPopupProps) {
   const [sessions, setSessions] = useState<Session[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const [appointmentDescription, setAppointmentDescription] =
     useState<string>('');
   const [artistName, setArtistName] = useState<string>('');
   const [clientName, setClientName] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
   const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
-  const [artistsData, setArtistsData] = useState<any[]>([]);
   const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
-
+  const [selectedEvent, setSelectedEvent] = useState<Session | null>(null);
   const getColorForState = (state: string): string => {
     switch (state.toLowerCase()) {
       case 'sin pagar':
@@ -57,30 +59,9 @@ function ComCalendarArtist() {
   };
 
   useEffect(() => {
-    axios
-      .get(`${apiBaseUrl}/admin/artists`)
-      .then((response) => {
-        const artistList = response.data.artists;
-        setArtistsData(artistList);
-      })
-      .catch((error) => {
-        console.error('Error al obtener la lista de artistas: ', error);
-      });
-  }, []);
-
-  const handleArtistChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedArtistId = event.target.value;
-    setSelectedArtistId(selectedArtistId);
-  };
-
-  const handleClosePopup = () => {
-    setSelectedEvent(null);
-  };
-
-  useEffect(() => {
-    if (selectedArtistId) {
+    if (artistId) {
       axios
-        .get(`${apiBaseUrl}/admin/artists/${selectedArtistId}/sessions`)
+        .get(`${apiBaseUrl}/admin/artists/${artistId}/sessions`)
         .then(async (response) => {
           const artistSessions = response.data.sessions;
           if (artistSessions.length === 0) {
@@ -100,14 +81,16 @@ function ComCalendarArtist() {
                   `${apiBaseUrl}/admin/clients/${clientId}`,
                 );
                 const clientData = clientResponse.data.client;
-                const clientName = clientData.name;
-                return clientName;
+                return clientData.name;
               },
             );
             const clientNames = await Promise.all(clientNamePromises);
             const calendarEvents = artistSessions.map(
               (session: any, index: number) => {
-                const title = `Cita cliente: ${clientNames[index]}`;
+                const fullName = clientNames[index];
+                const clientName = fullName.split(' ');
+                const firstName = clientName[0];
+                const title = `Cliente: ${firstName}`;
                 return {
                   id: session.id,
                   title: title,
@@ -128,7 +111,7 @@ function ComCalendarArtist() {
           console.error('Error al obtener las sesiones del artistas: ', error);
         });
     }
-  }, [selectedArtistId]);
+  }, [artistId]);
 
   useEffect(() => {}, [sessions]);
 
@@ -140,7 +123,7 @@ function ComCalendarArtist() {
     );
     if (headerButtons) {
       headerButtons.forEach((button) => {
-        (button as HTMLElement).style.backgroundColor = '#78160C';
+        (button as HTMLElement).style.backgroundColor = '#0E341F';
         (button as HTMLElement).style.borderColor = 'black';
       });
     }
@@ -181,19 +164,19 @@ function ComCalendarArtist() {
       });
   };
 
+  const handleClosePopup = () => {
+    setSelectedEvent(null);
+  };
+
   return (
-    <div className={styles.fullCalendar}>
-      <select
-        className={styles.artistOptions}
-        value={selectedArtistId || ''}
-        onChange={handleArtistChange}>
-        <option value="">Selecciona un artista</option>
-        {artistsData.map((artist) => (
-          <option key={artist.id} value={artist.id}>
-            {artist.name}
-          </option>
-        ))}
-      </select>
+    <div className={styles.popupContainer}>
+      <Icon
+        icon={'ri:close-circle-line'}
+        onClick={onClose}
+        className={styles.iconClose}
+        height={35}
+        width={35}
+      />
       <FullCalendar
         plugins={[dayGridPlugin, listPlugin, timeGridPlugin, interactionPlugin]}
         initialView={'dayGridMonth'}
@@ -209,8 +192,8 @@ function ComCalendarArtist() {
           day: 'Day',
           list: 'List',
         }}
-        height={'70vh'}
         events={calendarEvents}
+        height={'80vh'}
         eventClick={(clickInfo) => {
           const event = sessions.find(
             (appointment) => appointment.id === clickInfo.event.id,
@@ -218,7 +201,6 @@ function ComCalendarArtist() {
           if (event) {
             setSelectedEvent(event);
           }
-
           if (event) {
             setSelectedEvent(event);
             fetchAppointmentData(event);
@@ -251,10 +233,9 @@ function ComCalendarArtist() {
   );
 }
 
-export default ComCalendarArtist;
+export default ArtistCalendarPopup;
 
 function getStatusText(status: string) {
-  console.log(status);
   switch (status.toLowerCase()) {
     case 'pagado':
       return 'Pagado';

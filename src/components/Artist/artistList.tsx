@@ -7,6 +7,8 @@ import {
 } from 'react-icons/ri';
 import styles from './artist.module.css';
 import Image from 'next/image';
+import { useState } from 'react';
+import ArtistCalendarPopup from '@/components/ArtistCalendarPopup/ArtistCalendarPopup';
 
 interface UserType {
   name: string;
@@ -25,11 +27,20 @@ function ArtistList({
   onUserSelect: (user: UserType) => void;
   artists: UserType[];
 }) {
+  const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
   const handleEditIconClick = (user: UserType) => {
     if (user) {
       console.log(user);
       onUserSelect(user);
     }
+  };
+
+  const handleCalendarIconClick = (user: UserType) => {
+    setSelectedArtistId(user.id);
+  };
+
+  const handleCloseCalendarPopup = () => {
+    setSelectedArtistId(null);
   };
 
   return (
@@ -60,6 +71,7 @@ function ArtistList({
               <RiCalendarTodoLine
                 className={styles.calendar_icon}
                 title="Ver Citas"
+                onClick={() => handleCalendarIconClick(artist)}
               />
               <RiExternalLinkLine
                 className={styles.portfolio_icon}
@@ -76,6 +88,16 @@ function ArtistList({
           </div>
         ))}
       </div>
+      {selectedArtistId && (
+        <div className={styles.artistCalendarPopup}>
+          <div className={styles.popupContent}>
+            <ArtistCalendarPopup
+              artistId={selectedArtistId}
+              onClose={handleCloseCalendarPopup}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
