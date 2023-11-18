@@ -62,7 +62,7 @@ export function validateAppointmentFields(formData: any): {
   }
 
   for (const field of requiredFields) {
-    if (!formData[field] || formData[field] === 'Seleccionar') {
+    if (formData[field] === 'Seleccionar') {
       errors[
         field
       ] = `El campo ${field} es obligatorio y debe seleccionar una opción válida.`;

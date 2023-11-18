@@ -31,6 +31,10 @@ const ComReports: React.FC = () => {
     yaxis: {
       title: {
         text: 'Ventas',
+        style: {
+          fontSize: '14px',
+          fontFamily: 'Arial, sans-serif',
+        },
       },
     },
     tooltip: {

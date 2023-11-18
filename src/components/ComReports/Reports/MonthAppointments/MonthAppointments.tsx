@@ -58,6 +58,10 @@ const MonthAppointments: React.FC = () => {
     yaxis: {
       title: {
         text: 'Citas',
+        style: {
+          fontSize: '14px',
+          fontFamily: 'Arial, sans-serif',
+        },
       },
     },
     tooltip: {
