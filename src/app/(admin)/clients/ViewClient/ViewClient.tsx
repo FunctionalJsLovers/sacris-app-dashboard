@@ -31,9 +31,15 @@ function ViewClient({
   const [editState, setEditState] = useState<boolean>(false);
   const [editedUser, setEditedUser] = useState(user);
   const [deleteUser, setDeleteUser] = useState<boolean>(false);
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    phone: '',
+  });
 
   const haveChanges = () => {
     return (
+      Object.values(errors).every((errorMessage) => errorMessage === '') &&
       user.email === editedUser.email &&
       user.name === editedUser.name &&
       user.phone === editedUser.phone
@@ -44,6 +50,36 @@ function ViewClient({
     setEditState(false);
     setEditedUser(user);
   };
+
+  function validateName(name: string) {
+    if (name === '') {
+      return 'El nombre es requerido';
+    }
+    if (/[0-9]/.test(name)) {
+      return 'El nombre no debe contener números';
+    }
+    return '';
+  }
+
+  function validateEmail(email: string) {
+    if (email === '') {
+      return 'El correo electrónico es requerido';
+    }
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
+      return 'Por favor, introduce un correo electrónico válido';
+    }
+    return '';
+  }
+
+  function validatePhone(phone: string) {
+    if (phone === '') {
+      return 'El teléfono es requerido';
+    }
+    if (!/^[0-9]+$/.test(phone)) {
+      return 'El teléfono debe contener sólo números';
+    }
+    return '';
+  }
 
   return (
     <div className={styles.container}>
@@ -87,9 +123,12 @@ function ViewClient({
             disabled={!editState}
             style={inputStyles}
             onChange={(e) => {
+              const errorMessage = validateName(e.target.value);
+              setErrors({ ...errors, name: errorMessage });
               setEditedUser({ ...editedUser, name: e.target.value });
             }}
           />
+          {errors.name && <p className={styles.errorText}>{errors.name}</p>}
         </div>
         <div className={styles.phone}>
           <p>Teléfono</p>
@@ -98,9 +137,12 @@ function ViewClient({
             disabled={!editState}
             style={inputStyles}
             onChange={(e) => {
+              const errorMessage = validatePhone(e.target.value);
+              setErrors({ ...errors, phone: errorMessage });
               setEditedUser({ ...editedUser, phone: e.target.value });
             }}
           />
+          {errors.phone && <p className={styles.errorText}>{errors.phone}</p>}
         </div>
         <div className={styles.mail}>
           <p>Correo electrónico</p>
@@ -109,15 +151,22 @@ function ViewClient({
             disabled={!editState}
             style={inputStyles}
             onChange={(e) => {
+              const errorMessage = validateEmail(e.target.value);
+              setErrors({ ...errors, email: errorMessage });
               setEditedUser({ ...editedUser, email: e.target.value });
             }}
           />
+          {errors.email && <p className={styles.errorText}>{errors.email}</p>}
         </div>
         {editState && (
           <div className={styles.saveButtonContainer}>
             <Button
               type="primary"
-              disabled={haveChanges()}
+              disabled={
+                Object.values(errors).some(
+                  (errorMessage) => errorMessage !== '',
+                ) || haveChanges()
+              }
               onClick={() => {
                 onSubmit(editedUser);
                 setEditState(false);

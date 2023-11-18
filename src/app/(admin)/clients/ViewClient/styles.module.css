@@ -79,3 +79,8 @@
   background-color: #007bff;
   margin: 0;
 }
+
+.errorText {
+  font-size: 14px !important;
+  color: red !important;
+}

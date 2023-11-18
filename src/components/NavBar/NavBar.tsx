@@ -35,6 +35,18 @@ const NavBar: React.FC<NavBarProps> = ({ routes }) => {
     setExpanded(!expanded);
   };
 
+  const handleBeforeUnload = () => {
+    localStorage.clear();
+  };
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   return (
     <nav className={`${styles.navBar} ${expanded ? styles.expanded : ''}`}>
       <Link href="/dashboard">

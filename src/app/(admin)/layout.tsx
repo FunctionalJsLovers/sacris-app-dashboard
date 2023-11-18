@@ -28,14 +28,8 @@ export default function AdminLayout({ children }: PageProps) {
       text: 'None',
     },
     {
-      name: 'Productos',
-      path: '/',
-      icon: 'ri:inbox-2-line',
-      text: 'None',
-    },
-    {
       name: 'Reportes',
-      path: '/',
+      path: '/reports',
       icon: 'ri:bar-chart-box-line',
       text: 'None',
     },
@@ -43,12 +37,6 @@ export default function AdminLayout({ children }: PageProps) {
       name: 'Clientes',
       path: '/clients',
       icon: 'ri:user-shared-line',
-      text: 'None',
-    },
-    {
-      name: 'CArtist',
-      path: '/calendarArtist',
-      icon: 'ri:a-b',
       text: 'None',
     },
   ];

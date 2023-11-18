@@ -98,6 +98,6 @@
 }
 
 .back {
-  max-height: 390px;
+  max-height: 60vh;
   overflow: auto;
 }

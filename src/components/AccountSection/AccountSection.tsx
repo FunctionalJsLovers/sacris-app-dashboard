@@ -1,18 +1,49 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './styles.module.css';
 import { useSession } from 'next-auth/react';
+import { format, isToday } from 'date-fns';
 
 interface AccountSectionProps {
-  notificationCount: number;
   photoUrl: string;
 }
 
-const AccountSection: React.FC<AccountSectionProps> = ({
-  notificationCount,
-  photoUrl,
-}) => {
+interface Session {
+  id: string;
+  date: string;
+  estimated_time: number;
+  status: string;
+  price: number;
+  appointment_id: string;
+}
+
+const AccountSection: React.FC<AccountSectionProps> = ({ photoUrl }) => {
   const { data: session } = useSession();
+  const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const [notificationCount, setNotificationCount] = useState(0);
+
+  const fetchSessions = async () => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/admin/sessions`);
+      const data = await response.json();
+
+      const todayDate = format(new Date(), 'yyyy-MM-dd');
+
+      const todaySessions = data.sessions.filter((session: Session) =>
+        isToday(new Date(session.date)),
+      );
+
+      setNotificationCount(todaySessions.length);
+    } catch (error) {
+      console.error('Error al obtener sesiones:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSessions();
+    const intervalId = setInterval(fetchSessions, 60 * 1000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <div className={styles.accountSection}>

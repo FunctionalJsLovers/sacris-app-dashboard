@@ -54,11 +54,15 @@ export function validateSessionFields(sessionData: any): {
 export function validateAppointmentFields(formData: any): {
   [key: string]: string;
 } {
-  const requiredFields = ['artist_id', 'client_id', 'category_id'];
+  const requiredFields = ['"artista"', '"cliente"', '"categoría"'];
   const errors: { [key: string]: string } = {};
 
+  if (formData.description == '') {
+    errors.description = 'El campo descripción es obligatorio';
+  }
+
   for (const field of requiredFields) {
-    if (!formData[field] || formData[field] === 'Seleccionar') {
+    if (formData[field] === 'Seleccionar') {
       errors[
         field
       ] = `El campo ${field} es obligatorio y debe seleccionar una opción válida.`;

@@ -6,10 +6,7 @@ import Client from '@/components/Client/page';
 const Artists: React.FC = () => {
   return (
     <div className={styles.allArtist}>
-      <AccountSection
-        notificationCount={2}
-        photoUrl="https://th.bing.com/th/id/OIP.hFh4Uw00oR7qfvoCqnG8fQHaEK?w=186&h=104&c=7&r=0&o=5&dpr=1.3&pid=1.7"
-      />
+      <AccountSection photoUrl="https://th.bing.com/th/id/OIP.hFh4Uw00oR7qfvoCqnG8fQHaEK?w=186&h=104&c=7&r=0&o=5&dpr=1.3&pid=1.7" />
       <div className={styles.calendarArtist}>
         <div className={styles.title}>Cliente</div>
         <Client></Client>
