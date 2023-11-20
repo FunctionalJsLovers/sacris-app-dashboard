@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react';
 import styles from './styles.module.css';
 import { useSession } from 'next-auth/react';
 import { format, isToday } from 'date-fns';
+import Image from 'next/image';
+import { useQuery } from 'react-query';
+import { getAllAppointments } from '@/services/AppointmentAPI';
+import { getAllSessions } from '@/services/SessionsAPI';
 
 interface AccountSectionProps {
   photoUrl: string;
@@ -17,50 +21,98 @@ interface Session {
   appointment_id: string;
 }
 
+interface Appointment {
+  id: string;
+  description: string;
+  artist_id: string;
+  client_id: string;
+  category_id: string;
+  identifier: string;
+}
+
+interface SessionAppointment {
+  appointment: Appointment;
+  session: Session;
+}
+
 const AccountSection: React.FC<AccountSectionProps> = ({ photoUrl }) => {
   const { data: session } = useSession();
-  const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [notificationCount, setNotificationCount] = useState(0);
+  const [todaySessions, setTodaySessions] = useState<Session[]>([]);
+  const [displaySessions, setDisplaySessions] = useState<boolean>(false);
+  const [matchedAppointments, setMatchedAppointments] = useState<
+    SessionAppointment[]
+  >([]);
 
-  const fetchSessions = async () => {
-    try {
-      const response = await fetch(`${apiBaseUrl}/admin/sessions`);
-      const data = await response.json();
+  const { data: appointments, refetch } = useQuery({
+    queryKey: ['artists'],
+    queryFn: getAllAppointments,
+    refetchOnWindowFocus: false,
+  });
 
-      const todayDate = format(new Date(), 'yyyy-MM-dd');
+  const { data: sessions, refetch: refetchSessions } = useQuery({
+    queryKey: ['sessions'],
+    queryFn: getAllSessions,
+    refetchOnWindowFocus: false,
+  });
 
-      const todaySessions = data.sessions.filter((session: Session) =>
-        isToday(new Date(session.date)),
+  const handleSessions = () => {
+    const todayS = sessions?.sessions.filter((session: Session) =>
+      isToday(new Date(session.date)),
+    );
+    setTodaySessions(todayS || []);
+    setNotificationCount(todayS?.length);
+  };
+
+  const handleMatchedSessions = () => {
+    const matchedSessions = todaySessions.map((session: Session) => {
+      const appointment = appointments?.appointments.find(
+        (appointment: Appointment) => appointment.id === session.appointment_id,
       );
-
-      setNotificationCount(todaySessions.length);
-    } catch (error) {
-      console.error('Error al obtener sesiones:', error);
-    }
+      return { appointment, session };
+    });
+    setMatchedAppointments(matchedSessions);
   };
 
   useEffect(() => {
-    fetchSessions();
-    const intervalId = setInterval(fetchSessions, 60 * 1000);
-    return () => clearInterval(intervalId);
-  }, []);
+    handleSessions();
+    handleMatchedSessions();
+  }, [sessions]);
 
   return (
     <div className={styles.accountSection}>
       <div className={styles.notificationIcon}>
+        {notificationCount > 0 && displaySessions && (
+          <div className={styles.notificationSessions}>
+            {matchedAppointments?.map((matched: SessionAppointment) => (
+              <div key={matched.session.id} className={styles.notification}>
+                <p>{format(new Date(matched.session.date), 'HH:mm')}</p>
+                <p>{matched.appointment.identifier}</p>
+              </div>
+            ))}
+          </div>
+        )}
         <span>{notificationCount}</span>
-        <img
+        <Image
           className={styles.iconN}
           src="https://cdn.icon-icons.com/icons2/494/PNG/512/alarm_icon-icons.com_48364.png"
           alt="Notificaciones"
+          width={24}
+          height={24}
+          onClick={() => setDisplaySessions(!displaySessions)}
         />
       </div>
       <div className={styles.userInfo}>
         <span>{session?.user?.name}</span>
-        <img src={photoUrl} alt={`Foto de ${session?.user?.name}`} />
+        <Image
+          className={styles.userImage}
+          src={photoUrl}
+          alt="User Photo"
+          width={100}
+          height={100}
+        />
       </div>
     </div>
   );
 };
-
 export default AccountSection;

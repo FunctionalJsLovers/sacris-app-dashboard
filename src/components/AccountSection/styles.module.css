@@ -12,6 +12,7 @@
   margin-right: 20px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .iconN {
@@ -48,4 +49,29 @@
   font-weight: bold;
   margin-right: 20px;
   color: black;
+}
+
+.notificationSessions {
+  position: absolute;
+  top: 100%; /* Place the notificationSessions box just below the icon */
+  right: 0; /* Adjust the positioning based on your layout */
+  background-color: #fff; /* Set the background color */
+  border: 1px solid #ccc; /* Add a border for better visibility */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+  z-index: 1; /* Ensure the notificationSessions box appears above other content */
+  display: flex;
+  flex-direction: column;
+  min-width: 200px; /* Set a minimum width for better readability */
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.notification p {
+  margin-left: 10px;
+  color: #000;
 }

@@ -1,6 +1,11 @@
 const nextConfig = {
   images: {
-    domains: ['s3-alpha-sig.figma.com', 'hmnhiomzwpccvhzlgahm.supabase.co'],
+    domains: [
+      's3-alpha-sig.figma.com',
+      'hmnhiomzwpccvhzlgahm.supabase.co',
+      'cdn.icon-icons.com',
+      'th.bing.com',
+    ],
   },
   async headers() {
     return [

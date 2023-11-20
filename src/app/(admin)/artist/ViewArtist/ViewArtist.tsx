@@ -85,12 +85,15 @@ function ViewArtist({
       </div>
       <div className={styles.formContainer}>
         <div className={styles.leftPanel}>
-          <div className={styles.photoCard}>
-            <Image
-              src="/src/app/login/local.png"
-              width={400}
-              height={400}
-              alt="ProfilePicture"
+          <div className={styles.name}>
+            <p>Nombre</p>
+            <Input
+              defaultValue={editedUser.name}
+              disabled={!editState}
+              style={inputStyles}
+              onChange={(e) => {
+                setEditedUser({ ...editedUser, name: e.target.value });
+              }}
             />
           </div>
           <div className={styles.mail}>
@@ -114,17 +117,6 @@ function ViewArtist({
           </div>
         </div>
         <div className={styles.rightPanel}>
-          <div className={styles.name}>
-            <p>Nombre</p>
-            <Input
-              defaultValue={editedUser.name}
-              disabled={!editState}
-              style={inputStyles}
-              onChange={(e) => {
-                setEditedUser({ ...editedUser, name: e.target.value });
-              }}
-            />
-          </div>
           <div className={styles.userName}>
             <p>Nombre de usuario</p>
             <Input
