@@ -46,10 +46,6 @@ const Appointments: React.FC = () => {
     refetchOnWindowFocus: false,
   });
 
-  const reloadAppointments = () => {
-    refetch();
-  };
-
   useEffect(() => {
     const filtered = appointments?.appointments.filter(
       (appointment: Appointment) =>
@@ -69,22 +65,26 @@ const Appointments: React.FC = () => {
   const handleCreateClick = () => {
     clearAll();
     setShowCreateAppointment(true);
+    refetch();
   };
 
   const handleEditClick = () => {
     clearAll();
     setIsEditing(true);
     setIsEditMode(true);
+    refetch();
   };
 
   const handleEditWithoutId = () => {
     clearAll();
     setEditWithoutId(true);
+    refetch();
   };
 
   const handleDeleteWithoutId = () => {
     clearAll();
     setDeleteWithoutId(true);
+    refetch();
   };
 
   const handleSessionSection = () => {
@@ -95,6 +95,7 @@ const Appointments: React.FC = () => {
     setIsDeleteMode(false);
     setIsEditMode(false);
     setIsDefaultMode(false);
+    refetch();
   };
 
   return (

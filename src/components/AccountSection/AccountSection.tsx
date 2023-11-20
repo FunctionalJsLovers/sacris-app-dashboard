@@ -21,11 +21,28 @@ interface Session {
   appointment_id: string;
 }
 
+interface Appointment {
+  id: string;
+  description: string;
+  artist_id: string;
+  client_id: string;
+  category_id: string;
+  identifier: string;
+}
+
+interface SessionAppointment {
+  appointment: Appointment;
+  session: Session;
+}
+
 const AccountSection: React.FC<AccountSectionProps> = ({ photoUrl }) => {
   const { data: session } = useSession();
   const [notificationCount, setNotificationCount] = useState(0);
   const [todaySessions, setTodaySessions] = useState<Session[]>([]);
   const [displaySessions, setDisplaySessions] = useState<boolean>(false);
+  const [matchedAppointments, setMatchedAppointments] = useState<
+    SessionAppointment[]
+  >([]);
 
   const { data: appointments, refetch } = useQuery({
     queryKey: ['artists'],
@@ -40,27 +57,37 @@ const AccountSection: React.FC<AccountSectionProps> = ({ photoUrl }) => {
   });
 
   const handleSessions = () => {
-    setTodaySessions(
-      sessions?.sessions.filter((session: Session) =>
-        isToday(new Date(session.date)),
-      ),
+    const todayS = sessions?.sessions.filter((session: Session) =>
+      isToday(new Date(session.date)),
     );
-    setNotificationCount(todaySessions.length);
+    setTodaySessions(todayS || []);
+    setNotificationCount(todayS?.length);
+  };
+
+  const handleMatchedSessions = () => {
+    const matchedSessions = todaySessions.map((session: Session) => {
+      const appointment = appointments?.appointments.find(
+        (appointment: Appointment) => appointment.id === session.appointment_id,
+      );
+      return { appointment, session };
+    });
+    setMatchedAppointments(matchedSessions);
   };
 
   useEffect(() => {
     handleSessions();
-  }, []);
+    handleMatchedSessions();
+  }, [sessions]);
 
   return (
     <div className={styles.accountSection}>
       <div className={styles.notificationIcon}>
         {notificationCount > 0 && displaySessions && (
           <div className={styles.notificationSessions}>
-            {todaySessions.map((session: Session) => (
-              <div key={session.id} className={styles.notification}>
-                <p>{format(new Date(session.date), 'HH:mm')}</p>
-                <p>{session.appointment_id}</p>
+            {matchedAppointments?.map((matched: SessionAppointment) => (
+              <div key={matched.session.id} className={styles.notification}>
+                <p>{format(new Date(matched.session.date), 'HH:mm')}</p>
+                <p>{matched.appointment.identifier}</p>
               </div>
             ))}
           </div>
