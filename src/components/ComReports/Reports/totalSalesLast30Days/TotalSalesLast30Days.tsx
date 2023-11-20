@@ -78,7 +78,7 @@ const TotalSalesLast30Days: React.FC = () => {
 
   return (
     <div className={styles.report}>
-      <div className={styles.title}>Ventas en el último mes</div>
+      <div className={styles.title}>Ingresos por artista (Mes)</div>
       {isClient && (
         <Chart options={options} series={options.series} type="donut" />
       )}

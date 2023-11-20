@@ -3,12 +3,14 @@ import {
   RiFileUserLine,
   RiInboxLine,
   RiCalendarTodoLine,
+  RiBarChart2Line,
   RiExternalLinkLine,
 } from 'react-icons/ri';
 import styles from './artist.module.css';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ArtistCalendarPopup from '@/components/ArtistCalendarPopup/ArtistCalendarPopup';
+import ArtistReport from '@/components/ArtistReport/ArtistReport';
 
 interface UserType {
   name: string;
@@ -28,6 +30,10 @@ function ArtistList({
   artists: UserType[];
 }) {
   const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
+  const [selectedArtistName, setSelectedArtistName] = useState<string | null>(
+    null,
+  );
+
   const handleEditIconClick = (user: UserType) => {
     if (user) {
       console.log(user);
@@ -41,6 +47,14 @@ function ArtistList({
 
   const handleCloseCalendarPopup = () => {
     setSelectedArtistId(null);
+  };
+
+  const handleReportIconClick = (user: UserType) => {
+    setSelectedArtistName(user.name);
+  };
+
+  const handleCloseReportPopup = () => {
+    setSelectedArtistName(null);
   };
 
   return (
@@ -64,9 +78,10 @@ function ArtistList({
               </div>
             </div>
             <div className={styles.cardicons}>
-              <RiInboxLine
+              <RiBarChart2Line
                 className={styles.product_icon}
-                title="Ver Productos"
+                title="Ver reporte"
+                onClick={() => handleReportIconClick(artist)}
               />
               <RiCalendarTodoLine
                 className={styles.calendar_icon}
@@ -94,6 +109,16 @@ function ArtistList({
             <ArtistCalendarPopup
               artistId={selectedArtistId}
               onClose={handleCloseCalendarPopup}
+            />
+          </div>
+        </div>
+      )}
+      {selectedArtistName && (
+        <div className={styles.artistCalendarPopup}>
+          <div className={styles.popupContent}>
+            <ArtistReport
+              artistName={selectedArtistName}
+              onClose={handleCloseReportPopup}
             />
           </div>
         </div>

@@ -23,6 +23,7 @@ function Client() {
   const [viewClientState, setViewClientState] = useState<boolean>(false);
   const [modalAlert, setModalAlert] = useState<boolean>(false);
   const [modalText, setModalText] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleUserSelect = (user: UserType) => {
     setSelectedClient(user);
@@ -70,6 +71,10 @@ function Client() {
     }
   };
 
+  const filteredClients = clients?.clients.filter((client: any) =>
+    client.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   return (
     <>
       <div className={styles.all}>
@@ -105,6 +110,8 @@ function Client() {
               className={styles.inputField}
               type="text"
               placeholder="Type here..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <div className={styles.buttonContainer}>
@@ -126,7 +133,7 @@ function Client() {
           </div>
           <div className={styles.back}>
             <ClientList
-              clients={clients?.clients}
+              clients={filteredClients}
               onUserSelect={(client) => handleUserSelect(client)}></ClientList>
           </div>
         </div>
