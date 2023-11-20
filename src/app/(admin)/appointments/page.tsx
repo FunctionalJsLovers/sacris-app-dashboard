@@ -8,6 +8,8 @@ import CreateAppointment from '@/components/Appointment/ManageAppointments/Creat
 import { Icon } from '@iconify/react/dist/iconify.js';
 import Default from '@/components/Default/Default';
 import Sessions from '@/components/Sessions/ManageSessions/Sessions';
+import { useQuery } from 'react-query';
+import { getAllAppointments } from '@/services/AppointmentAPI';
 
 interface Appointment {
   id: string;
@@ -19,7 +21,9 @@ interface Appointment {
 }
 
 const Appointments: React.FC = () => {
-  const [allAppointments, setAllAppointments] = useState<Appointment[]>([]);
+  const [allAppointments, setAllAppointments] = useState<
+    Appointment[] | undefined
+  >([]);
   const [filteredAppointments, setFilteredAppointments] = useState<
     Appointment[]
   >([]);
@@ -30,65 +34,34 @@ const Appointments: React.FC = () => {
   const [editWithoutId, setEditWithoutId] = useState(false);
   const [deleteWithoutId, setDeleteWithoutId] = useState(false);
   const [showCreateAppointment, setShowCreateAppointment] = useState(false);
-  const [showEditAppointment, setShowEditAppointment] = useState(false);
-  const [showDeleteAppointment, setShowDeleteAppointment] = useState(false);
   const [showSessionContent, setShowSessionContent] = useState(false);
   const [isEditing, setIsEditing] = useState(true);
   const [editMode, setIsEditMode] = useState(false);
   const [deleteMode, setIsDeleteMode] = useState(false);
   const [defaultMode, setIsDefaultMode] = useState(true);
-  const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-  useEffect(() => {
-    axios
-      .get(`${apiBaseUrl}/admin/appointments/`)
-      .then((response) => {
-        if (Array.isArray(response.data.appointments)) {
-          setAllAppointments(response.data.appointments);
-        } else {
-          console.error(
-            'La respuesta no contiene una matriz de citas válida:',
-            response.data,
-          );
-        }
-      })
-      .catch((error) => {
-        console.error('Error al cargar las citas:', error);
-      });
-  }, []);
+  const { data: appointments, refetch } = useQuery({
+    queryKey: ['artists'],
+    queryFn: getAllAppointments,
+    refetchOnWindowFocus: false,
+  });
 
   const reloadAppointments = () => {
-    axios
-      .get(`${apiBaseUrl}/admin/appointments/`)
-      .then((response) => {
-        if (Array.isArray(response.data.appointments)) {
-          setAllAppointments(response.data.appointments);
-        } else {
-          console.error('No se encontró citas válidas:', response.data);
-        }
-      })
-      .catch((error) => {
-        console.error('Error al cargar las citas:', error);
-      });
+    refetch();
   };
 
   useEffect(() => {
-    reloadAppointments();
-  }, [reloadAppointments()]);
-
-  useEffect(() => {
-    const filtered = allAppointments.filter((appointment) =>
-      appointment.identifier.toLowerCase().includes(searchTerm.toLowerCase()),
+    const filtered = appointments?.appointments.filter(
+      (appointment: Appointment) =>
+        appointment.identifier.toLowerCase().includes(searchTerm.toLowerCase()),
     );
-    setFilteredAppointments(filtered);
-  }, [searchTerm, allAppointments]);
+    setFilteredAppointments(filtered || []);
+  }, [searchTerm, appointments]);
 
   const clearAll = () => {
     setShowSessionContent(false);
-    setShowEditAppointment(false);
     setShowCreateAppointment(false);
     setEditWithoutId(false);
-    setShowDeleteAppointment(false);
     setDeleteWithoutId(false);
     setIsDefaultMode(false);
     clearModes();
@@ -102,7 +75,6 @@ const Appointments: React.FC = () => {
     clearAll();
     setIsEditing(true);
     setIsEditMode(true);
-    setShowEditAppointment(true);
   };
 
   const handleEditWithoutId = () => {
