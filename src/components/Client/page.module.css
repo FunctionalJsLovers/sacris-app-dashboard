@@ -27,8 +27,9 @@
 .inputField {
   flex-grow: 1;
   outline: none;
-  color: var(--gray-gray-400, #a0aec0);
-  font-family: Helvetica;
+  background-color: transparent;
+  color: black;
+  font-family: Helvetica, sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -104,6 +105,6 @@
 }
 
 .back {
-  max-height: 300px;
+  max-height: 60vh;
   overflow: auto;
 }

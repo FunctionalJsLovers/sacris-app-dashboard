@@ -4,3 +4,13 @@
   color: black;
   cursor: pointer;
 }
+
+.apexcharts-tooltip {
+  background-color: rgba(31, 31, 32, 0.7) !important;
+  color: white;
+}
+
+.apexcharts-tooltip-title {
+  background-color: black !important;
+  color: white;
+}

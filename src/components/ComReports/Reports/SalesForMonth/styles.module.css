@@ -11,6 +11,18 @@
   color: #111111;
   font-size: 1.3vw;
   justify-content: center;
+  margin-bottom: 2vh;
+}
+
+.selectYear {
+  color: black;
+  font-family: Helvetica, sans-serif;
+}
+
+.selectBox {
+  background-color: #e3e3e3;
+  color: black;
+  font-family: Helvetica, sans-serif;
 }
 
 .apexcharts-menu-item {

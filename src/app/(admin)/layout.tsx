@@ -28,15 +28,15 @@ export default function AdminLayout({ children }: PageProps) {
       text: 'None',
     },
     {
-      name: 'Reportes',
-      path: '/reports',
-      icon: 'ri:bar-chart-box-line',
-      text: 'None',
-    },
-    {
       name: 'Clientes',
       path: '/clients',
       icon: 'ri:user-shared-line',
+      text: 'None',
+    },
+    {
+      name: 'Reportes',
+      path: '/reports',
+      icon: 'ri:bar-chart-box-line',
       text: 'None',
     },
   ];

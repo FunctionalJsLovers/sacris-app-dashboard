@@ -9,7 +9,8 @@
     "lint": "next lint",
     "format": "prettier --check --ignore-path .gitignore .",
     "format:fix": "prettier --write --ignore-path .gitignore .",
-    "add": "git add ."
+    "add": "git add .",
+    "test": "jest"
   },
   "pre-commit": [
     "format:fix",
@@ -46,8 +47,12 @@
     "react-spring": "^9.7.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/preset-env": "^7.23.3",
+    "@babel/preset-react": "^7.23.3",
     "@iconify/react": "^4.1.1",
     "@tanstack/eslint-plugin-query": "^4.36.1",
+    "@types/jest": "^29.5.8",
     "@types/react-datepicker": "^4.19.0",
     "@types/react-image-gallery": "^1.2.3",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
@@ -59,9 +64,13 @@
     "eslint-plugin-n": "^16.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
+    "identity-obj-proxy": "^3.0.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-fetch-mock": "^3.0.3",
     "next-auth": "^4.23.2",
     "pre-commit": "^1.2.2",
     "prettier": "^3.0.3",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.2.2"
   }
 }

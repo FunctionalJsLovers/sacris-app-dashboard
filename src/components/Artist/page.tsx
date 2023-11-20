@@ -25,6 +25,7 @@ function Artist() {
   const [viewArtistState, setViewArtistState] = useState<boolean>(false);
   const [modalAlert, setModalAlert] = useState<boolean>(false);
   const [modalText, setModalText] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleUserSelect = (user: UserType) => {
     setSelectedArtist(user);
@@ -72,6 +73,10 @@ function Artist() {
     }
   };
 
+  const filteredArtists = artists?.artists.filter((artist: any) =>
+    artist.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   return (
     <>
       <div className={styles.all}>
@@ -107,6 +112,8 @@ function Artist() {
               className={styles.inputField}
               type="text"
               placeholder="Type here..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <div className={styles.buttonContainer}>
@@ -123,7 +130,7 @@ function Artist() {
           <div className={styles.header_row}>
             <div className={styles.header_a}>ARTISTA</div>
             <div className={styles.tags}>
-              <div className={styles.header}>PRODUCTOS</div>
+              <div className={styles.header}>REPORTES</div>
               <div className={styles.header}>CITAS</div>
               <div className={styles.header}>PORTAFOLIO</div>
               <div className={styles.header}>PERFIL</div>
@@ -132,7 +139,7 @@ function Artist() {
           <div className={styles.back}>
             <div className={styles.card_i}>
               <ArtistList
-                artists={artists?.artists}
+                artists={filteredArtists}
                 onUserSelect={(artist) =>
                   handleUserSelect(artist)
                 }></ArtistList>
