@@ -8,7 +8,6 @@ import { validateSessionFields } from '@/Validations/validationsSessions';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import useForceUpdate from 'antd/es/_util/hooks/useForceUpdate';
-import { getAllSessions } from '@/services/SessionsAPI';
 
 interface EditAppointmentProps {
   sessionId: string;
