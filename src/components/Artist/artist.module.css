@@ -69,8 +69,8 @@
 }
 .cardicons {
   display: flex;
-  gap: 2px;
-  width: 25vw;
+  gap: 8px;
+  width: 350px;
   justify-content: space-between;
 }
 .edit_icon,
