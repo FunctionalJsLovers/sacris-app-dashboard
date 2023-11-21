@@ -4,7 +4,8 @@ import { Icon } from '@iconify/react';
 import Error from '@/components/PopUps/Error/Error';
 import Success from '@/components/PopUps/Success/Success';
 import SessionOperations from '@/components/Sessions/ManageSessions/SessionOperations/SessionOperations';
-import axios from 'axios';
+import { useQuery } from 'react-query';
+import { getAllSessionsForAppointment } from '@/services/SessionsAPI';
 
 interface SessionProps {
   appointmentId: string;
@@ -20,7 +21,6 @@ interface Session {
 }
 
 const Sessions = ({ appointmentId }: SessionProps) => {
-  const [allSessions, setAllSessions] = useState<Session[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [createMode, setCreateMode] = useState(true);
@@ -32,45 +32,12 @@ const Sessions = ({ appointmentId }: SessionProps) => {
     null,
   );
   const [loadingSessions, setLoadingSessions] = useState(false);
-  const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-  useEffect(() => {
-    setLoadingSessions(true);
-    axios
-      .get(`${apiBaseUrl}/admin/appointments/${appointmentId}/sessions`)
-      .then((response) => {
-        if (Array.isArray(response.data.sessions)) {
-          setAllSessions(response.data.sessions);
-          setLoadingSessions(false);
-        } else {
-          console.error('No se encontró sesiones válidas:', response.data);
-        }
-      })
-      .catch((error) => {
-        console.error('Error al cargar las sesiones:', error);
-      });
-  }, []);
-
-  const reloadSessions = () => {
-    axios
-      .get(`${apiBaseUrl}/admin/appointments/${appointmentId}/sessions`)
-      .then((response) => {
-        if (Array.isArray(response.data.sessions)) {
-          setAllSessions(response.data.sessions);
-        } else {
-          console.error('No se encontró sesiones válidas:', response.data);
-        }
-      })
-      .catch((error) => {
-        console.error('Error al cargar las sesiones:', error);
-      });
-  };
-
-  useEffect(() => {
-    if (reloadSessions) {
-      reloadSessions();
-    }
-  }, [reloadSessions]);
+  const { data: sessions, refetch } = useQuery({
+    queryKey: ['sessions', { appointmentId }],
+    queryFn: () => getAllSessionsForAppointment(appointmentId),
+    refetchOnWindowFocus: false,
+  });
 
   const clearAllModes = () => {
     setIsEditMode(false);
@@ -78,6 +45,7 @@ const Sessions = ({ appointmentId }: SessionProps) => {
     setCreateMode(false);
     setIsCreating(false);
     setIsCreating(false);
+    refetch();
   };
 
   useEffect(() => {
@@ -94,11 +62,7 @@ const Sessions = ({ appointmentId }: SessionProps) => {
   const handleEditClick = () => {
     clearAllModes();
     setIsEditMode(true);
-  };
-
-  const handleDeleteClick = () => {
-    clearAllModes();
-    setIsDeleteMode(true);
+    refetch();
   };
 
   return (
@@ -151,7 +115,7 @@ const Sessions = ({ appointmentId }: SessionProps) => {
       <div className={styles.sessionSection}>
         <div className={styles.sectionListSessions}>
           <div className={styles.listSessions}>
-            {allSessions.map((session) => (
+            {sessions?.sessions.map((session: Session) => (
               <span
                 key={session.id}
                 onClick={() => {
