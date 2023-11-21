@@ -6,6 +6,10 @@ import Error from '@/components/PopUps/Error/Error';
 import Success from '@/components/PopUps/Success/Success';
 import { validateAppointmentFields } from '@/Validations/validationsSessions';
 
+interface CreateAppointmentProps {
+  refetchAppointments?: () => void;
+}
+
 interface ArtistCategory {
   id: string;
   artist_id: string;
@@ -34,26 +38,14 @@ interface Category {
   name: string;
 }
 
-const CreateAppointment = () => {
+const CreateAppointment = ({ refetchAppointments }: CreateAppointmentProps) => {
   const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [artists, setArtists] = useState<Artist[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [artistCategories, setArtistCategories] = useState<ArtistCategory[]>(
-    [],
-  );
   const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-  const fetchArtistCategories = async () => {
-    try {
-      const response = await axios.get(`${apiBaseUrl}/admin/artistCategories`);
-      setArtistCategories(response.data.artistCategories);
-    } catch (error) {
-      console.error('Error al cargar las categorías de los artistas:', error);
-    }
-  };
 
   const fetchArtists = async () => {
     try {
@@ -86,7 +78,6 @@ const CreateAppointment = () => {
     fetchArtists();
     fetchClients();
     fetchCategories();
-    fetchArtistCategories();
   }, []);
 
   const [formData, setFormData] = useState({
@@ -162,9 +153,19 @@ const CreateAppointment = () => {
 
   return (
     <div className={styles.containerCreateAppointment}>
-      {error && <Error message={error} onClose={() => setError(null)} />}
+      {error && (
+        <Error
+          message={error}
+          onClose={() => setError(null)}
+          refetch={refetchAppointments}
+        />
+      )}
       {success && (
-        <Success message={success} onClose={() => setSuccess(null)} />
+        <Success
+          message={success}
+          onClose={() => setSuccess(null)}
+          refetch={refetchAppointments}
+        />
       )}
       <center>
         <h1 className={styles.title}>Crear cita</h1>
@@ -213,16 +214,11 @@ const CreateAppointment = () => {
                 value={formData.category_id}
                 onChange={handleSelectChange}>
                 <option value="">Seleccionar</option>
-                {artistCategories.map((artistCategory) => {
-                  const category = categories.find(
-                    (c) => c.id === artistCategory.category_id,
-                  );
-                  return (
-                    <option key={artistCategory.id} value={artistCategory.id}>
-                      {category ? category.name : 'Categoría no encontrada'}
-                    </option>
-                  );
-                })}
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

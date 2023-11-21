@@ -200,7 +200,13 @@ function SessionOperations({
 
   return (
     <div className={styles.edtDltContainer}>
-      {error && <Error message={error} onClose={() => setError(null)} />}
+      {error && (
+        <Error
+          message={error}
+          onClose={() => setError(null)}
+          refetch={refetchSessions}
+        />
+      )}
       {success && (
         <Success
           message={success}
