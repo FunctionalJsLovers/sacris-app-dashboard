@@ -6,6 +6,10 @@ import Error from '@/components/PopUps/Error/Error';
 import Success from '@/components/PopUps/Success/Success';
 import { validateAppointmentFields } from '@/Validations/validationsSessions';
 
+interface CreateAppointmentProps {
+  refetchAppointments?: () => void;
+}
+
 interface ArtistCategory {
   id: string;
   artist_id: string;
@@ -34,7 +38,7 @@ interface Category {
   name: string;
 }
 
-const CreateAppointment = () => {
+const CreateAppointment = ({ refetchAppointments }: CreateAppointmentProps) => {
   const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -54,7 +58,6 @@ const CreateAppointment = () => {
       console.error('Error al cargar las categorías de los artistas:', error);
     }
   };
-
   const fetchArtists = async () => {
     try {
       const response = await axios.get(`${apiBaseUrl}/admin/artists`);
@@ -130,8 +133,9 @@ const CreateAppointment = () => {
       const fieldErrors = validateAppointmentFields(formData);
       console.log('Datos: ', formData);
       if (formData.description && !Object.keys(fieldErrors).length) {
+        const newAppointment = { appointment: formData };
         const appointmentResponse = await createAppointmentMutation.mutateAsync(
-          formData as any,
+          newAppointment as any,
         );
         const appointmentId = appointmentResponse.data.appointments[0].id;
         console.log(`Cita creada con ID: ${appointmentId}`);
@@ -162,9 +166,19 @@ const CreateAppointment = () => {
 
   return (
     <div className={styles.containerCreateAppointment}>
-      {error && <Error message={error} onClose={() => setError(null)} />}
+      {error && (
+        <Error
+          message={error}
+          onClose={() => setError(null)}
+          refetch={refetchAppointments}
+        />
+      )}
       {success && (
-        <Success message={success} onClose={() => setSuccess(null)} />
+        <Success
+          message={success}
+          onClose={() => setSuccess(null)}
+          refetch={refetchAppointments}
+        />
       )}
       <center>
         <h1 className={styles.title}>Crear cita</h1>

@@ -98,6 +98,10 @@ const Appointments: React.FC = () => {
     refetch();
   };
 
+  const refetchAppointments = () => {
+    refetch();
+  };
+
   return (
     <div
       className={
@@ -186,25 +190,37 @@ const Appointments: React.FC = () => {
               <EditDltAppointment
                 appointment_id={selectedAppointmentId}
                 isEditing={isEditing}
+                refetchAppointments={refetchAppointments}
               />
             )}
 
             {editWithoutId && !selectedAppointmentId && (
-              <EditDltAppointment appointment_id={' '} isEditing={isEditing} />
+              <EditDltAppointment
+                appointment_id={' '}
+                isEditing={isEditing}
+                refetchAppointments={refetchAppointments}
+              />
             )}
 
             {selectedAppointmentId && deleteMode && (
               <EditDltAppointment
                 appointment_id={selectedAppointmentId}
                 isEditing={isEditing}
+                refetchAppointments={refetchAppointments}
               />
             )}
 
             {deleteWithoutId && !selectedAppointmentId && (
-              <EditDltAppointment appointment_id={' '} isEditing={isEditing} />
+              <EditDltAppointment
+                appointment_id={' '}
+                isEditing={isEditing}
+                refetchAppointments={refetchAppointments}
+              />
             )}
 
-            {showCreateAppointment && <CreateAppointment />}
+            {showCreateAppointment && (
+              <CreateAppointment refetchAppointments={refetchAppointments} />
+            )}
             {!showCreateAppointment && !defaultMode && (
               <div className={styles.lineSeparator}>
                 <div className={styles.halfLine}></div>

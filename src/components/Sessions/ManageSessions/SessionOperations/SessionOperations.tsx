@@ -8,13 +8,13 @@ import { validateSessionFields } from '@/Validations/validationsSessions';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import useForceUpdate from 'antd/es/_util/hooks/useForceUpdate';
-import { getAllSessions } from '@/services/SessionsAPI';
 
 interface EditAppointmentProps {
   sessionId: string;
   appointmentId: string;
   isEditing?: boolean;
   isCreating?: boolean;
+  refetchSessions?: () => void;
 }
 
 function SessionOperations({
@@ -22,6 +22,7 @@ function SessionOperations({
   appointmentId,
   isEditing,
   isCreating,
+  refetchSessions,
 }: EditAppointmentProps) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -199,9 +200,19 @@ function SessionOperations({
 
   return (
     <div className={styles.edtDltContainer}>
-      {error && <Error message={error} onClose={() => setError(null)} />}
+      {error && (
+        <Error
+          message={error}
+          onClose={() => setError(null)}
+          refetch={refetchSessions}
+        />
+      )}
       {success && (
-        <Success message={success} onClose={() => setSuccess(null)} />
+        <Success
+          message={success}
+          onClose={() => setSuccess(null)}
+          refetch={refetchSessions}
+        />
       )}
       <form>
         <div className={styles.formGroup}>
@@ -306,7 +317,10 @@ function SessionOperations({
                   type={'button'}
                   className={styles.button}
                   data-action={'create-session'}
-                  onClick={createSession}>
+                  onClick={() => {
+                    createSession();
+                    refetchSessions && refetchSessions();
+                  }}>
                   Agregar sesión
                 </button>
               </center>

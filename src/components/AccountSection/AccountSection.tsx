@@ -45,7 +45,7 @@ const AccountSection: React.FC<AccountSectionProps> = ({ photoUrl }) => {
   >([]);
 
   const { data: appointments, refetch } = useQuery({
-    queryKey: ['artists'],
+    queryKey: ['appointments'],
     queryFn: getAllAppointments,
     refetchOnWindowFocus: false,
   });
@@ -74,9 +74,25 @@ const AccountSection: React.FC<AccountSectionProps> = ({ photoUrl }) => {
     setMatchedAppointments(matchedSessions);
   };
 
+  const handleDisplaySessions = () => {
+    handleMatchedSessions();
+    setDisplaySessions(!displaySessions);
+    console.log(matchedAppointments);
+  };
+
+  useEffect(() => {
+    const refetchInterval = setInterval(() => {
+      refetch();
+      refetchSessions();
+    }, 10000);
+
+    return () => {
+      clearInterval(refetchInterval);
+    };
+  }, []);
+
   useEffect(() => {
     handleSessions();
-    handleMatchedSessions();
   }, [sessions]);
 
   return (
@@ -99,7 +115,7 @@ const AccountSection: React.FC<AccountSectionProps> = ({ photoUrl }) => {
           alt="Notificaciones"
           width={24}
           height={24}
-          onClick={() => setDisplaySessions(!displaySessions)}
+          onClick={() => handleDisplaySessions()}
         />
       </div>
       <div className={styles.userInfo}>

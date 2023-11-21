@@ -9,6 +9,7 @@ import { validateAppointmentFields } from '@/Validations/validationsSessions';
 interface EditAppointmentProps {
   appointment_id: string;
   isEditing?: boolean;
+  refetchAppointments?: () => void;
 }
 
 interface Artist {
@@ -37,6 +38,7 @@ interface Category {
 function EditDltAppointment({
   appointment_id,
   isEditing,
+  refetchAppointments,
 }: EditAppointmentProps) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -187,9 +189,19 @@ function EditDltAppointment({
 
   return (
     <div className={styles.containerEditAppointment}>
-      {error && <Error message={error} onClose={() => setError(null)} />}
+      {error && (
+        <Error
+          message={error}
+          onClose={() => setError(null)}
+          refetch={refetchAppointments}
+        />
+      )}
       {success && (
-        <Success message={success} onClose={() => setSuccess(null)} />
+        <Success
+          message={success}
+          onClose={() => setSuccess(null)}
+          refetch={refetchAppointments}
+        />
       )}
       <center>
         <h1 className={styles.title}>Cita</h1>
