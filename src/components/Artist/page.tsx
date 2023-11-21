@@ -3,7 +3,7 @@ import { RiUserAddLine, RiSearchLine } from 'react-icons/ri';
 import styles from './page.module.css';
 import ArtistList from './artistList';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ViewArtist from '@/app/(admin)/artist/ViewArtist/ViewArtist';
 import { Modal } from 'antd';
 import { useMutation, useQuery } from 'react-query';
