@@ -65,6 +65,10 @@ const Sessions = ({ appointmentId }: SessionProps) => {
     refetch();
   };
 
+  const refetchSessions = () => {
+    refetch();
+  };
+
   return (
     <div className={styles.containerSession}>
       {error && <Error message={error} onClose={() => setError(null)} />}
@@ -138,6 +142,7 @@ const Sessions = ({ appointmentId }: SessionProps) => {
               appointmentId={appointmentId}
               isEditing={isEditing}
               isCreating={isCreating}
+              refetchSessions={refetchSessions}
             />
           )}
           {editMode && !selectedSessionId && (
