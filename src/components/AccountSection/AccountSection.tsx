@@ -81,6 +81,17 @@ const AccountSection: React.FC<AccountSectionProps> = ({ photoUrl }) => {
   };
 
   useEffect(() => {
+    const refetchInterval = setInterval(() => {
+      refetch();
+      refetchSessions();
+    }, 10000);
+
+    return () => {
+      clearInterval(refetchInterval);
+    };
+  }, []);
+
+  useEffect(() => {
     handleSessions();
   }, [sessions]);
 
