@@ -14,6 +14,7 @@ interface EditAppointmentProps {
   appointmentId: string;
   isEditing?: boolean;
   isCreating?: boolean;
+  refetchSessions?: () => void;
 }
 
 function SessionOperations({
@@ -21,6 +22,7 @@ function SessionOperations({
   appointmentId,
   isEditing,
   isCreating,
+  refetchSessions,
 }: EditAppointmentProps) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -200,7 +202,11 @@ function SessionOperations({
     <div className={styles.edtDltContainer}>
       {error && <Error message={error} onClose={() => setError(null)} />}
       {success && (
-        <Success message={success} onClose={() => setSuccess(null)} />
+        <Success
+          message={success}
+          onClose={() => setSuccess(null)}
+          refetch={refetchSessions}
+        />
       )}
       <form>
         <div className={styles.formGroup}>
@@ -305,7 +311,10 @@ function SessionOperations({
                   type={'button'}
                   className={styles.button}
                   data-action={'create-session'}
-                  onClick={createSession}>
+                  onClick={() => {
+                    createSession();
+                    refetchSessions && refetchSessions();
+                  }}>
                   Agregar sesión
                 </button>
               </center>
