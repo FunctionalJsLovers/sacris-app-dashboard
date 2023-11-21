@@ -105,6 +105,6 @@
 }
 
 .back {
-  max-height: 60vh;
+  height: 60vh;
   overflow: auto;
 }
