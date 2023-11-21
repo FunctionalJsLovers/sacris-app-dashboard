@@ -21,67 +21,47 @@ const TopCategories: React.FC = () => {
     const fetchData = async () => {
       try {
         const topCategoriesResponse = await axios.get(
-          'http://54.190.9.68:9000/admin/topCategoriesMonth',
+          `${apiBaseUrl}/admin/topCategoriesMonth`,
         );
         const topCategories = topCategoriesResponse.data.category;
 
-        console.log('Top Categories:', topCategories);
-
         const artistCategoriesResponse = await axios.get(
-          'http://54.190.9.68:9000/admin/artistCategories',
+          `${apiBaseUrl}/admin/artistCategories`,
         );
         const artistCategories = artistCategoriesResponse.data.artistCategories;
 
-        console.log('Artist Categories:', artistCategories);
-
         const categoriesResponse = await axios.get(
-          'http://54.190.9.68:9000/admin/categories',
+          `${apiBaseUrl}/admin/categories`,
         );
         const categories = categoriesResponse.data.categories;
 
-        console.log('Categories:', categories);
+        const newChartData: ChartDataItem[] = [];
 
-        const mappedChartData = topCategories.map(
-          ([count, categoryId]: [number, string]) => {
-            console.log(
-              'artistCategory for categoryId',
-              categoryId,
-              ':',
-              artistCategories.find((ac: any) => ac.category_id === categoryId),
-            );
-            const artistCategory = artistCategories.find(
-              (ac: any) => ac.category_id === categoryId,
-            );
-            // Obtener el ID de la categoría, usando artistCategory si está presente, de lo contrario, usar categoryId directamente
-            const categoryIdToUse = artistCategory
-              ? artistCategory.category_id
-              : categoryId;
-
-            // Buscar la categoría en el array de categories
-            console.log(
-              'category for categoryId',
-              categoryIdToUse,
-              ':',
-              categories.find((c: any) => c.id === categoryIdToUse),
-            );
-
+        topCategories.forEach(([count, categoryId]: [number, string]) => {
+          const artistCategory = artistCategories.find(
+            (ac: any) => ac.id === categoryId,
+          );
+          if (artistCategory) {
             const category = categories.find(
-              (c: any) => c.id === categoryIdToUse,
+              (c: any) => c.id === artistCategory.category_id,
             );
+            if (category) {
+              newChartData.push({
+                name: category.name,
+                data: count,
+              });
+            } else {
+              console.log(
+                'No category found for category_id',
+                artistCategory.category_id,
+              );
+            }
+          } else {
+            console.log('No artistCategory found for categoryId', categoryId);
+          }
+        });
 
-            // Obtener el nombre de la categoría
-            const categoryName = category ? category.name : 'Unknown Category';
-
-            return {
-              name: categoryName,
-              data: count,
-            };
-          },
-        );
-
-        console.log('Mapped Chart Data:', mappedChartData);
-
-        setChartData(mappedChartData);
+        setChartData(newChartData);
         setIsClient(true);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -133,7 +113,7 @@ const TopCategories: React.FC = () => {
     },
     xaxis: {
       title: {
-        text: 'Categorías',
+        text: 'Aplicaciones',
         style: {
           fontSize: '14px',
           fontFamily: 'Arial, sans-serif',
@@ -144,7 +124,7 @@ const TopCategories: React.FC = () => {
     yaxis: [
       {
         title: {
-          text: 'Horas',
+          text: 'Categorías',
           style: {
             fontSize: '14px',
             fontFamily: 'Arial, sans-serif',

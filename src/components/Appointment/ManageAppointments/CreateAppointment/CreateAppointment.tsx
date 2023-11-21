@@ -45,8 +45,19 @@ const CreateAppointment = ({ refetchAppointments }: CreateAppointmentProps) => {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [artistCategories, setArtistCategories] = useState<ArtistCategory[]>(
+    [],
+  );
   const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+  const fetchArtistCategories = async () => {
+    try {
+      const response = await axios.get(`${apiBaseUrl}/admin/artistCategories`);
+      setArtistCategories(response.data.artistCategories);
+    } catch (error) {
+      console.error('Error al cargar las categorías de los artistas:', error);
+    }
+  };
   const fetchArtists = async () => {
     try {
       const response = await axios.get(`${apiBaseUrl}/admin/artists`);
@@ -78,6 +89,7 @@ const CreateAppointment = ({ refetchAppointments }: CreateAppointmentProps) => {
     fetchArtists();
     fetchClients();
     fetchCategories();
+    fetchArtistCategories();
   }, []);
 
   const [formData, setFormData] = useState({
@@ -121,8 +133,9 @@ const CreateAppointment = ({ refetchAppointments }: CreateAppointmentProps) => {
       const fieldErrors = validateAppointmentFields(formData);
       console.log('Datos: ', formData);
       if (formData.description && !Object.keys(fieldErrors).length) {
+        const newAppointment = { appointment: formData };
         const appointmentResponse = await createAppointmentMutation.mutateAsync(
-          formData as any,
+          newAppointment as any,
         );
         const appointmentId = appointmentResponse.data.appointments[0].id;
         console.log(`Cita creada con ID: ${appointmentId}`);
@@ -214,11 +227,16 @@ const CreateAppointment = ({ refetchAppointments }: CreateAppointmentProps) => {
                 value={formData.category_id}
                 onChange={handleSelectChange}>
                 <option value="">Seleccionar</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
+                {artistCategories.map((artistCategory) => {
+                  const category = categories.find(
+                    (c) => c.id === artistCategory.category_id,
+                  );
+                  return (
+                    <option key={artistCategory.id} value={artistCategory.id}>
+                      {category ? category.name : 'Categoría no encontrada'}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>
