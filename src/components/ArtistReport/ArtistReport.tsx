@@ -59,6 +59,7 @@ function ArtistReport({ artistName, onClose }: ArtistCalendarPopupProps) {
         height={35}
         width={35}
       />
+      <h3>Reporte de los últimos 30 días</h3>
       <div className={styles.reportSection}>
         <div className={styles.firstLine}>
           <div className={styles.sessions}>

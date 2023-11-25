@@ -32,7 +32,7 @@ const TopArtistByWorkedHours: React.FC = () => {
 
         setChartData(seriesData);
       })
-      .catch((error) => console.error('Error fetching data:', error));
+      .catch((error) => console.error('Error obteniendo las horas:', error));
   }, []);
 
   const options: ApexOptions = {
@@ -110,7 +110,7 @@ const TopArtistByWorkedHours: React.FC = () => {
 
   return (
     <div className={styles.report}>
-      <div className={styles.title}>Horas trabajadas por artista</div>
+      <div className={styles.title}>Horas trabajadas (Últimos 30 días)</div>
       {isClient && (
         <Chart options={options} series={options.series} type="bar" />
       )}
