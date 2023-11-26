@@ -7,6 +7,9 @@ import TotalSalesLast30Days from '@/components/ComReports/Reports/totalSalesLast
 import TopArtistByWorkedHours from '@/components/ComReports/Reports/TopArtistByWorkedHours/TopArtistByWorkedHours';
 import TopCategories from '@/components/ComReports/Reports/TopCategories/TopCategories';
 import TopCategoriesMonth from '@/components/ComReports/Reports/TopCategoriesMonth/TopCategoriesMonth';
+import ArtistSessions from '@/components/ComReports/Reports/ArtistSessions/ArtistSessions';
+import ArtistHours from '@/components/ComReports/Reports/ArtistHours/ArtistHours';
+import ArtistSales from '@/components/ComReports/Reports/ArtistSales/ArtistSales';
 
 const ComReports: React.FC = () => {
   return (
@@ -28,6 +31,15 @@ const ComReports: React.FC = () => {
       </div>
       <div className={styles.report}>
         <TopCategoriesMonth />
+      </div>
+      <div className={styles.report}>
+        <ArtistSessions />
+      </div>
+      <div className={styles.report}>
+        <ArtistHours />
+      </div>
+      <div className={styles.report}>
+        <ArtistSales />
       </div>
     </div>
   );

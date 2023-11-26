@@ -110,7 +110,7 @@ const TopArtistBySessions: React.FC = () => {
 
   return (
     <div className={styles.report}>
-      <div className={styles.title}>Sesiones por artista</div>
+      <div className={styles.title}>Sesiones (Últimos 30 días)</div>
       {isClient && (
         <Chart options={options} series={options.series} type="bar" />
       )}
