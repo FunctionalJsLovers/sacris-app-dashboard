@@ -1,0 +1,134 @@
+.allAppointmentSection,
+.allAppointmentSectionDE {
+  width: 100%;
+  display: flex;
+  background-color: #e3e3e3;
+}
+
+.allAppointmentSection {
+  height: 100vh;
+}
+
+.allAppointmentSectionDE {
+  height: 140vh;
+}
+
+.appointmentsContent,
+.appointmentsContentSession {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  padding: 20px;
+  margin: 0 auto 10px 100px;
+}
+
+.appointmentsContent {
+  height: 100%;
+}
+
+.appointmentsContentSession {
+  height: 82.5%;
+}
+
+.appointmentsHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1vh;
+}
+
+.title {
+  justify-content: flex-start;
+  font-size: 40px;
+  font-family: 'Helvetica', sans-serif;
+  color: #111111;
+}
+
+.appointmentsContainer {
+  display: flex;
+  height: 80%;
+  margin-top: 20px;
+}
+
+.appointmentsListSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  height: 100%;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.inputSearch {
+  width: 100%;
+  padding: 10px;
+  border: 3px solid #2d3748;
+  border-radius: 5px;
+  background-color: #f4f4f4;
+  color: #111111;
+  margin-bottom: 20px;
+}
+
+.listAppointments span {
+  display: block;
+  padding: 5px;
+  background-color: #bbbfc1;
+  color: #111111;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.onlyAppointmentContainer {
+  margin-left: 20px;
+  width: 100%;
+  flex: 1;
+  border-radius: 5px;
+  height: 100%;
+}
+
+.icons {
+  display: flex;
+  margin-left: auto;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  margin-top: 1vh;
+}
+
+.iconAdd,
+.iconDelete,
+.iconEdit {
+  width: 30px;
+  height: 30px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.lineSeparator {
+  margin-top: 0.5vh;
+  display: flex;
+  align-items: center;
+}
+
+.halfLine,
+.fullLine {
+  height: 2px;
+  background-color: #878787;
+}
+
+.arrowIcon {
+  margin-right: 1vh;
+  margin-left: 1vh;
+  cursor: pointer;
+}
+
+.halfLine {
+  flex: 1;
+}
+
+.fullLine {
+  flex: 1;
+}

@@ -1,0 +1,75 @@
+.popupContainer {
+  width: 90vw;
+  height: 80%;
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 9;
+}
+
+.iconClose {
+  margin-left: 85vw;
+}
+
+.iconClose:hover {
+  color: red;
+}
+
+.fc-title {
+  font-size: 10px;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
+
+.popupContent {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.popupContent h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #111111;
+}
+
+.popupContent p {
+  margin: 5px 0;
+  color: #111111;
+  font-size: 1.1vw;
+  font-weight: normal;
+}
+
+.popupContent button {
+  display: block;
+  margin: 10px auto;
+  background-color: #78160c;
+  color: white;
+  font-size: 15px;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popupContent button:hover {
+  background-color: #540f08;
+  font-size: 17px;
+}

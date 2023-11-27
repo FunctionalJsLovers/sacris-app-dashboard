@@ -1,53 +1,130 @@
-'use client'
-import {  RiFileUserLine, RiInboxLine, RiCalendarTodoLine, RiExternalLinkLine } from 'react-icons/ri';
-import { Icon } from '@iconify/react/dist/iconify.js';
-import styles from './artist.module.css'
+'use client';
+import {
+  RiFileUserLine,
+  RiInboxLine,
+  RiCalendarTodoLine,
+  RiBarChart2Line,
+  RiExternalLinkLine,
+} from 'react-icons/ri';
+import styles from './artist.module.css';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useQuery } from 'react-query';
-import { getAllArtists } from '../../services/ArtistsAPI';
+import { useEffect, useState } from 'react';
+import ArtistCalendarPopup from '@/components/ArtistCalendarPopup/ArtistCalendarPopup';
+import ArtistReport from '@/components/ArtistReport/ArtistReport';
 
+interface UserType {
+  name: string;
+  email: string;
+  id: string;
+  phone: string;
+  instagram: string;
+  description: string;
+  username: string;
+}
 
+function ArtistList({
+  onUserSelect,
+  artists,
+}: {
+  onUserSelect: (user: UserType) => void;
+  artists: UserType[];
+}) {
+  const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
+  const [selectedArtistName, setSelectedArtistName] = useState<string | null>(
+    null,
+  );
 
+  const handleEditIconClick = (user: UserType) => {
+    if (user) {
+      console.log(user);
+      onUserSelect(user);
+    }
+  };
 
-function Card({ }) {
+  const handleCalendarIconClick = (user: UserType) => {
+    setSelectedArtistId(user.id);
+  };
 
-  const {data: artists} = useQuery({
-    queryKey: ['artists'],
-    queryFn: getAllArtists,
-    refetchOnWindowFocus: false,
-  })
+  const handleCloseCalendarPopup = () => {
+    setSelectedArtistId(null);
+  };
 
-  console.log(artists)
-  
+  const handleReportIconClick = (user: UserType) => {
+    setSelectedArtistName(user.name);
+  };
+
+  const handleCloseReportPopup = () => {
+    setSelectedArtistName(null);
+  };
+
   return (
-    <>
-      {artists?.map((artist:any)=>(
-       // eslint-disable-next-line react/jsx-key
-       <Link href={`/artist/${String(artist.adminId)}`}> <div className={styles.card}key={artist.id}>
-
-      <div className={styles.carddetails} >
-                  <div className={styles.cardImage}>
-              <Image src="https://s3-alpha-sig.figma.com/img/b940/caf9/f3a52bcc9317c793ebc094db911b237b?Expires=1696204800&Signature=orXUC1z2Ieogp1Td5CEEycHwZ06VwuUC-F-Y-6bgjerrygHoo6Cu0B4quPh9WSjeeilJtPm5aR385jaarT5-X0HTNHyMtAKGox7f8CM~Cj2~nGF4GxOzqjLptqZ32yNZIpj4afhEhNou4KLaaKqkE1RSu4hlWZSCFjMxASCDkjf5Ojv97PdMIesCgPDdYJo3Y2UMDvItteqVGjvv3hk-sG28gUuzbsuDyuxfXfKRLPZyJRHf1TRZynWHTfipHTmIPvBzvVMSb3gRqth6JcIQLKYEeO~3Zy5MyD-64mUzOvDNbGedlM8IBXZuj6wNm6h3pLOa-E4aMK55CQcV2u5zXw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4" alt={`${artist.name}'s Avatar`} width={15} height={15} />
+    <div className={styles.container}>
+      <div className={styles.artistContainer}>
+        {artists?.map((artist: any) => (
+          <div className={styles.card} key={artist.id}>
+            <div className={styles.carddetails}>
+              <div className={styles.cardImage}>
+                <Image
+                  src={`https://hmnhiomzwpccvhzlgahm.supabase.co/storage/v1/object/public/profile_pics/${artist.phone}.png`}
+                  alt={''}
+                  width={15}
+                  height={15}
+                  sizes="(max-width: 768px) 100vw, (max-width:1200px)50vw,33vw"
+                />
+              </div>
+              <div className={styles.name}>
+                <h1>{artist.name} </h1>
+                <h3>{artist.email}</h3>
+              </div>
             </div>
-            <div className={styles.name} > <h1>{artist.name} </h1>
-            <h3>{artist.email}</h3>
+            <div className={styles.cardicons}>
+              <RiBarChart2Line
+                className={styles.product_icon}
+                title="Ver reporte"
+                onClick={() => handleReportIconClick(artist)}
+              />
+              <RiCalendarTodoLine
+                className={styles.calendar_icon}
+                title="Ver Citas"
+                onClick={() => handleCalendarIconClick(artist)}
+              />
+              <RiExternalLinkLine
+                className={styles.portfolio_icon}
+                title="Ver Portafolio"
+              />
+              <RiFileUserLine
+                className={styles.edit_icon}
+                title="Editar Perfil"
+                onClick={() => {
+                  handleEditIconClick(artist);
+                }}
+              />
             </div>
-           
-            
           </div>
-          <div className={styles.cardicons}>
-            <RiInboxLine className={styles.product_icon} title="Ver Productos" />
-            <RiCalendarTodoLine className={styles.calendar_icon} title="Ver Citas" />
-            <RiExternalLinkLine className={styles.portfolio_icon} title="Ver Portafolio" />
-            <RiFileUserLine className={styles.edit_icon} title="Editar Perfil" />
+        ))}
+      </div>
+      {selectedArtistId && (
+        <div className={styles.artistCalendarPopup}>
+          <div className={styles.popupContent}>
+            <ArtistCalendarPopup
+              artistId={selectedArtistId}
+              onClose={handleCloseCalendarPopup}
+            />
           </div>
-          </div></Link>
+        </div>
+      )}
+      {selectedArtistName && (
+        <div className={styles.artistCalendarPopup}>
+          <div className={styles.popupContent}>
+            <ArtistReport
+              artistName={selectedArtistName}
+              onClose={handleCloseReportPopup}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
-    ))}
-        </> 
-      )
-    };
-
-  export default Card;
-
+export default ArtistList;

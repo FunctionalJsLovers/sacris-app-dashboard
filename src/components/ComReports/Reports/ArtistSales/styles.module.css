@@ -1,0 +1,32 @@
+.report {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(159, 159, 164, 0.4);
+  padding: 2vw;
+  border-radius: 10px;
+}
+
+.title {
+  display: flex;
+  color: #111111;
+  font-size: 1.3vw;
+  justify-content: center;
+  font-family: 'Comic Sans MS', sans-serif;
+}
+
+.filters {
+  margin-top: 1vh;
+  display: flex;
+  justify-content: space-around;
+}
+
+.selectYear {
+  color: black;
+  font-family: Helvetica, sans-serif;
+}
+
+.selectBox {
+  background-color: #e3e3e3;
+  color: black;
+  font-family: Helvetica, sans-serif;
+}

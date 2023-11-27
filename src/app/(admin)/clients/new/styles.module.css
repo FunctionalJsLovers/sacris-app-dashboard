@@ -1,0 +1,19 @@
+.allArtist {
+  height: 100vh;
+  display: flex;
+  background-color: #e3e3e3;
+}
+
+.calendarArtist {
+  width: 90%;
+  height: auto;
+  margin: 70px auto 5px 100px;
+}
+
+.title {
+  position: relative;
+  bottom: 40px;
+  font-size: 40px;
+  color: #111111;
+  font-family: var(--font), sans-serif;
+}

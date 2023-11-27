@@ -1,0 +1,120 @@
+.all {
+  background-image: url('local.png');
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginContainer {
+  background: rgba(255, 255, 255, 0.8);
+  width: 400px;
+  padding: 20px;
+  margin: 0 auto;
+  border: 0.5px #878787 solid;
+  border-radius: 10px;
+  box-shadow: 0 4px 64px rgba(0, 0, 0, 0.05);
+}
+
+.welcome,
+.textStart,
+.textSacris {
+  color: black;
+  word-wrap: break-word;
+  font-family: Poppins, sans-serif;
+}
+
+.welcome {
+  font-size: 25px;
+  font-weight: 300;
+  word-wrap: break-word;
+}
+
+.textStart {
+  margin-top: 40px;
+  font-size: 31px;
+  font-weight: bold;
+}
+
+.textSacris {
+  margin-bottom: 40px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.form {
+  margin-top: 20px;
+}
+
+.label {
+  color: black;
+  font-size: 16px;
+  font-family: Poppins, sans-serif;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 400;
+}
+
+.username,
+.password {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #111111;
+  border-radius: 5px;
+  background-color: #ffffff;
+  color: #111111;
+  font-size: 14px;
+  font-family: Poppins, sans-serif;
+  font-weight: 300;
+  word-wrap: break-word;
+}
+
+.passwordInput {
+  position: relative;
+}
+
+.togglePassword {
+  position: absolute;
+  top: 40%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #111111;
+  width: 20px;
+  height: 20px;
+}
+
+.togglePasswordHidden {
+  background-image: url('https://cdn4.iconfinder.com/data/icons/proglyphs-files-and-folders/512/Visibility_Hidden-512.png');
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.togglePasswordVisible {
+  background-image: url('https://static.vecteezy.com/system/resources/previews/000/576/988/original/eye-icon-vector-illustration.jpg');
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.username {
+  margin-bottom: 20px;
+}
+
+.buttonLogin {
+  margin-top: 40px;
+  background-color: #111111;
+  width: 100%;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 16px;
+  font-family: Poppins, sans-serif;
+  font-weight: 500;
+  word-wrap: break-word;
+}

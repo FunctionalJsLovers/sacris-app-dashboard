@@ -1,0 +1,122 @@
+.popupContainer {
+  width: 70vw;
+  height: 75vh;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 9;
+}
+
+.popupContainer h3 {
+  margin-bottom: 20px;
+}
+
+.iconClose {
+  margin-left: 65vw;
+}
+
+.iconClose:hover {
+  color: red;
+}
+
+.reportSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.firstLine {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.sessions {
+  width: 100%;
+  height: 25vh;
+  background-color: #e3e3e3;
+  box-shadow: 0 0 15px rgba(0, 0, 255, 0.8);
+  margin-right: 20px;
+  display: flex;
+  border-radius: 10px;
+}
+
+.hoursWorked {
+  width: 100%;
+  height: 25vh;
+  background-color: #e3e3e3;
+  box-shadow: 0 0 15px rgba(0, 0, 255, 0.8);
+  margin-left: 20px;
+  display: flex;
+  border-radius: 10px;
+}
+
+.sales {
+  width: 100%;
+  height: 25vh;
+  background-color: #e3e3e3;
+  display: flex;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 255, 0.8);
+}
+
+.secondLine {
+  display: flex;
+  margin-top: 5vh;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4vw;
+}
+
+.value {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2vw;
+}
+
+.value h1 {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 7vw;
+}
+
+.text h1,
+.textSales h1 {
+  font-size: 3vw;
+  margin-top: 3vh;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.textSales {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6vw;
+}
+
+.valueSales {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2vw;
+}
+
+.pesos {
+  font-size: 2vw;
+  margin-top: 5vh;
+  font-family: Helvetica, sans-serif;
+}
+
+.valueSales h1 {
+  font-size: 5vw;
+  font-family: Helvetica, sans-serif;
+}

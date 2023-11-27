@@ -1,0 +1,180 @@
+.formContainer {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.formLeft {
+  flex: 1;
+  padding: 10px;
+  margin-right: 10px;
+}
+
+.formRight {
+  flex: 1;
+  padding: 10px;
+  width: 90%;
+}
+
+.textarea,
+.input {
+  flex-grow: 1;
+  outline: none;
+  color: var(--gray-gray-400, #a0aec0);
+  font-family: Helvetica;
+  font-size: 12px;
+  width: 90%;
+  height: 45px;
+  border: none;
+  border-radius: 10px;
+  font-style: normal;
+  color: black;
+  border-color: black;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+.formButtons {
+  display: flex;
+  justify-content: center;
+}
+
+.confirmButton {
+  padding: 20px;
+  background-color: #007bff;
+  color: #e2e2e2;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 200px;
+  height: 55px;
+  font-family: Helvetica;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  margin-right: 10px;
+}
+
+.cancelButton {
+  padding: 20px;
+  background-color: #cb3230;
+  color: #e2e2e2;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 200px;
+  height: 55px;
+  font-family: Helvetica;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  margin-left: 10px;
+}
+
+.label {
+  display: flex;
+  width: 400px;
+  font-family: var(--font), sans-serif;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-right: 50px;
+  color: #111111;
+}
+.span {
+  display: block;
+  color: tomato;
+  font-size: x;
+}
+
+.img {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.inputImage {
+  width: 590px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+  background-color: white;
+}
+.buttonCon {
+  text-align: center;
+}
+.msg {
+  margin-top: 20px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.menuButton {
+  padding: 20px;
+  background-color: #30cb90;
+  color: #e2e2e2;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 150px;
+  height: 55px;
+  font-feature-settings:
+    'clig' off,
+    'liga' off;
+  font-family: var(--font), sans-serif;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  justify-content: center;
+}
+
+.div {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .formContainer {
+    display: grid;
+  }
+
+  .formLeft,
+  .formRight {
+    display: grid;
+
+    width: 100%;
+    margin: 0;
+  }
+
+  .formRight {
+    margin-top: 10px;
+  }
+
+  .textarea,
+  .input {
+    width: 80%;
+    height: 54px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 10px;
+    background: #e2e2e2;
+    margin-bottom: 20px;
+  }
+
+  .formButtons {
+    display: grid;
+    margin-top: 10px;
+  }
+
+  .cancelButton,
+  .confirmButton {
+    margin-top: 15px;
+    justify-items: center;
+  }
+}

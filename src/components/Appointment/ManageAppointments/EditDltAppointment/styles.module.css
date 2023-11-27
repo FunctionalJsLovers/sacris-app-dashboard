@@ -1,0 +1,148 @@
+.containerEditAppointment {
+  background-color: #f4f4f4;
+  border-radius: 10px;
+}
+
+.title {
+  color: #111111;
+  font-family: 'Times New Roman', sans-serif;
+}
+
+.createSection {
+  display: flex;
+  justify-content: space-between;
+}
+
+.leftSection,
+.rightSection {
+  flex: 1;
+  padding: 20px;
+}
+
+.leftSection {
+  border-right: 1px solid #ccc;
+}
+
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.formGroup {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+
+.leftSection .formGroup {
+  margin-top: 1.4vh;
+}
+
+.labelWithTitle {
+  display: block;
+  font-size: 1vw;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #111111;
+}
+
+.inputWithTitle {
+  width: 100%;
+  height: 5vh;
+  font-size: 1vw;
+  padding: 10px;
+  border: 1px solid #2d3748;
+  border-radius: 5px;
+  background-color: #f4f4f4;
+  color: #111111;
+}
+
+.button {
+  font-family: Inter, sans-serif;
+  font-size: 1vw;
+  background-color: #2d3748;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 1vh;
+  margin-bottom: 2vh;
+}
+
+.buttonDelete {
+  font-family: Inter, sans-serif;
+  font-size: 1vw;
+  background-color: #540f08;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 1vh;
+  margin-bottom: 2vh;
+}
+
+.timeStatusContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.showInfoAppointment {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #111111;
+  width: 20px;
+  height: 20px;
+  background-image: url('https://1.bp.blogspot.com/-bAVXa7Jz0Go/XIRjInOLK5I/AAAAAAAJJTU/dV7o--P1lR0a00rDdENJbfrLncikzMoDgCLcBGAs/s1600/585e4ae1cb11b227491c3393.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+.confirmationBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.confirmationPopup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.confirmationPopup p {
+  color: #111111;
+  font-size: 18px;
+  font-family: 'Times New Roman', sans-serif;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.confirmationPopup button {
+  margin: 5px;
+  padding: 8px 16px;
+  background-color: #540f08;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.confirmationPopup button:hover {
+  background-color: darkred;
+}

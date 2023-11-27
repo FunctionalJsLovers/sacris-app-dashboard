@@ -1,0 +1,146 @@
+.edtDltContainer {
+  height: 100%;
+  width: 100%;
+}
+
+.title {
+  color: #111111;
+  font-family: 'Times New Roman', sans-serif;
+}
+
+.formGroup {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+
+.labelWithTitle {
+  display: block;
+  font-weight: bold;
+  font-size: 1vw;
+  margin-bottom: 5px;
+  color: #111111;
+}
+
+.inputWithTitle {
+  width: 100%;
+  height: 5vh;
+  font-size: 1vw;
+  padding: 8px;
+  border: 1px solid #2d3748;
+  border-radius: 5px;
+  background-color: #f4f4f4;
+  color: #111111;
+}
+
+.inputDate {
+  width: 162%;
+  height: 5vh;
+  padding: 10px;
+  font-size: 1vw;
+  border: 1px solid #2d3748;
+  border-radius: 5px;
+  background-color: #f4f4f4;
+  color: #111111;
+}
+
+.button,
+.buttonAdd,
+.buttonDelete {
+  font-family: Inter, sans-serif;
+  font-size: 1vw;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 4vh;
+}
+
+.button,
+.buttonAdd {
+  background-color: #2d3748;
+}
+
+.buttonDelete {
+  background-color: #540f08;
+}
+
+.timeStatusContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timeStatusContainer .inputWithTitle {
+  width: 20vw;
+}
+
+.idInput {
+  position: relative;
+}
+
+.showInfoSession {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #111111;
+  width: 20px;
+  height: 20px;
+  background-image: url('https://1.bp.blogspot.com/-bAVXa7Jz0Go/XIRjInOLK5I/AAAAAAAJJTU/dV7o--P1lR0a00rDdENJbfrLncikzMoDgCLcBGAs/s1600/585e4ae1cb11b227491c3393.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+.confirmationBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.confirmationPopup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.confirmationPopup p {
+  color: #111111;
+  font-size: 18px;
+  font-family: 'Times New Roman', sans-serif;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.confirmationPopup button {
+  margin: 5px;
+  padding: 8px 16px;
+  background-color: #540f08;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.confirmationPopup button:hover {
+  background-color: darkred;
+}
+
+.formGroupId {
+  display: none;
+}
+
+.formGroupIdAppointment {
+  display: none;
+}
